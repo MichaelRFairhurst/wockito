@@ -17,4 +17,4 @@ do
   deps[${#deps[@]}]="$2/$(echo $LINE | sed 's/^import \(.*\);$/\1/').table"
 done < $1
 
-echo bin/obj/$( basename $1 | sed 's/\.wk/.o/'): ${deps[@]}
+echo bin/wakeobj/$( basename $1 | sed 's/\.wk/.o/'): ${deps[@]}
