@@ -1,0 +1,26 @@
+import ArgumentWatcher;
+import ReturnValueStubber;
+import CrossFilter;
+
+every ExampleMockStubber is:
+
+	needs ArgumentWatcher{Text, Text} textarg, ArgumentWatcher{Num, Text} numarg;
+
+	provides ReturnValueStubber{Text};
+
+	ReturnValueStubber{Text} -- get(Text, Num) {
+		var ReturnValueStubber{Text} <- this;
+		textarg.expect(Text, ReturnValueStubber);
+		numarg.expect(Num, ReturnValueStubber);
+		return ReturnValueStubber;
+	}
+
+every ExampleMock is:
+
+	needs ArgumentWatcher{Text, Text} textarg, ArgumentWatcher{Num, Text} numarg, public ExampleMockStubber, CrossFilter{ReturnValueStubber{Text}} textcrosser;
+
+	Text -- get(Text, Num) {
+		var ReturnValueStubber{Text}[] = textarg.getPossibleStubs(Text);
+		ReturnValueStubber = textcrosser.intersect(ReturnValueStubber)With(numarg.getPossibleStubs(Num));
+		return ReturnValueStubber[0].get();
+	}

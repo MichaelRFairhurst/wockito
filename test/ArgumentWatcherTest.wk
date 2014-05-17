@@ -1,0 +1,54 @@
+import Asserts;
+import ArgumentWatcher;
+import ReturnValueStubber;
+
+every ArgumentWatcherTest is:
+
+	needs ArgumentWatcher{Num, Num};
+
+	provides ReturnValueStubber{Num};
+
+	~[ test get calls ]~(Asserts) {
+		ArgumentWatcher.tell(1);
+		ArgumentWatcher.tell(2);
+		ArgumentWatcher.tell(4);
+		ArgumentWatcher.tell(8);
+
+		var Num[] = ArgumentWatcher.getCalls();
+		Asserts.that(Num[0])Equals(1);
+		Asserts.that(Num[1])Equals(2);
+		Asserts.that(Num[2])Equals(4);
+		Asserts.that(Num[3])Equals(8);
+	}
+
+	~[ test get a nonexist stub ]~(Asserts) {
+		var ReturnValueStubber{Num}[] = ArgumentWatcher.getPossibleStubs(1234);
+		Asserts.that(ReturnValueStubber.getSize())Equals(0);
+		Asserts.that(ReturnValueStubber.getSize())Equals(0);
+	}
+
+	~[ test set and get an expected stub ]~(Asserts) {
+		var ReturnValueStubber{Num} <- this;
+		var $ReturnValueStubber{Num} <- this;
+
+		ArgumentWatcher.expect(1, ReturnValueStubber);
+		ArgumentWatcher.expect(2, $ReturnValueStubber);
+		var ReturnValueStubber{Num}[] arr = ArgumentWatcher.getPossibleStubs(1);
+		Asserts.that(arr.getSize())Equals(1);
+		Asserts.that(arr[0] == ReturnValueStubber);
+		arr = ArgumentWatcher.getPossibleStubs(2);
+		Asserts.that(arr.getSize())Equals(1);
+		Asserts.that(arr[0] == $ReturnValueStubber);
+	}
+
+	~[ test set and get a overlapping expected stubs ]~(Asserts) {
+		var ReturnValueStubber{Num} <- this;
+		var $ReturnValueStubber{Num} <- this;
+
+		ArgumentWatcher.expect(3, ReturnValueStubber);
+		ArgumentWatcher.expect(3, $ReturnValueStubber);
+		var ReturnValueStubber{Num}[] arr = ArgumentWatcher.getPossibleStubs(3);
+		Asserts.that(arr.getSize())Equals(2);
+		Asserts.that(arr[0] == ReturnValueStubber);
+		Asserts.that(arr[1] == $ReturnValueStubber);
+	}

@@ -1,7 +1,7 @@
 PROGRAM := your-program-name
 LIBRARYFILES := ../compiler/bin/wakeobj/std.o
-LIBRARYTABLES := $(filter-out $(wildcard ../compiler/bin/waketable/*Test.table), $(wildcard ../compiler/bin/waketable/*.table) )
-TESTLIBRARYFILES :=
+LIBRARYTABLES := $(filter-out $(wildcard ../compiler/bin/waketable/*Test.table), $(wildcard ../compiler/bin/waketable/*.table) ) ../wUnit/bin/waketable/Asserts.table ../wUnit/bin/waketable/TestResultReporter.table
+TESTLIBRARYFILES := ../wUnit/bin/wakeobj/Asserts.o ../wUnit/bin/wakeobj/TestResultReporter.o
 
 TABLEDIR := bin/waketable
 OBJECTDIR := bin/wakeobj
@@ -59,6 +59,7 @@ $(OBJECTDIR)/%Test.o: $(TESTDIR)/%Test.wk
 
 ifneq "$(MAKECMDGOALS)" "clean"
 -include ${SOURCEFILES:.wk=.d}
+-include ${TESTFILES:.wk=.d}
 endif
 
 clean:

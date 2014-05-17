@@ -1,0 +1,11 @@
+every CrossFilter{T} is:
+
+	T[] -- intersect(T[])With($T[]) {
+		var T[] ret = [];
+		for(var Num = 0; Num < T.getSize(); Num += 1) {
+			if($T.contains(T[Num])) {
+				ret[ret.getSize()] = T[Num];
+			}
+		}
+		return ret;
+	}

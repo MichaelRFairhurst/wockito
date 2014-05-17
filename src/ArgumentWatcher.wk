@@ -1,0 +1,32 @@
+import ReturnValueStubber;
+
+every ArgumentWatcher{T, R} is:
+
+	with T[] calls = [];
+
+	with ReturnValueStubber{R}[] stubs = [];
+	with T[] matches = [];
+
+	tell(T) {
+		calls[calls.getSize()] = T;
+	}
+
+	T[] -- getCalls() {
+		return calls;
+	}
+
+	expect(T, ReturnValueStubber{R}) {
+		matches[matches.getSize()] = T;
+		stubs[stubs.getSize()] = ReturnValueStubber;
+	}
+
+	ReturnValueStubber{R}[] -- getPossibleStubs(T) {
+		var ReturnValueStubber{R}[] ret = [];
+		for(var Num = 0; Num < matches.getSize(); Num += 1) {
+			if(matches[Num] == T) {
+				ret[ret.getSize()] = stubs[Num];
+			}
+		}
+
+		return ret;
+	}
