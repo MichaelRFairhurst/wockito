@@ -1,26 +1,73 @@
 import ArgumentWatcher;
 import ReturnValueStubber;
 import CrossFilter;
+import CallValidator;
+import Asserts;
+import TimesCalledValidator;
 
 every ExampleMockStubber is:
 
-	needs ArgumentWatcher{Text, Text} textarg, ArgumentWatcher{Num, Text} numarg;
+	needs ArgumentWatcher{Text, Text}:ExampleMockZgetZpTextZcNumZpZa1 getZpTextZcNumZpZa1, ArgumentWatcher{Num, Text}:ExampleMockZgetZpTextZcNumZpZa2 getZpTextZcNumZpZa2;
 
 	provides ReturnValueStubber{Text};
 
 	ReturnValueStubber{Text} -- get(Text, Num) {
 		var ReturnValueStubber{Text} <- this;
-		textarg.expect(Text, ReturnValueStubber);
-		numarg.expect(Num, ReturnValueStubber);
+		getZpTextZcNumZpZa1.expect(Text, ReturnValueStubber);
+		getZpTextZcNumZpZa2.expect(Num, ReturnValueStubber);
 		return ReturnValueStubber;
 	}
 
 every ExampleMock is:
 
-	needs ArgumentWatcher{Text, Text} textarg, ArgumentWatcher{Num, Text} numarg, public ExampleMockStubber, CrossFilter{ReturnValueStubber{Text}} textcrosser;
+	needs ArgumentWatcher{Text, Text}:ExampleMockZgetZpTextZcNumZpZa1 getZpTextZcNumZpZa1, ArgumentWatcher{Num, Text}:ExampleMockZgetZpTextZcNumZpZa2 getZpTextZcNumZpZa2, public ExampleMockStubber, CrossFilter{ReturnValueStubber{Text}}, public ExampleMockVerifier;
 
 	Text -- get(Text, Num) {
-		var ReturnValueStubber{Text}[] = textarg.getPossibleStubs(Text);
-		ReturnValueStubber = textcrosser.intersect(ReturnValueStubber)With(numarg.getPossibleStubs(Num));
+		var ReturnValueStubber{Text}[] = getZpTextZcNumZpZa1.getPossibleStubs(Text);
+		ReturnValueStubber = CrossFilter.intersect(ReturnValueStubber)With(getZpTextZcNumZpZa2.getPossibleStubs(Num));
 		return ReturnValueStubber[0].get();
+	}
+
+every ExampleMockVerifier is:
+
+	needs ArgumentWatcher{Text, Text} getZpTextZcNumZpZa1, ArgumentWatcher{Num, Text} getZpTextZcNumZpZa2, CrossFilter{Num}, CallValidator;
+
+	get(Text, Num) {
+		var Num[] calls = getZpTextZcNumZpZa1.getCallIndices(Text);
+		calls = CrossFilter.intersect(calls)With(getZpTextZcNumZpZa2.getCallIndices(Num));
+		CallValidator.validate(calls);
+	}
+
+every MockProvider is:
+
+	needs ArgumentWatcher{Text, Text} exampleMockZgetZpTextZcNumZpZa1, ArgumentWatcher{Num, Text} exampleMockZgetZpTextZcNumZpZa2;
+
+	with Asserts[] = [];
+
+	use($Asserts) {
+		Asserts[0] = $Asserts;
+	}
+
+	provides ExampleMock <- {
+			exampleMockZgetZpTextZcNumZpZa1 = ArgumentWatcher{Text, Text} <- this;
+			exampleMockZgetZpTextZcNumZpZa2 = ArgumentWatcher{Num, Text} <- this;
+			return ExampleMock <- this;
+		},
+		ExampleMockStubber,
+		ArgumentWatcher{Text, Text},
+		ArgumentWatcher{Num, Text},
+		ArgumentWatcher{Text, Text}:ExampleMockZgetZpTextZcNumZpZa1 <- { return exampleMockZgetZpTextZcNumZpZa1; },
+		ArgumentWatcher{Num, Text}:ExampleMockZgetZpTextZcNumZpZa2 <- { return exampleMockZgetZpTextZcNumZpZa2; },
+		Asserts <- { return Asserts[0]; },
+		CallValidator,
+		TimesCalledValidator;
+
+	ExampleMockStubber -- when(ExampleMock) {
+		return ExampleMock.ExampleMockStubber;
+	}
+
+	ExampleMockVerifier -- verify(ExampleMock) {
+		var TimesCalledValidator <- this;
+		ExampleMock.ExampleMockVerifier.CallValidator = TimesCalledValidator;
+		return ExampleMock.ExampleMockVerifier;
 	}

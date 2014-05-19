@@ -1,0 +1,22 @@
+import Asserts;
+import NameTransformer;
+
+every NameTransformerTest is:
+
+	needs NameTransformer;
+
+	~[ test two properties ]~(Asserts) {
+		Asserts.that(NameTransformer.methodToProperty("add(Num,Num)"))Equals("addZpNumZcNumZp");
+	}
+
+	~[ test two segments ]~(Asserts) {
+		Asserts.that(NameTransformer.methodToProperty("add(Num)To(Num)"))Equals("addZpNumZpToZpNumZp");
+	}
+
+	~[ test generics ]~(Asserts) {
+		Asserts.that(NameTransformer.methodToProperty("add(List{Num})"))Equals("addZpListZsNumZeZp");
+	}
+
+	~[ test classnames  ]~(Asserts) {
+		Asserts.that(NameTransformer.classToProperty("TestClass"))Equals("testClass");
+	}

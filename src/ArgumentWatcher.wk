@@ -3,16 +3,28 @@ import ReturnValueStubber;
 every ArgumentWatcher{T, R} is:
 
 	with T[] calls = [];
+	with Num[] callNums = [];
 
 	with ReturnValueStubber{R}[] stubs = [];
 	with T[] matches = [];
 
-	tell(T) {
+	tell(T, Num) {
 		calls[calls.getSize()] = T;
+		callNums[callNums.getSize()] = Num;
 	}
 
 	T[] -- getCalls() {
 		return calls;
+	}
+
+	Num[] -- getCallIndices(T) {
+		var Num[] = [];
+		for(var $Num = 0; $Num < calls.getSize(); $Num += 1) {
+			if(calls[$Num] == T)
+				Num[Num.getSize()] = callNums[$Num];
+		}
+
+		return Num;
 	}
 
 	expect(T, ReturnValueStubber{R}) {

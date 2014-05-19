@@ -1,0 +1,8 @@
+import Asserts;
+
+every CallValidator is:
+
+	needs $Asserts;
+
+	validate(Num[]) {
+	}

@@ -1,0 +1,25 @@
+import CallValidator;
+import Asserts;
+
+every TimesCalledValidator (a CallValidator) is:
+
+	needs Asserts;
+	with public Text methodname = "";
+	with public Num? minExpectedTimes = nothing;
+	with public Num? maxExpectedTimes = nothing;
+
+	validate(Num[]) {
+		var $Num? = minExpectedTimes;
+		if $Num exists {
+			if(Num.getSize() < $Num) {
+				Asserts.fail("Expected " + methodname + " to be called more than times than actual");
+			}
+		}
+
+		$Num = maxExpectedTimes;
+		if $Num exists {
+			if(Num.getSize() > $Num) {
+				Asserts.fail("Expected " + methodname + " to be called fewer than times than actual");
+			}
+		}
+	}

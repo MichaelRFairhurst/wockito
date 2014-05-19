@@ -1,0 +1,17 @@
+import File;
+import WakeClass;
+
+#>
+# Generates files along the lines of:
+#
+# every ExampleMockVerifier is:
+#
+#	needs ArgumentWatcher{Text, Text} getZpTextZcNumZpZa1, ArgumentWatcher{Num, Text} getZpTextZcNumZpZa2, CrossFilter{Num}, CallValidator;
+#
+#	get(Text, Num) {
+#		var Num[] calls = getZpTextZcNumZpZa1.getCallIndices(Text);
+#		calls = CrossFilter.intersect(calls)With(getZpTextZcNumZpZa2.getCallIndices(Num));
+#		CallValidator.validate(calls);
+#	}
+##
+every MockVerifierFileGenerator is:
