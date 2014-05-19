@@ -1,10 +1,11 @@
 import File;
 import WakeClass;
+import NameTransformer;
 
 #>
 # Generates code along the lines of:
 #
-# every ExampleMock is:
+# every ExampleMock (capable Example) is:
 #
 #	needs ArgumentWatcher{Text, Text}:ExampleMockZgetZpTextZcNumZpZa1 getZpTextZcNumZpZa1, ArgumentWatcher{Num, Text}:ExampleMockZgetZpTextZcNumZpZa2 getZpTextZcNumZpZa2, public ExampleMockStubber, CrossFilter{ReturnValueStubber{Text}}, public ExampleMockVerifier;
 #
@@ -16,6 +17,71 @@ import WakeClass;
 ##
 every MockFileGenerator is:
 
+	needs NameTransformer;
+
 	generate(WakeClass, File) {
 		File.write("every " + WakeClass.classname + "Mock (capable " + WakeClass.classname + ") is:");
+		File.write("needs ");
+
+		var Text[] = WakeClass.properties.getKeys();
+		var Text[] filters = [];
+
+		for(var Num = 0; Num < Text.getSize(); Num += 1) {
+			var WakeType method = WakeClass.properties.get(Text[Num]);
+			if(method.type == 2) continue;
+
+			var Text methodname = Text[Num];
+			var Text methodAsProperty = NameTransformer.methodToProperty(methodname);
+
+			var WakeType? returntype = method.returntype;
+			var Text returntypename = "";
+			if returntype exists {
+				returntypename = returntype.getPureName();
+			} else {
+				returntypename = "Num"; // this type will simply be ignored...but it must be a valid type!
+			}
+
+			for(var $Num = 0; $Num < method.arguments.getSize(); $Num += 1) {
+				var Text argname = method.arguments[$Num].getPureName();
+				if(!filters.contains(argname) {
+					File.write("CrossFilter{ReturnValueStubber{" + argname + "}}, ");
+					filters[filters.size()] = argname;
+				}
+
+				File.write("ArgumentWatcher{" + argname + "," + returntypename + "}:"
+					+ NameTransformer.classToProperty(WakeClass.classname) + methodAsProperty + "Za1 "
+					+ methodAsProperty + "Za1, "); // TODO Num.toString!!!!!
+			}
+		}
+
+		File.write("public " + WakeClass.classname + "MockVerifier, public " + WakeClass.classname + "MockStubber;");
+
+		for(var Num = 0; Num < Text.getSize(); Num += 1) {
+			var WakeType method = WakeClass.properties.get(Text[Num]);
+			if(method.type == 2) continue;
+
+			var Text methodname = Text[Num];
+			var Text methodAsProperty = NameTransformer.methodToProperty(methodname);
+
+			var WakeType? returntype = method.returntype;
+			var Text returntypename = "";
+			if returntype exists {
+				returntypename = returntype.getPureName();
+				File.write(returntypename + " -- ");
+			} else {
+				returntypename = "Num"; // this type will simply be ignored...but it must be a valid type!
+			}
+
+			for(var $Num = 0; $Num < method.arguments.getSize(); $Num += 1) {
+				var Text argname = method.arguments[$Num].getPureName();
+				if(!filters.contains(argname) {
+					File.write("CrossFilter{ReturnValueStubber{" + argname + "}}, ");
+					filters[filters.size()] = argname;
+				}
+
+				File.write("ArgumentWatcher{" + argname + "," + returntypename + "}:"
+					+ NameTransformer.classToProperty(WakeClass.classname) + methodAsProperty + "Za1 "
+					+ methodAsProperty + "Za1, "); // TODO Num.toString!!!!!
+			}
+		}
 	}
