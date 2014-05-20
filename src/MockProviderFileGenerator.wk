@@ -6,36 +6,34 @@ import WakeClass;
 #
 # every MockProvider is:
 #
-#	needs ArgumentWatcher{Text, Text} exampleMockZgetZpTextZcNumZpZa1, ArgumentWatcher{Num, Text} exampleMockZgetZpTextZcNumZpZa2;
-#
 #	with Asserts[] = [];
 #
 #	use($Asserts) {
 #		Asserts[0] = $Asserts;
 #	}
 #
-#	provides ExampleMock <- {
-#			exampleMockZgetZpTextZcNumZpZa1 = ArgumentWatcher{Text, Text} <- this;
-#			exampleMockZgetZpTextZcNumZpZa2 = ArgumentWatcher{Num, Text} <- this;
-#			return ExampleMock <- this;
-#		},
-#		ExampleMockStubber,
+#	provides ExampleMock,
 #		ArgumentWatcher{Text, Text},
 #		ArgumentWatcher{Num, Text},
-#		ArgumentWatcher{Text, Text}:ExampleMockZgetZpTextZcNumZpZa1 <- { return exampleMockZgetZpTextZcNumZpZa1; },
-#		ArgumentWatcher{Num, Text}:ExampleMockZgetZpTextZcNumZpZa2 <- { return exampleMockZgetZpTextZcNumZpZa2; },
 #		Asserts <- { return Asserts[0]; },
-#		CallValidator,
 #		TimesCalledValidator;
 #
 #	ExampleMockStubber -- when(ExampleMock) {
-#		return ExampleMock.ExampleMockStubber;
+#		return ExampleMockStubber <- ExampleMock;
 #	}
 #
 #	ExampleMockVerifier -- verify(ExampleMock) {
 #		var TimesCalledValidator <- this;
-#		ExampleMock.ExampleMockVerifier.CallValidator = TimesCalledValidator;
-#		return ExampleMock.ExampleMockVerifier;
+#		var ExampleMockVerifier <- ExampleMock;
+#		ExampleMockVerifier.CallValidator = TimesCalledValidator;
+#		return ExampleMockVerifier;
 #	}
+#
+#	ExampleMockVerifier -- verify(Num)Times(ExampleMock) {
+#		var ExampleMockVerifier <- this;
+#		ExampleMockVerifier.CallValidator.minTimesCalled = Num;
+#		ExampleMockVerifier.CallValidator.maxTimesCalled = Num;
+#	}
+#
 ##
 every MockProviderFileGenerator is:

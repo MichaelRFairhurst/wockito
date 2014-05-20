@@ -6,15 +6,15 @@ import WakeClass;
 #
 # every ExampleMockStubber is:
 #
-#	needs ArgumentWatcher{Text, Text}:ExampleMockZgetZpTextZcNumZpZa1 getZpTextZcNumZpZa1, ArgumentWatcher{Num, Text}:ExampleMockZgetZpTextZcNumZpZa2 getZpTextZcNumZpZa2;
+# 	needs ArgumentWatcher{Text, Text}:getZpTextZcNumZpZa1 getZpTextZcNumZpZa1, ArgumentWatcher{Num, Text}:getZpTextZcNumZpZa1 getZpTextZcNumZpZa2;
 #
-#	provides ReturnValueStubber{Text};
+# 	provides ReturnValueStubber{Text};
 #
-#	ReturnValueStubber{Text} -- get(Text, Num) {
-#		var ReturnValueStubber{Text} <- this;
-#		getZpTextZcNumZpZa1.expect(Text, ReturnValueStubber);
-#		getZpTextZcNumZpZa2.expect(Num, ReturnValueStubber);
-#		return ReturnValueStubber;
-#	}
+# 	ReturnValueStubber{Text} -- get(Text, Num) {
+# 		var ReturnValueStubber{Text} <- this;
+# 		getZpTextZcNumZpZa1.expect(Text, ReturnValueStubber);
+# 		getZpTextZcNumZpZa2.expect(Num, ReturnValueStubber);
+# 		return ReturnValueStubber;
+# 	}
 ##
 every MockStubberFileGenerator is:

@@ -6,12 +6,17 @@ import WakeClass;
 #
 # every ExampleMockVerifier is:
 #
-#	needs ArgumentWatcher{Text, Text} getZpTextZcNumZpZa1, ArgumentWatcher{Num, Text} getZpTextZcNumZpZa2, CrossFilter{Num}, CallValidator;
+# 	needs ArgumentWatcher{Text, Text}:getZpTextZcNumZpZa1 getZpTextZcNumZpZa1, ArgumentWatcher{Num, Text}:getZpTextZcNumZpZa1 getZpTextZcNumZpZa2;
+#
+#	with public CallValidator? = nothing;
 #
 #	get(Text, Num) {
 #		var Num[] calls = getZpTextZcNumZpZa1.getCallIndices(Text);
-#		calls = CrossFilter.intersect(calls)With(getZpTextZcNumZpZa2.getCallIndices(Num));
-#		CallValidator.validate(calls);
+#		calls = calls.intersect(getZpTextZcNumZpZa2.getCallIndices(Num));
+#		var $CallValidator? = CallValidator; // bugfix.....
+#		if $CallValidator exists {
+#			$CallValidator.validate(calls);
+#		}
 #	}
 ##
 every MockVerifierFileGenerator is:

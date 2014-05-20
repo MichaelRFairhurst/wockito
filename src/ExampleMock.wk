@@ -6,7 +6,7 @@ import TimesCalledValidator;
 
 every ExampleMockStubber is:
 
-	needs ArgumentWatcher{Text, Text}:getZpTextZcNumZpZa1 getZpTextZcNumZpZa1, ArgumentWatcher{Num, Text}:getZpTextZcNumZpZa1 getZpTextZcNumZpZa2;
+	needs ArgumentWatcher{Text, Text}:getZpTextZcNumZpZa1 getZpTextZcNumZpZa1, ArgumentWatcher{Num, Text}:getZpTextZcNumZpZa2 getZpTextZcNumZpZa2;
 
 	provides ReturnValueStubber{Text};
 
@@ -19,13 +19,13 @@ every ExampleMockStubber is:
 
 every ExampleMock is:
 
-	needs ArgumentWatcher{Text, Text} getZpTextZcNumZpZa1, ArgumentWatcher{Num, Text}:getZpTextZcNumZpZa2 getZpTextZcNumZpZa2;
+	needs ArgumentWatcher{Text, Text} getZpTextZcNumZpZa1, ArgumentWatcher{Num, Text} getZpTextZcNumZpZa2;
 
 	provides
 		ArgumentWatcher{Text, Text}:getZpTextZcNumZpZa1 <- { return getZpTextZcNumZpZa1; },
 		ArgumentWatcher{Num, Text}:getZpTextZcNumZpZa2 <- { return getZpTextZcNumZpZa2; },
 		ExampleMockStubber,
-		ExampleMockValidator;
+		ExampleMockVerifier;
 
 	Text -- get(Text, Num) {
 		var ReturnValueStubber{Text}[] = getZpTextZcNumZpZa1.getPossibleStubs(Text);
@@ -35,7 +35,7 @@ every ExampleMock is:
 
 every ExampleMockVerifier is:
 
-	needs ArgumentWatcher{Text, Text} getZpTextZcNumZpZa1, ArgumentWatcher{Num, Text} getZpTextZcNumZpZa2;
+	needs ArgumentWatcher{Text, Text}:getZpTextZcNumZpZa1 getZpTextZcNumZpZa1, ArgumentWatcher{Num, Text}:getZpTextZcNumZpZa2 getZpTextZcNumZpZa2;
 
 	with public CallValidator? = nothing;
 
@@ -49,8 +49,6 @@ every ExampleMockVerifier is:
 	}
 
 every MockProvider is:
-
-	needs ArgumentWatcher{Text, Text} exampleMockZgetZpTextZcNumZpZa1, ArgumentWatcher{Num, Text} exampleMockZgetZpTextZcNumZpZa2;
 
 	with Asserts[] = [];
 
@@ -76,7 +74,10 @@ every MockProvider is:
 	}
 
 	ExampleMockVerifier -- verify(Num)Times(ExampleMock) {
-		var ExampleMockVerifier <- this;
-		ExampleMockVerifier.CallValidator.minTimesCalled = Num;
-		ExampleMockVerifier.CallValidator.maxTimesCalled = Num;
+		var TimesCalledValidator <- this;
+		TimesCalledValidator.minExpectedTimes = Num;
+		TimesCalledValidator.maxExpectedTimes = Num;
+		var ExampleMockVerifier <- ExampleMock;
+		ExampleMockVerifier.CallValidator = TimesCalledValidator;
+		return ExampleMockVerifier;
 	}

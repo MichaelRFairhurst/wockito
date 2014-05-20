@@ -1,17 +1,24 @@
 import File;
 import WakeClass;
 import NameTransformer;
+import Map;
 
 #>
 # Generates code along the lines of:
 #
-# every ExampleMock (capable Example) is:
+# every ExampleMock is:
 #
-#	needs ArgumentWatcher{Text, Text}:ExampleMockZgetZpTextZcNumZpZa1 getZpTextZcNumZpZa1, ArgumentWatcher{Num, Text}:ExampleMockZgetZpTextZcNumZpZa2 getZpTextZcNumZpZa2, public ExampleMockStubber, CrossFilter{ReturnValueStubber{Text}}, public ExampleMockVerifier;
+#	needs ArgumentWatcher{Text, Text} getZpTextZcNumZpZa1, ArgumentWatcher{Num, Text}:getZpTextZcNumZpZa2 getZpTextZcNumZpZa2;
+#
+#	provides
+#		ArgumentWatcher{Text, Text}:getZpTextZcNumZpZa1 <- { return getZpTextZcNumZpZa1; },
+#		ArgumentWatcher{Num, Text}:getZpTextZcNumZpZa2 <- { return getZpTextZcNumZpZa2; },
+#		ExampleMockStubber,
+#		ExampleMockValidator;
 #
 #	Text -- get(Text, Num) {
 #		var ReturnValueStubber{Text}[] = getZpTextZcNumZpZa1.getPossibleStubs(Text);
-#		ReturnValueStubber = CrossFilter.intersect(ReturnValueStubber)With(getZpTextZcNumZpZa2.getPossibleStubs(Num));
+#		ReturnValueStubber = ReturnValueStubber.intersect(getZpTextZcNumZpZa2.getPossibleStubs(Num));
 #		return ReturnValueStubber[0].get();
 #	}
 ##
@@ -21,21 +28,72 @@ every MockFileGenerator is:
 
 	generate(WakeClass, File) {
 		File.write("every " + WakeClass.classname + "Mock (capable " + WakeClass.classname + ") is:");
+
+		generateImports(WakeClass, File);
+		generateNeeds(WakeClass, File);
+		generateProvisions(WakeClass, File);
+		generateMethods(WakeClass, File);
+	}
+
+	generateImports(WakeClass, File);
+
+	generateMethods(WakeClass, File) {
+		var Text[] = WakeClass.properties.getKeys();
+
+		for(var Num = 0; Num < Text.getSize(); Num += 1) {
+			var Text methodname = Text[Num];
+			var WakeType method = WakeClass.properties.get(methodname);
+			if(method.type == 2) continue;
+
+			var Text methodAsProperty = NameTransformer.methodToProperty(methodname);
+
+			var WakeType? returntype = method.returntype;
+			var Text returntypename = "";
+			if Fix returntype exists {
+				returntypename = returntype.getPureName();
+				File.write(returntypename + " -- ");
+			}
+
+			File.write(methodname + "{");
+			for(var $Num = 0; $Num < method.arguments.getSize(); $Num += 1) {
+				var Text argname = "blah";
+				File.write(methodAsProperty + "Za1.tell(" + argname + ");"); // TODO Num.toString!!!!!
+				if Fix returntype exists {
+					if($Num == 0) {
+						File.write("var ReturnValueStubber{" + returntypename + "}[] = " + methodAsProperty + "Za1.getPosssibleStubs(" + argname + ");"); // TODO Num.toString!!!!!
+					} else {
+						File.write("ReturnValueStubber = ReturnValueStubber.intersect(" + methodAsProperty + "Za1.getPossibleStubs(" + argname + "));"); // TODO Num.toString!!!!!
+					}
+				}
+			}
+
+			if Fix returntype exists {
+				File.write("return ReturnValueStubber[0].get();");
+			}
+
+			File.write("}");
+		}
+	}
+
+	generateProvisions(WakeClass, File) {
+		File.write("provides " + WakeClass.classname + "MockVerifier, " + WakeClass.classname + "MockStubber;");
+	}
+
+	generateNeeds(WakeClass, File) {
 		File.write("needs ");
 
 		var Text[] = WakeClass.properties.getKeys();
-		var Text[] filters = [];
 
 		for(var Num = 0; Num < Text.getSize(); Num += 1) {
-			var WakeType method = WakeClass.properties.get(Text[Num]);
+			var Text methodname = Text[Num];
+			var WakeType method = WakeClass.properties.get(methodname);
 			if(method.type == 2) continue;
 
-			var Text methodname = Text[Num];
 			var Text methodAsProperty = NameTransformer.methodToProperty(methodname);
 
 			var WakeType? returntype = method.returntype;
 			var Text returntypename = "";
-			if returntype exists {
+			if Fix returntype exists {
 				returntypename = returntype.getPureName();
 			} else {
 				returntypename = "Num"; // this type will simply be ignored...but it must be a valid type!
@@ -43,45 +101,12 @@ every MockFileGenerator is:
 
 			for(var $Num = 0; $Num < method.arguments.getSize(); $Num += 1) {
 				var Text argname = method.arguments[$Num].getPureName();
-				if(!filters.contains(argname) {
-					File.write("CrossFilter{ReturnValueStubber{" + argname + "}}, ");
-					filters[filters.size()] = argname;
-				}
 
-				File.write("ArgumentWatcher{" + argname + "," + returntypename + "}:"
-					+ NameTransformer.classToProperty(WakeClass.classname) + methodAsProperty + "Za1 "
-					+ methodAsProperty + "Za1, "); // TODO Num.toString!!!!!
+				if(Num != 0) File.write(", ");
+				File.write("ArgumentWatcher{" + argname + "," + returntypename + "} " + methodAsProperty + "Za1"); // TODO Num.toString!!!!!
 			}
+
 		}
 
-		File.write("public " + WakeClass.classname + "MockVerifier, public " + WakeClass.classname + "MockStubber;");
-
-		for(var Num = 0; Num < Text.getSize(); Num += 1) {
-			var WakeType method = WakeClass.properties.get(Text[Num]);
-			if(method.type == 2) continue;
-
-			var Text methodname = Text[Num];
-			var Text methodAsProperty = NameTransformer.methodToProperty(methodname);
-
-			var WakeType? returntype = method.returntype;
-			var Text returntypename = "";
-			if returntype exists {
-				returntypename = returntype.getPureName();
-				File.write(returntypename + " -- ");
-			} else {
-				returntypename = "Num"; // this type will simply be ignored...but it must be a valid type!
-			}
-
-			for(var $Num = 0; $Num < method.arguments.getSize(); $Num += 1) {
-				var Text argname = method.arguments[$Num].getPureName();
-				if(!filters.contains(argname) {
-					File.write("CrossFilter{ReturnValueStubber{" + argname + "}}, ");
-					filters[filters.size()] = argname;
-				}
-
-				File.write("ArgumentWatcher{" + argname + "," + returntypename + "}:"
-					+ NameTransformer.classToProperty(WakeClass.classname) + methodAsProperty + "Za1 "
-					+ methodAsProperty + "Za1, "); // TODO Num.toString!!!!!
-			}
-		}
+		File.write(";");
 	}
