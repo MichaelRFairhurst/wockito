@@ -1,13 +1,12 @@
 import ArgumentWatcher;
 import ReturnValueStubber;
-import CrossFilter;
 import CallValidator;
 import Asserts;
 import TimesCalledValidator;
 
 every ExampleMockStubber is:
 
-	needs ArgumentWatcher{Text, Text}:ExampleMockZgetZpTextZcNumZpZa1 getZpTextZcNumZpZa1, ArgumentWatcher{Num, Text}:ExampleMockZgetZpTextZcNumZpZa2 getZpTextZcNumZpZa2;
+	needs ArgumentWatcher{Text, Text}:getZpTextZcNumZpZa1 getZpTextZcNumZpZa1, ArgumentWatcher{Num, Text}:getZpTextZcNumZpZa1 getZpTextZcNumZpZa2;
 
 	provides ReturnValueStubber{Text};
 
@@ -20,22 +19,33 @@ every ExampleMockStubber is:
 
 every ExampleMock is:
 
-	needs ArgumentWatcher{Text, Text}:ExampleMockZgetZpTextZcNumZpZa1 getZpTextZcNumZpZa1, ArgumentWatcher{Num, Text}:ExampleMockZgetZpTextZcNumZpZa2 getZpTextZcNumZpZa2, public ExampleMockStubber, CrossFilter{ReturnValueStubber{Text}}, public ExampleMockVerifier;
+	needs ArgumentWatcher{Text, Text} getZpTextZcNumZpZa1, ArgumentWatcher{Num, Text}:getZpTextZcNumZpZa2 getZpTextZcNumZpZa2;
+
+	provides
+		ArgumentWatcher{Text, Text}:getZpTextZcNumZpZa1 <- { return getZpTextZcNumZpZa1; },
+		ArgumentWatcher{Num, Text}:getZpTextZcNumZpZa2 <- { return getZpTextZcNumZpZa2; },
+		ExampleMockStubber,
+		ExampleMockValidator;
 
 	Text -- get(Text, Num) {
 		var ReturnValueStubber{Text}[] = getZpTextZcNumZpZa1.getPossibleStubs(Text);
-		ReturnValueStubber = CrossFilter.intersect(ReturnValueStubber)With(getZpTextZcNumZpZa2.getPossibleStubs(Num));
+		ReturnValueStubber = ReturnValueStubber.intersect(getZpTextZcNumZpZa2.getPossibleStubs(Num));
 		return ReturnValueStubber[0].get();
 	}
 
 every ExampleMockVerifier is:
 
-	needs ArgumentWatcher{Text, Text} getZpTextZcNumZpZa1, ArgumentWatcher{Num, Text} getZpTextZcNumZpZa2, CrossFilter{Num}, CallValidator;
+	needs ArgumentWatcher{Text, Text} getZpTextZcNumZpZa1, ArgumentWatcher{Num, Text} getZpTextZcNumZpZa2;
+
+	with public CallValidator? = nothing;
 
 	get(Text, Num) {
 		var Num[] calls = getZpTextZcNumZpZa1.getCallIndices(Text);
-		calls = CrossFilter.intersect(calls)With(getZpTextZcNumZpZa2.getCallIndices(Num));
-		CallValidator.validate(calls);
+		calls = calls.intersect(getZpTextZcNumZpZa2.getCallIndices(Num));
+		var $CallValidator? = CallValidator; // bugfix.....
+		if $CallValidator exists {
+			$CallValidator.validate(calls);
+		}
 	}
 
 every MockProvider is:
@@ -48,26 +58,25 @@ every MockProvider is:
 		Asserts[0] = $Asserts;
 	}
 
-	provides ExampleMock <- {
-			exampleMockZgetZpTextZcNumZpZa1 = ArgumentWatcher{Text, Text} <- this;
-			exampleMockZgetZpTextZcNumZpZa2 = ArgumentWatcher{Num, Text} <- this;
-			return ExampleMock <- this;
-		},
-		ExampleMockStubber,
+	provides ExampleMock,
 		ArgumentWatcher{Text, Text},
 		ArgumentWatcher{Num, Text},
-		ArgumentWatcher{Text, Text}:ExampleMockZgetZpTextZcNumZpZa1 <- { return exampleMockZgetZpTextZcNumZpZa1; },
-		ArgumentWatcher{Num, Text}:ExampleMockZgetZpTextZcNumZpZa2 <- { return exampleMockZgetZpTextZcNumZpZa2; },
 		Asserts <- { return Asserts[0]; },
-		CallValidator,
 		TimesCalledValidator;
 
 	ExampleMockStubber -- when(ExampleMock) {
-		return ExampleMock.ExampleMockStubber;
+		return ExampleMockStubber <- ExampleMock;
 	}
 
 	ExampleMockVerifier -- verify(ExampleMock) {
 		var TimesCalledValidator <- this;
-		ExampleMock.ExampleMockVerifier.CallValidator = TimesCalledValidator;
-		return ExampleMock.ExampleMockVerifier;
+		var ExampleMockVerifier <- ExampleMock;
+		ExampleMockVerifier.CallValidator = TimesCalledValidator;
+		return ExampleMockVerifier;
+	}
+
+	ExampleMockVerifier -- verify(Num)Times(ExampleMock) {
+		var ExampleMockVerifier <- this;
+		ExampleMockVerifier.CallValidator.minTimesCalled = Num;
+		ExampleMockVerifier.CallValidator.maxTimesCalled = Num;
 	}
