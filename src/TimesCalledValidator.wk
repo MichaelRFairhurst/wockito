@@ -12,14 +12,14 @@ every TimesCalledValidator (a CallValidator) is:
 		var $Num? = minExpectedTimes;
 		if $Num exists {
 			if(Num.getSize() < $Num) {
-				Asserts.fail("Expected " + methodname + " to be called more than " + Num.getSize().toString() + " times, actually called " + $Num.toString() + " times");
+				Asserts.fail("Expected " + methodname + " to be called more than " + $Num.toString() + " times, actually called " + Num.getSize().toString() + " times");
 			}
 		}
 
 		$Num = maxExpectedTimes;
 		if $Num exists {
 			if(Num.getSize() > $Num) {
-				Asserts.fail("Expected " + methodname + " to be called fewer than " + Num.getSize().toString() + " times, actually called " + $Num.toString() + " times");
+				Asserts.fail("Expected " + methodname + " to be called fewer than " + $Num.toString() + " times, actually called " + Num.getSize().toString() + " times");
 			}
 		}
 	}

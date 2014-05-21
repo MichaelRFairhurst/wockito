@@ -105,3 +105,11 @@ every ExampleMockTest is:
 		ExampleMock.get("what", 7);
 		mocks.verify(0)Times(ExampleMock).get("what", 7);
 	}
+
+	~[ test FAILS not called enough times ]~(Asserts) {
+		mocks.use(Asserts);
+		var ExampleMock <- mocks;
+		mocks.when(ExampleMock).get("what", 7).thenReturn("useless");
+		ExampleMock.get("what", 7);
+		mocks.verify(2)Times(ExampleMock).get("what", 7);
+	}

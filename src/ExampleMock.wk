@@ -27,9 +27,14 @@ every ExampleMock is:
 		ExampleMockStubber,
 		ExampleMockVerifier;
 
+	with Num counter = 0;
+
 	Text -- get(Text, Num) {
 		var ReturnValueStubber{Text}[] = getZpTextZcNumZpZa1.getPossibleStubs(Text);
 		ReturnValueStubber = ReturnValueStubber.intersect(getZpTextZcNumZpZa2.getPossibleStubs(Num));
+		getZpTextZcNumZpZa1.tell(Text, counter);
+		getZpTextZcNumZpZa2.tell(Num, counter);
+		counter += 1;
 		return ReturnValueStubber[0].get();
 	}
 
@@ -69,6 +74,7 @@ every MockProvider is:
 	ExampleMockVerifier -- verify(ExampleMock) {
 		var TimesCalledValidator <- this;
 		var ExampleMockVerifier <- ExampleMock;
+		TimesCalledValidator.minExpectedTimes = 1;
 		ExampleMockVerifier.CallValidator = TimesCalledValidator;
 		return ExampleMockVerifier;
 	}
