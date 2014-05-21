@@ -1,5 +1,6 @@
 import File;
 import WakeClass;
+import WakeType;
 import NameTransformer;
 import Map;
 
@@ -42,7 +43,7 @@ every MockFileGenerator is:
 
 		for(var Num = 0; Num < Text.getSize(); Num += 1) {
 			var Text methodname = Text[Num];
-			var WakeType method = WakeClass.properties.get(methodname);
+			var WakeType? method = WakeClass.properties.get(methodname);
 			if(method.type == 2) continue;
 
 			var Text methodAsProperty = NameTransformer.methodToProperty(methodname);
@@ -86,24 +87,28 @@ every MockFileGenerator is:
 
 		for(var Num = 0; Num < Text.getSize(); Num += 1) {
 			var Text methodname = Text[Num];
-			var WakeType method = WakeClass.properties.get(methodname);
-			if(method.type == 2) continue;
+			var WakeType? method = WakeClass.properties.get(methodname);
 
-			var Text methodAsProperty = NameTransformer.methodToProperty(methodname);
+			if Fix method exists {
 
-			var WakeType? returntype = method.returntype;
-			var Text returntypename = "";
-			if Fix returntype exists {
-				returntypename = returntype.getPureName();
-			} else {
-				returntypename = "Num"; // this type will simply be ignored...but it must be a valid type!
-			}
+				if(method.type == 2) continue;
 
-			for(var $Num = 0; $Num < method.arguments.getSize(); $Num += 1) {
-				var Text argname = method.arguments[$Num].getPureName();
+				var Text methodAsProperty = NameTransformer.methodToProperty(methodname);
 
-				if(Num != 0) File.write(", ");
-				File.write("ArgumentWatcher{" + argname + "," + returntypename + "} " + methodAsProperty + "Za1"); // TODO Num.toString!!!!!
+				var WakeType? returntype = method.returntype;
+				var Text returntypename = "";
+				if Fix returntype exists {
+					returntypename = returntype.getPureName();
+				} else {
+					returntypename = "Num"; // this type will simply be ignored...but it must be a valid type!
+				}
+
+				for(var $Num = 0; $Num < method.arguments.getSize(); $Num += 1) {
+					var Text argname = method.arguments[$Num].getPureName();
+
+					if(Num != 0) File.write(", ");
+					File.write("ArgumentWatcher{" + argname + "," + returntypename + "} " + methodAsProperty + "Za1"); // TODO Num.toString!!!!!
+				}
 			}
 
 		}

@@ -1,0 +1,15 @@
+import ExampleMock;
+import ExampleMockStubber;
+import ReturnValueStubber;
+import Asserts;
+import MockProvider;
+
+every ExampleMockTest is:
+
+	needs MockProvider;
+
+	~[ test set and use a stub ]~(Asserts) {
+		var ExampleMock <- MockProvider;
+		MockProvider.when(ExampleMock).get("hello", 5).thenReturn("hey");
+		Asserts.that(ExampleMock.get("hello", 5))Equals("hey");
+	}
