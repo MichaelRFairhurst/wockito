@@ -1,15 +1,107 @@
 import ExampleMock;
 import ExampleMockStubber;
+import ExampleMockVerifier;
 import ReturnValueStubber;
 import Asserts;
 import MockProvider;
+import ArgumentWatcher;
 
 every ExampleMockTest is:
 
-	needs MockProvider;
+	needs MockProvider mocks;
 
 	~[ test set and use a stub ]~(Asserts) {
-		var ExampleMock <- MockProvider;
-		MockProvider.when(ExampleMock).get("hello", 5).thenReturn("hey");
+		var ExampleMock <- mocks;
+		mocks.when(ExampleMock).get("hello", 5).thenReturn("hey");
 		Asserts.that(ExampleMock.get("hello", 5))Equals("hey");
+	}
+
+	~[ test and use multiple stubs ]~(Asserts) {
+		var ExampleMock <- mocks;
+		mocks.when(ExampleMock).get("hey there", 54).thenReturn("hey back!");
+		mocks.when(ExampleMock).get("hey here", 54).thenReturn("hey front!");
+		mocks.when(ExampleMock).get("hey here", 55).thenReturn("hey up!");
+		mocks.when(ExampleMock).get("hey there", 55).thenReturn("hey to the side!");
+		Asserts.that(ExampleMock.get("hey there", 54))Equals("hey back!");
+		Asserts.that(ExampleMock.get("hey here", 54))Equals("hey front!");
+		Asserts.that(ExampleMock.get("hey here", 55))Equals("hey up!");
+		Asserts.that(ExampleMock.get("hey there", 55))Equals("hey to the side!");
+	}
+
+	~[ test and use multiple stub returns ]~(Asserts) {
+		var ExampleMock <- mocks;
+		mocks.when(ExampleMock).get("hey", 1).thenReturn("yo").thenReturn("yoo").thenReturn("whaddup.");
+		Asserts.that(ExampleMock.get("hey", 1))Equals("yo");
+		Asserts.that(ExampleMock.get("hey", 1))Equals("yoo");
+		Asserts.that(ExampleMock.get("hey", 1))Equals("whaddup.");
+	}
+
+	~[ test and use multiple mocks ]~(Asserts) {
+		var ExampleMock <- mocks;
+		var $ExampleMock <- mocks;
+		mocks.when(ExampleMock).get("one", 2).thenReturn("hey man");
+		mocks.when($ExampleMock).get("one", 2).thenReturn("hey dawg");
+		Asserts.that(ExampleMock.get("one", 2))Equals("hey man");
+		Asserts.that($ExampleMock.get("one", 2))Equals("hey dawg");
+	}
+
+	~[ test verify valid ]~(Asserts) {
+		mocks.use(Asserts);
+		var ExampleMock <- mocks;
+		mocks.when(ExampleMock).get("toast", 430).thenReturn("That's too early for toast!");
+		ExampleMock.get("toast", 430);
+		mocks.verify(ExampleMock).get("toast", 430);
+	}
+
+	~[ test verify twice valid ]~(Asserts) {
+		mocks.use(Asserts);
+		var ExampleMock <- mocks;
+		mocks.when(ExampleMock).get("toast", 430).thenReturn("That's too early for toast!");
+		ExampleMock.get("toast", 430);
+		ExampleMock.get("toast", 430);
+		mocks.verify(ExampleMock).get("toast", 430);
+	}
+
+	~[ test verify times 0 valid ]~(Asserts) {
+		mocks.use(Asserts);
+		var ExampleMock <- mocks;
+		mocks.when(ExampleMock).get("toast", 430).thenReturn("That's too early for toast!");
+		mocks.verify(0)Times(ExampleMock).get("toast", 430);
+	}
+
+	~[ test verify times 1 valid ]~(Asserts) {
+		mocks.use(Asserts);
+		var ExampleMock <- mocks;
+		mocks.when(ExampleMock).get("toast", 430).thenReturn("That's too early for toast!");
+		ExampleMock.get("toast", 430);
+		mocks.verify(1)Times(ExampleMock).get("toast", 430);
+	}
+
+	~[ test verify times 2 valid ]~(Asserts) {
+		mocks.use(Asserts);
+		var ExampleMock <- mocks;
+		mocks.when(ExampleMock).get("toast", 430).thenReturn("That's too early for toast!");
+		ExampleMock.get("toast", 430);
+		ExampleMock.get("toast", 430);
+		mocks.verify(2)Times(ExampleMock).get("toast", 430);
+	}
+
+	~[ test FAILS not called ]~(Asserts) {
+		mocks.use(Asserts);
+		var ExampleMock <- mocks;
+		mocks.when(ExampleMock).get("hey", 5).thenReturn("useless");
+		mocks.when(ExampleMock).get("heyy", 4).thenReturn("useless");
+		mocks.when(ExampleMock).get("heyy", 5).thenReturn("useless");
+		ExampleMock.get("hey", 5);
+		ExampleMock.get("heyy", 4);
+		ExampleMock.get("heyy", 5);
+		mocks.verify(1)Times(ExampleMock).get("hey", 4);
+	}
+
+	~[ test FAILS should not have been called ]~(Asserts) {
+		mocks.use(Asserts);
+		var ExampleMock <- mocks;
+		mocks.when(ExampleMock).get("what", 7).thenReturn("useless");
+		ExampleMock.get("what", 7);
+		mocks.verify(0)Times(ExampleMock).get("what", 7);
 	}

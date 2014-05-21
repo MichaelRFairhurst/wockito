@@ -50,7 +50,7 @@ every MockFileGenerator is:
 
 			var WakeType? returntype = method.returntype;
 			var Text returntypename = "";
-			if Fix returntype exists {
+			if returntype exists {
 				returntypename = returntype.getPureName();
 				File.write(returntypename + " -- ");
 			}
@@ -59,7 +59,7 @@ every MockFileGenerator is:
 			for(var $Num = 0; $Num < method.arguments.getSize(); $Num += 1) {
 				var Text argname = "blah";
 				File.write(methodAsProperty + "Za1.tell(" + argname + ");"); // TODO Num.toString!!!!!
-				if Fix returntype exists {
+				if returntype exists {
 					if($Num == 0) {
 						File.write("var ReturnValueStubber{" + returntypename + "}[] = " + methodAsProperty + "Za1.getPosssibleStubs(" + argname + ");"); // TODO Num.toString!!!!!
 					} else {
@@ -68,7 +68,7 @@ every MockFileGenerator is:
 				}
 			}
 
-			if Fix returntype exists {
+			if returntype exists {
 				File.write("return ReturnValueStubber[0].get();");
 			}
 
@@ -89,7 +89,7 @@ every MockFileGenerator is:
 			var Text methodname = Text[Num];
 			var WakeType? method = WakeClass.properties.get(methodname);
 
-			if Fix method exists {
+			if method exists {
 
 				if(method.type == 2) continue;
 
@@ -97,7 +97,7 @@ every MockFileGenerator is:
 
 				var WakeType? returntype = method.returntype;
 				var Text returntypename = "";
-				if Fix returntype exists {
+				if returntype exists {
 					returntypename = returntype.getPureName();
 				} else {
 					returntypename = "Num"; // this type will simply be ignored...but it must be a valid type!

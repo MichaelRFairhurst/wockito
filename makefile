@@ -1,4 +1,4 @@
-PROGRAM := your-program-name
+PROGRAM := wockito-generator
 LIBRARYFILES := ../compiler/bin/wakeobj/std.o
 LIBRARYTABLES := $(filter-out $(wildcard ../compiler/bin/waketable/*Test.table), $(wildcard ../compiler/bin/waketable/*.table) ) \
 	../wUnit/bin/waketable/Asserts.table \
