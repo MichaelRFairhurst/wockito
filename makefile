@@ -1,4 +1,6 @@
 PROGRAM := wockito-generator
+EXECUTABLE := true # set to false or it will be linked with a main()
+
 LIBRARYFILES := ../compiler/bin/wakeobj/std.o
 LIBRARYTABLES := $(filter-out $(wildcard ../compiler/bin/waketable/*Test.table), $(wildcard ../compiler/bin/waketable/*.table) ) \
 	../wUnit/bin/waketable/Asserts.table \
@@ -33,7 +35,9 @@ TABLEFILES := $(subst $(SRCDIR),$(TABLEDIR),${SOURCEFILES:.wk=.table})
 TESTTABLEFILES := $(subst $(TESTDIR),$(TABLEDIR),${TESTFILES:.wk=.table})
 
 bin/$(PROGRAM): $(OBJECTFILES) $(TABLEFILES) $(LIBRARYFILES) tests
-	wake -l -d $(TABLEDIR) -o bin/$(PROGRAM) $(OBJECTFILES) $(LIBRARYFILES)
+ifeq($(EXECUTABLE), true)
+		wake -l -d $(TABLEDIR) -o bin/$(PROGRAM) $(OBJECTFILES) $(LIBRARYFILES)
+endif
 
 .PHONY:
 tests: bin/$(PROGRAM)-test
