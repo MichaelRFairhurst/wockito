@@ -1,10 +1,10 @@
 import ExampleMock;
 import ExampleMockStubber;
-import ExampleMockVerifier;
 import ReturnValueStubber;
 import Asserts;
 import MockProvider;
 import ArgumentWatcher;
+import Example;
 
 every ExampleMockTest is:
 

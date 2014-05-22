@@ -1,0 +1,26 @@
+import WakeClass;
+import MethodIteration;
+
+every MethodIterator is:
+
+	with MethodIteration?;
+
+	set($MethodIteration) {
+		iteration = $MethodIteration;
+	}
+
+	iterate(WakeClass) {
+		var Text[] = WakeClass.properties.getKeys();
+
+		for(var Num = 0; Num < Text.getSize(); Num += 1) {
+			var Text methodname = Text[Num];
+			var WakeType? method = WakeClass.properties.get(methodname);
+			if method exists {
+				if(method.type != 1) continue;
+				var iter = MethodIteration;
+				if iter exists {
+					iter.iterate(WakeClass, method, method.returntype);
+				}
+			}
+		}
+	}

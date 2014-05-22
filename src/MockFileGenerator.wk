@@ -77,7 +77,7 @@ every MockFileGenerator is:
 	}
 
 	generateProvisions(WakeClass, File) {
-		File.write("provides " + WakeClass.classname + "MockVerifier, " + WakeClass.classname + "MockStubber;");
+		File.write("provides " + WakeClass.classname + "MockVerifier, " + WakeClass.classname + "MockStubber");
 	}
 
 	generateNeeds(WakeClass, File) {
@@ -107,7 +107,7 @@ every MockFileGenerator is:
 					var Text argname = method.arguments[$Num].getPureName();
 
 					if(Num != 0) File.write(", ");
-					File.write("ArgumentWatcher{" + argname + "," + returntypename + "} " + methodAsProperty + "Za1"); // TODO Num.toString!!!!!
+					File.write("ArgumentWatcher{" + argname + "," + returntypename + "} " + methodAsProperty + "Za" + Num.toString()); // TODO Num.toString!!!!!
 				}
 			}
 
