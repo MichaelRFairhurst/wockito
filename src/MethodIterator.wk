@@ -1,12 +1,14 @@
 import WakeClass;
+import WakeType;
 import MethodIteration;
+import Map;
 
 every MethodIterator is:
 
-	with MethodIteration?;
+	with MethodIteration? = nothing;
 
 	set($MethodIteration) {
-		iteration = $MethodIteration;
+		MethodIteration = $MethodIteration;
 	}
 
 	iterate(WakeClass) {
@@ -17,9 +19,9 @@ every MethodIterator is:
 			var WakeType? method = WakeClass.properties.get(methodname);
 			if method exists {
 				if(method.type != 1) continue;
-				var iter = MethodIteration;
-				if iter exists {
-					iter.iterate(WakeClass, method, method.returntype);
+				var $MethodIteration? = MethodIteration;
+				if $MethodIteration exists {
+					$MethodIteration.iterate(WakeClass, methodname, method.arguments, method.returntype);
 				}
 			}
 		}

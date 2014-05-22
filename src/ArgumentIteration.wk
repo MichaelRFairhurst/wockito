@@ -1,0 +1,6 @@
+import WakeClass;
+import WakeType;
+
+every ArgumentIteration is:
+
+	iterate(WakeClass, Text methodnamme, WakeType? returntype, WakeType arg, Num argnum);

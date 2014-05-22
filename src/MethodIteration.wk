@@ -3,4 +3,4 @@ import WakeType;
 
 every MethodIteration is:
 
-	iterate(WakeClass, WakeType[] args, WakeType? returntype);
+	iterate(WakeClass, Text methodname, WakeType[] args, WakeType? returntype);

@@ -1,0 +1,21 @@
+import MethodIteration;
+import ArgumentIteration;
+import WakeClass;
+import WakeType;
+
+every ArgumentIterator (capable MethodIteration) is:
+
+	with ArgumentIteration? = nothing;
+
+	set($ArgumentIteration) {
+		ArgumentIteration = $ArgumentIteration;
+	}
+
+	iterate(WakeClass, Text methodname, WakeType[] args, WakeType? returntype) {
+		for(var Num = 0; Num < args.getSize(); Num += 1) {
+			var $ArgumentIteration? = ArgumentIteration;
+			if $ArgumentIteration exists {
+				$ArgumentIteration.iterate(WakeClass, methodname, returntype, args[Num], Num);
+			}
+		}
+	}

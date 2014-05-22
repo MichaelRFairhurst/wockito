@@ -1,0 +1,28 @@
+import MethodIterator;
+import ArgumentIterator;
+import MethodIteration;
+import ArgumentIteration;
+import WakeClass;
+import WakeType;
+import NameTransformer;
+
+every ImportIterator (an ArgumentIterator, capable ArgumentIteration) is:
+
+	needs NameTransformer;
+	with Text[] imports = [];
+
+	iterate(WakeClass, Text methodname, WakeType? returntype, WakeType arg, Num argnum) {
+		addImport(arg.getImportName());
+
+		if returntype exists {
+			addImport(returntype.getImportName());
+		}
+	}
+
+	addImport(Text) {
+		if(!imports.contains(Text)) imports.push(Text);
+	}
+
+	Text[] -- getImports() {
+		return imports;
+	}

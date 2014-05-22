@@ -1,0 +1,23 @@
+import MethodIterator;
+import ArgumentIterator;
+import MethodIteration;
+import ArgumentIteration;
+import WakeClass;
+import WakeType;
+import NameTransformer;
+
+every ArgumentWatcherGatherer (an ArgumentIterator, capable ArgumentIteration) is:
+
+	needs NameTransformer;
+	with Text[] types = [];
+
+	iterate(WakeClass, Text methodname, WakeType? returntype, WakeType arg, argn Num) {
+		var Text returntypename = "Num";
+
+		if returntype exists {
+			returntypename = returntype.getPureName();
+		}
+
+		types.push("ArgumentIterator{" + returntypename + "," + arg.getPureName() + "}");
+	}
+
