@@ -17,7 +17,12 @@ every ExampleMockStubber is:
 		return ReturnValueStubber;
 	}
 
-every ExampleMock is:
+every Example is:
+	Text -- get(Text, Num) {
+		return Text;
+	}
+
+every ExampleMock (capable Example) is:
 
 	needs ArgumentWatcher{Text, Text} getZpTextZcNumZpZa1, ArgumentWatcher{Num, Text} getZpTextZcNumZpZa2;
 
@@ -38,7 +43,7 @@ every ExampleMock is:
 		return ReturnValueStubber[0].get();
 	}
 
-every ExampleMockVerifier is:
+every ExampleMockVerifier (capable Example) is:
 
 	needs ArgumentWatcher{Text, Text}:getZpTextZcNumZpZa1 getZpTextZcNumZpZa1, ArgumentWatcher{Num, Text}:getZpTextZcNumZpZa2 getZpTextZcNumZpZa2;
 
@@ -71,7 +76,7 @@ every MockProvider is:
 		return ExampleMockStubber <- ExampleMock;
 	}
 
-	ExampleMockVerifier -- verify(ExampleMock) {
+	Example -- verify(ExampleMock) {
 		var TimesCalledValidator <- this;
 		var ExampleMockVerifier <- ExampleMock;
 		TimesCalledValidator.minExpectedTimes = 1;
@@ -79,7 +84,7 @@ every MockProvider is:
 		return ExampleMockVerifier;
 	}
 
-	ExampleMockVerifier -- verify(Num)Times(ExampleMock) {
+	Example -- verify(Num)Times(ExampleMock) {
 		var TimesCalledValidator <- this;
 		TimesCalledValidator.minExpectedTimes = Num;
 		TimesCalledValidator.maxExpectedTimes = Num;
