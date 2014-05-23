@@ -1,0 +1,19 @@
+import MethodIteration;
+import WakeClass;
+import WakeType;
+
+every MockMethodGenerator (capable MethodIteration) is:
+
+	needs File, ArgumentIterator;
+	provides ArgumentWatcherGatherer;
+
+	iterate(WakeClass, Text methodname, WakeType? returntype, WakeType[] args) {
+		var ArgumentWatcherGatherer <- this;
+		ArgumentIterator.set((cast ArgumentIteration) ArgumentWatcherGatherer);
+
+		ArgumentIterator.iterate(WakeClass, methodname, returntype, args);
+
+		foreach(ArgumentWatcherGatherer.declarations) {
+
+		}
+	}

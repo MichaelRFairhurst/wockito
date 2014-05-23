@@ -10,6 +10,8 @@ every ArgumentWatcherGatherer (an ArgumentIterator, capable ArgumentIteration) i
 
 	needs NameTransformer;
 	with Text[] types = [];
+	with Text[] aliases = [];
+	with Text[] declarations = [];
 
 	iterate(WakeClass, Text methodname, WakeType? returntype, WakeType arg, argn Num) {
 		var Text returntypename = "Num";
@@ -18,6 +20,10 @@ every ArgumentWatcherGatherer (an ArgumentIterator, capable ArgumentIteration) i
 			returntypename = returntype.getPureName();
 		}
 
-		types.push("ArgumentIterator{" + returntypename + "," + arg.getPureName() + "}");
+		var Text typename = "ArgumentIterator{" + returntypename + "," + arg.getPureName() + "}";
+		var Text alias = NameTransformer.methodToProperty(methodname) + "Za" + argn.toString();
+		if(!types.contains(typename)) types.push(typename);
+		aliases.push(alias);
+		declarations.push(typename + " " + alias);
 	}
 
