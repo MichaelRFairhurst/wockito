@@ -4,7 +4,7 @@ every ReturnValueStubber{T} is:
 	with Num = 0;
 
 	ReturnValueStubber{T} -- thenReturn(T) {
-		returns[returns.getSize()] = T;
+		returns.push(T);
 		return this;
 	}
 

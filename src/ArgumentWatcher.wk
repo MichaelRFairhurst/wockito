@@ -9,8 +9,8 @@ every ArgumentWatcher{T, R} is:
 	with T[] matches = [];
 
 	tell(T, Num) {
-		calls[calls.getSize()] = T;
-		callNums[callNums.getSize()] = Num;
+		calls.push(T);
+		callNums.push(Num);
 	}
 
 	T[] -- getCalls() {
@@ -28,8 +28,8 @@ every ArgumentWatcher{T, R} is:
 	}
 
 	expect(T, ReturnValueStubber{R}) {
-		matches[matches.getSize()] = T;
-		stubs[stubs.getSize()] = ReturnValueStubber;
+		matches.push(T);
+		stubs.push(ReturnValueStubber);
 	}
 
 	ReturnValueStubber{R}[] -- getPossibleStubs(T) {
