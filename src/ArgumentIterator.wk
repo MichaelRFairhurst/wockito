@@ -12,7 +12,7 @@ every ArgumentIterator (capable MethodIteration) is:
 	}
 
 	iterate(WakeClass, Text methodname, WakeType[] args, WakeType? returntype) {
-		for(var Num = 0; Num < args.getSize(); Num += 1) {
+		for(var Num = 0; Num < args.getSize(); Num += 1) { // @TODO foreachin
 			var $ArgumentIteration? = ArgumentIteration;
 			if $ArgumentIteration exists {
 				$ArgumentIteration.iterate(WakeClass, methodname, returntype, args[Num], Num);
