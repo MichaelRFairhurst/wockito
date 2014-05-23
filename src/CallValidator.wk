@@ -2,7 +2,7 @@ import Asserts;
 
 every CallValidator is:
 
-	needs $Asserts;
+	with public Text methodname = "";
 
 	validate(Num[]) {
 	}

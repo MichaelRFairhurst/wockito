@@ -4,7 +4,6 @@ import Asserts;
 every TimesCalledValidator (a CallValidator) is:
 
 	needs Asserts;
-	with public Text methodname = "";
 	with public Num? minExpectedTimes = nothing;
 	with public Num? maxExpectedTimes = nothing;
 
