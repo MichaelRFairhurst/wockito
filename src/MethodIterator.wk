@@ -14,7 +14,7 @@ every MethodIterator is:
 	iterate(WakeClass) {
 		var Text[] = WakeClass.properties.getKeys();
 
-		for(var Num = 0; Num < Text.getSize(); Num += 1) {
+		for(var Num = 0; Num < Text[].getSize(); Num += 1) {
 			var Text methodname = Text[Num];
 			var WakeType? method = WakeClass.properties.get(methodname);
 			if method exists {

@@ -36,7 +36,7 @@ every ExampleMock (capable Example) is:
 
 	Text -- get(Text, Num) {
 		var ReturnValueStubber{Text}[] = getZpTextZcNumZpZa1.getPossibleStubs(Text);
-		ReturnValueStubber = ReturnValueStubber.intersect(getZpTextZcNumZpZa2.getPossibleStubs(Num));
+		ReturnValueStubber[] = ReturnValueStubber[].intersect(getZpTextZcNumZpZa2.getPossibleStubs(Num));
 		getZpTextZcNumZpZa1.tell(Text, counter);
 		getZpTextZcNumZpZa2.tell(Num, counter);
 		counter += 1;

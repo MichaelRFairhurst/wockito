@@ -41,7 +41,7 @@ every MockFileGenerator is:
 	generateMethods(WakeClass, File) {
 		var Text[] = WakeClass.properties.getKeys();
 
-		for(var Num = 0; Num < Text.getSize(); Num += 1) {
+		for(var Num = 0; Num < Text[].getSize(); Num += 1) {
 			var Text methodname = Text[Num];
 			var WakeType? method = WakeClass.properties.get(methodname);
 			if(method.type == 2) continue;
@@ -85,7 +85,7 @@ every MockFileGenerator is:
 
 		var Text[] = WakeClass.properties.getKeys();
 
-		for(var Num = 0; Num < Text.getSize(); Num += 1) {
+		for(var Num = 0; Num < Text[].getSize(); Num += 1) {
 			var Text methodname = Text[Num];
 			var WakeType? method = WakeClass.properties.get(methodname);
 

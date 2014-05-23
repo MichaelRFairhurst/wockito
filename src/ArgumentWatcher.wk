@@ -21,10 +21,10 @@ every ArgumentWatcher{T, R} is:
 		var Num[] = [];
 		for(var $Num = 0; $Num < calls.getSize(); $Num += 1) {
 			if(calls[$Num] == T)
-				Num[Num.getSize()] = callNums[$Num];
+				Num[].push(callNums[$Num]);
 		}
 
-		return Num;
+		return Num[];
 	}
 
 	expect(T, ReturnValueStubber{R}) {
@@ -36,7 +36,7 @@ every ArgumentWatcher{T, R} is:
 		var ReturnValueStubber{R}[] ret = [];
 		for(var Num = 0; Num < matches.getSize(); Num += 1) {
 			if(matches[Num] == T) {
-				ret[ret.getSize()] = stubs[Num];
+				ret.push(stubs[Num]);
 			}
 		}
 
