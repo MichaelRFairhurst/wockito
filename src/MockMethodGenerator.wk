@@ -1,19 +1,51 @@
 import MethodIteration;
+import ArgumentIteration;
 import WakeClass;
+import WakeProperty;
 import WakeType;
+import ArgumentWatcherGatherer;
+import ArgumentIterator;
+import File;
+import NameTransformer;
 
 every MockMethodGenerator (capable MethodIteration) is:
 
 	needs File, ArgumentIterator;
-	provides ArgumentWatcherGatherer;
+	provides ArgumentWatcherGatherer, NameTransformer;
 
-	iterate(WakeClass, Text methodname, WakeType? returntype, WakeType[] args) {
+	iterate(WakeClass, WakeProperty, WakeType[] args, WakeType? returntype) {
 		var ArgumentWatcherGatherer <- this;
 		ArgumentIterator.set((cast ArgumentIteration) ArgumentWatcherGatherer);
 
-		ArgumentIterator.iterate(WakeClass, methodname, returntype, args);
+		ArgumentIterator.iterate(WakeClass, WakeProperty, WakeProperty.WakeType.arguments, WakeProperty.WakeType.returntype);
 
-		foreach(ArgumentWatcherGatherer.declarations) {
-
+		if returntype exists {
+			File.write(returntype.getPureName() + " -- ");
 		}
+
+		for(var Num = 0; Num < args.getSize(); Num += 1) { // @TODO foreach in at
+			File.write(WakeProperty.casing[Num]);
+			File.write(args[Num].getPureName() + " arg" + Num.toString());
+		}
+
+		File.write(WakeProperty.casing[args.getSize()]); // might be just ')' but might be ')ALastMethodSegment()'
+		File.write("{");
+
+		for(var Num = 0; Num < ArgumentWatcherGatherer.aliases.getSize(); Num += 1) { // @TODO foreach in at
+			File.write(ArgumentWatcherGatherer.aliases[Num] + ".tell(arg" + Num.toString() + ");");
+			if returntype exists {
+				if(Num == 0) {
+					File.write("var ReturnValueStubber{" + returntype.getPureName() + "}[] = ");
+					File.write(ArgumentWatcherGatherer.aliases[Num] + ".getPossibleStubs(arg0);");
+				} else {
+					File.write("ReturnValueStubber[] = ReturnValueStubber[].intersect(" + ArgumentWatcherGatherer.aliases[Num] + ".getPossibleStubs(arg" + Num.toString() + "));");
+				}
+			}
+		}
+
+		if returntype exists {
+			File.write("return ReturnValueStubber[0].get();");
+		}
+
+		File.write("}");
 	}

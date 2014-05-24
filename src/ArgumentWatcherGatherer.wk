@@ -4,6 +4,7 @@ import MethodIteration;
 import ArgumentIteration;
 import WakeClass;
 import WakeType;
+import WakeProperty;
 import NameTransformer;
 
 every ArgumentWatcherGatherer (an ArgumentIterator, capable ArgumentIteration) is:
@@ -13,7 +14,7 @@ every ArgumentWatcherGatherer (an ArgumentIterator, capable ArgumentIteration) i
 	with Text[] aliases = [];
 	with Text[] declarations = [];
 
-	iterate(WakeClass, Text methodname, WakeType? returntype, WakeType arg, argn Num) {
+	iterate(WakeClass, WakeProperty, WakeType? returntype, WakeType arg, argn Num) {
 		var Text returntypename = "Num";
 
 		if returntype exists {
@@ -21,7 +22,7 @@ every ArgumentWatcherGatherer (an ArgumentIterator, capable ArgumentIteration) i
 		}
 
 		var Text typename = "ArgumentIterator{" + returntypename + "," + arg.getPureName() + "}";
-		var Text alias = NameTransformer.methodToProperty(methodname) + "Za" + argn.toString();
+		var Text alias = NameTransformer.methodToProperty(WakeProperty.name) + "Za" + argn.toString();
 		if(!types.contains(typename)) types.push(typename);
 		aliases.push(alias);
 		declarations.push(typename + " " + alias);

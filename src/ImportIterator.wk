@@ -4,6 +4,7 @@ import MethodIteration;
 import ArgumentIteration;
 import WakeClass;
 import WakeType;
+import WakeProperty;
 import NameTransformer;
 
 every ImportIterator (an ArgumentIterator, capable ArgumentIteration) is:
@@ -11,7 +12,7 @@ every ImportIterator (an ArgumentIterator, capable ArgumentIteration) is:
 	needs NameTransformer;
 	with Text[] imports = [];
 
-	iterate(WakeClass, Text methodname, WakeType? returntype, WakeType arg, Num argnum) {
+	iterate(WakeClass, WakeProperty, WakeType? returntype, WakeType arg, Num argnum) {
 		addImport(arg.getImportName());
 
 		if returntype exists {

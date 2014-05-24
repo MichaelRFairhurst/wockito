@@ -39,79 +39,10 @@ every MockFileGenerator is:
 	generateImports(WakeClass, File);
 
 	generateMethods(WakeClass, File) {
-		var Text[] = WakeClass.properties.getKeys();
-
-		for(var Num = 0; Num < Text[].getSize(); Num += 1) {
-			var Text methodname = Text[Num];
-			var WakeType? method = WakeClass.properties.get(methodname);
-			if(method.type == 2) continue;
-
-			var Text methodAsProperty = NameTransformer.methodToProperty(methodname);
-
-			var WakeType? returntype = method.returntype;
-			var Text returntypename = "";
-			if returntype exists {
-				returntypename = returntype.getPureName();
-				File.write(returntypename + " -- ");
-			}
-
-			File.write(methodname + "{");
-			for(var $Num = 0; $Num < method.arguments.getSize(); $Num += 1) {
-				var Text argname = "blah";
-				File.write(methodAsProperty + "Za1.tell(" + argname + ");"); // TODO Num.toString!!!!!
-				if returntype exists {
-					if($Num == 0) {
-						File.write("var ReturnValueStubber{" + returntypename + "}[] = " + methodAsProperty + "Za1.getPosssibleStubs(" + argname + ");"); // TODO Num.toString!!!!!
-					} else {
-						File.write("ReturnValueStubber = ReturnValueStubber.intersect(" + methodAsProperty + "Za1.getPossibleStubs(" + argname + "));"); // TODO Num.toString!!!!!
-					}
-				}
-			}
-
-			if returntype exists {
-				File.write("return ReturnValueStubber[0].get();");
-			}
-
-			File.write("}");
-		}
 	}
 
 	generateProvisions(WakeClass, File) {
-		File.write("provides " + WakeClass.classname + "MockVerifier, " + WakeClass.classname + "MockStubber");
 	}
 
 	generateNeeds(WakeClass, File) {
-		File.write("needs ");
-
-		var Text[] = WakeClass.properties.getKeys();
-
-		for(var Num = 0; Num < Text[].getSize(); Num += 1) {
-			var Text methodname = Text[Num];
-			var WakeType? method = WakeClass.properties.get(methodname);
-
-			if method exists {
-
-				if(method.type == 2) continue;
-
-				var Text methodAsProperty = NameTransformer.methodToProperty(methodname);
-
-				var WakeType? returntype = method.returntype;
-				var Text returntypename = "";
-				if returntype exists {
-					returntypename = returntype.getPureName();
-				} else {
-					returntypename = "Num"; // this type will simply be ignored...but it must be a valid type!
-				}
-
-				for(var $Num = 0; $Num < method.arguments.getSize(); $Num += 1) {
-					var Text argname = method.arguments[$Num].getPureName();
-
-					if(Num != 0) File.write(", ");
-					File.write("ArgumentWatcher{" + argname + "," + returntypename + "} " + methodAsProperty + "Za" + Num.toString()); // TODO Num.toString!!!!!
-				}
-			}
-
-		}
-
-		File.write(";");
 	}

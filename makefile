@@ -7,6 +7,7 @@ LIBRARYTABLES := $(filter-out $(wildcard ../compiler/bin/waketable/*Test.table),
 	../wUnit/bin/waketable/TestResultReporter.table \
 	../table-reflection-parser/bin/waketable/WakeClass.table \
 	../table-reflection-parser/bin/waketable/WakeType.table \
+	../table-reflection-parser/bin/waketable/WakeProperty.table \
 	../table-reflection-parser/bin/waketable/TableDirectoryScanner.table \
 	../table-reflection-parser/bin/waketable/TableFileReader.table \
 	../std/bin/waketable/Map.table
@@ -16,6 +17,7 @@ TESTLIBRARYFILES := \
 	../wUnit/bin/wakeobj/TestResultReporter.o \
 	../table-reflection-parser/bin/wakeobj/WakeClass.o \
 	../table-reflection-parser/bin/wakeobj/WakeType.o \
+	../table-reflection-parser/bin/wakeobj/WakeProperty.o \
 	../table-reflection-parser/bin/wakeobj/TableDirectoryScanner.o \
 	../table-reflection-parser/bin/wakeobj/TableFileReader.o \
 	../std/bin/wakeobj/Map.o
