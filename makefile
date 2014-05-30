@@ -1,4 +1,7 @@
 PROGRAM := wockito-generator
+PROGRAM := your-program-name
+
+# set to false or it will be linked with a main()
 EXECUTABLE := true
 
 LIBRARYFILES := ../compiler/bin/wakeobj/std.o
@@ -25,10 +28,12 @@ LIBRARYFILES := \
 	../std/bin/wakeobj/Map.o \
 	../compiler/bin/wakeobj/std.o
 
-TABLEDIR := bin/waketable
-OBJECTDIR := bin/wakeobj
 SRCDIR := src
 TESTDIR := test
+TABLEDIR := bin/waketable
+OBJECTDIR := bin/wakeobj
+SRCDEPDIR := bin/srcdep
+TESTDEPDIR := bin/testdep
 
 SOURCEFILES := $(wildcard $(SRCDIR)/*.wk)
 TESTFILES := $(wildcard $(TESTDIR)/*.wk)
@@ -63,10 +68,10 @@ FORCE:
 $(addprefix $(TABLEDIR)/,$(notdir $(LIBRARYTABLES))): $(LIBRARYTABLES)
 	cp $(LIBRARYTABLES) $(TABLEDIR)
 
-$(SRCDIR)/%.d: $(SRCDIR)/%.wk
+$(SRCDEPDIR)/%.d: $(SRCDIR)/%.wk
 	@./generate-makefile.sh $< $(TABLEDIR) > $@
 
-$(TESTDIR)/%.d: $(TESTDIR)/%.wk
+$(TESTDEPDIR)/%.d: $(TESTDIR)/%.wk
 	@./generate-makefile.sh $< $(TABLEDIR) > $@
 
 $(TABLEDIR)/%.table: $(SRCDIR)/%.wk
@@ -82,8 +87,8 @@ $(OBJECTDIR)/%Test.o: $(TESTDIR)/%Test.wk
 	wake $< -d $(TABLEDIR) -o $@
 
 ifneq "$(MAKECMDGOALS)" "clean"
--include ${SOURCEFILES:.wk=.d}
--include ${TESTFILES:.wk=.d}
+-include $(subst $(SRCDIR),$(SRCDEPDIR),${SOURCEFILES:.wk=.d})
+-include $(subst $(TESTDIR),$(TESTDEPDIR),${TESTFILES:.wk=.d})
 endif
 
 clean:
