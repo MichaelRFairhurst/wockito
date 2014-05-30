@@ -7,11 +7,12 @@ import ArgumentWatcherGatherer;
 import ArgumentIterator;
 import File;
 import NameTransformer;
+import MethodIterator;
 
 every MockMethodGenerator (capable MethodIteration) is:
 
 	needs File, ArgumentIterator;
-	provides ArgumentWatcherGatherer, NameTransformer;
+	provides ArgumentWatcherGatherer, NameTransformer, MethodIterator;
 
 	iterate(WakeClass, WakeProperty, WakeType[] args, WakeType? returntype) {
 		var ArgumentWatcherGatherer <- this;

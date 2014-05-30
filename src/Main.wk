@@ -1,0 +1,28 @@
+import MockFileGenerator;
+import File;
+import FileSystem;
+import FilePath;
+import TableFileReader;
+import TableDirectoryScanner;
+import NameTransformer;
+import WakeClass;
+import MethodIterator;
+
+every Main is:
+
+	needs FileSystem, TableFileReader, TableDirectoryScanner;
+
+	provides
+		MethodIterator,
+		MockFileGenerator,
+		NameTransformer,
+		File <- { return File <- FileSystem.getPath("MockAsserts.wk"); };
+
+	main() {
+		var File <- FileSystem.getPath("bin/waketable/Asserts.table");
+
+		var WakeClass = TableFileReader.readFrom(File);
+		var MockFileGenerator <- this;
+
+		MockFileGenerator.generate(WakeClass);
+	}

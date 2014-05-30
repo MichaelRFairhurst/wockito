@@ -3,6 +3,13 @@ import WakeClass;
 import WakeType;
 import NameTransformer;
 import Map;
+import MockMethodGenerator;
+import ArgumentIterator;
+import MethodIterator;
+import MethodIteration;
+import ImportIterator;
+import ArgumentIteration;
+import ArgumentWatcherGatherer;
 
 #>
 # Generates code along the lines of:
@@ -25,24 +32,57 @@ import Map;
 ##
 every MockFileGenerator is:
 
-	needs NameTransformer;
+	needs NameTransformer, File, MethodIterator;
 
-	generate(WakeClass, File) {
+	provides File <- { return File; }, MockMethodGenerator, ArgumentIterator, ImportIterator, NameTransformer, MethodIterator, ArgumentWatcherGatherer;
+
+	generate(WakeClass) {
 		File.write("every " + WakeClass.classname + "Mock (capable " + WakeClass.classname + ") is:");
 
-		generateImports(WakeClass, File);
-		generateNeeds(WakeClass, File);
-		generateProvisions(WakeClass, File);
-		generateMethods(WakeClass, File);
+		generateImports(WakeClass);
+		generateNeeds(WakeClass);
+		generateProvisions(WakeClass);
+		generateMethods(WakeClass);
 	}
 
-	generateImports(WakeClass, File);
+	generateImports(WakeClass) {
+		var ImportIterator <- this;
 
-	generateMethods(WakeClass, File) {
+		MethodIterator.set((cast MethodIteration) ImportIterator);
+
+		foreach(ImportIterator.getImports()) { // @TODO foreach as
+			File.write("import " + Text + ";");
+		}
 	}
 
-	generateProvisions(WakeClass, File) {
+	generateMethods(WakeClass) {
+		MethodIterator.set((cast MethodIteration) (MockMethodGenerator <- this));
+		MethodIterator.iterate(WakeClass);
 	}
 
-	generateNeeds(WakeClass, File) {
+	generateProvisions(WakeClass) {
+		var ArgumentWatcherGatherer <- this;
+		MethodIterator.set((cast MethodIteration) ArgumentWatcherGatherer);
+		MethodIterator.iterate(WakeClass);
+
+		File.write("provides ");
+		for(var Num = 0; Num < ArgumentWatcherGatherer.declarations.getSize(); Num += 1) {
+			File.write(ArgumentWatcherGatherer.provisions[Num] + " <- { return " + ArgumentWatcherGatherer.aliases[Num] + "; }, ");
+		}
+		File.write("Mock" + WakeClass.classname + "Stubber, Mock" + WakeClass.classname + "Verifier;");
+	}
+
+	generateNeeds(WakeClass) {
+		var ArgumentWatcherGatherer <- this;
+		MethodIterator.set((cast MethodIteration) ArgumentWatcherGatherer);
+		MethodIterator.iterate(WakeClass);
+
+		File.write("needs ");
+
+		var Text[] = ArgumentWatcherGatherer.declarations;
+		foreach(Text[]) {
+			File.write(Text + ", ");
+		}
+
+		File.write(" MockTracker;");
 	}

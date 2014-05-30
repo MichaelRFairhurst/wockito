@@ -86,6 +86,7 @@ every ExampleMockTest is:
 		mocks.verify(2)Times(ExampleMock).get("toast", 430);
 	}
 
+	#>
 	~[ test FAILS not called ]~(Asserts) {
 		mocks.use(Asserts);
 		var ExampleMock <- mocks;
@@ -113,3 +114,4 @@ every ExampleMockTest is:
 		ExampleMock.get("what", 7);
 		mocks.verify(2)Times(ExampleMock).get("what", 7);
 	}
+	##

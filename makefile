@@ -1,5 +1,5 @@
 PROGRAM := wockito-generator
-EXECUTABLE := true # set to false or it will be linked with a main()
+EXECUTABLE := true
 
 LIBRARYFILES := ../compiler/bin/wakeobj/std.o
 LIBRARYTABLES := $(filter-out $(wildcard ../compiler/bin/waketable/*Test.table), $(wildcard ../compiler/bin/waketable/*.table) ) \
@@ -13,14 +13,17 @@ LIBRARYTABLES := $(filter-out $(wildcard ../compiler/bin/waketable/*Test.table),
 	../std/bin/waketable/Map.table
 
 TESTLIBRARYFILES := \
+	../wUnit/bin/wakeobj/TestResultReporter.o
+
+LIBRARYFILES := \
 	../wUnit/bin/wakeobj/Asserts.o \
-	../wUnit/bin/wakeobj/TestResultReporter.o \
 	../table-reflection-parser/bin/wakeobj/WakeClass.o \
 	../table-reflection-parser/bin/wakeobj/WakeType.o \
 	../table-reflection-parser/bin/wakeobj/WakeProperty.o \
 	../table-reflection-parser/bin/wakeobj/TableDirectoryScanner.o \
 	../table-reflection-parser/bin/wakeobj/TableFileReader.o \
-	../std/bin/wakeobj/Map.o
+	../std/bin/wakeobj/Map.o \
+	../compiler/bin/wakeobj/std.o
 
 TABLEDIR := bin/waketable
 OBJECTDIR := bin/wakeobj
@@ -37,7 +40,7 @@ TABLEFILES := $(subst $(SRCDIR),$(TABLEDIR),${SOURCEFILES:.wk=.table})
 TESTTABLEFILES := $(subst $(TESTDIR),$(TABLEDIR),${TESTFILES:.wk=.table})
 
 bin/$(PROGRAM): $(OBJECTFILES) $(TABLEFILES) $(LIBRARYFILES) tests
-ifeq ($(EXECUTABLE), true)
+ifeq ($(EXECUTABLE),true)
 		wake -l -d $(TABLEDIR) -o bin/$(PROGRAM) $(OBJECTFILES) $(LIBRARYFILES)
 endif
 

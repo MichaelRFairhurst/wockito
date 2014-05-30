@@ -7,12 +7,16 @@ import WakeType;
 import WakeProperty;
 import NameTransformer;
 
-every ArgumentWatcherGatherer (an ArgumentIterator, capable ArgumentIteration) is:
+every ArgumentWatcherGatherer (an ArgumentIterator, capable ArgumentIteration, capable MethodIteration) is:
 
-	needs NameTransformer;
+	needs NameTransformer, MethodIterator;
+
 	with Text[] types = [];
 	with Text[] aliases = [];
 	with Text[] declarations = [];
+	with Text[] provisions = [];
+
+	with Num? lastCallIndex = nothing;
 
 	iterate(WakeClass, WakeProperty, WakeType? returntype, WakeType arg, argn Num) {
 		var Text returntypename = "Num";
@@ -26,5 +30,10 @@ every ArgumentWatcherGatherer (an ArgumentIterator, capable ArgumentIteration) i
 		if(!types.contains(typename)) types.push(typename);
 		aliases.push(alias);
 		declarations.push(typename + " " + alias);
+		declarations.push(typename + ":" + alias);
 	}
 
+	iterate(WakeClass) {
+		MethodIterator.set((cast MethodIteration) this);
+		MethodIterator.iterate(WakeClass);
+	}
