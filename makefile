@@ -1,5 +1,4 @@
 PROGRAM := wockito-generator
-PROGRAM := your-program-name
 
 # set to false or it will be linked with a main()
 EXECUTABLE := true
