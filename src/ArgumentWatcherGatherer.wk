@@ -9,7 +9,9 @@ import NameTransformer;
 
 every ArgumentWatcherGatherer (an ArgumentIterator, capable ArgumentIteration, capable MethodIteration) is:
 
-	needs NameTransformer, MethodIterator;
+	needs NameTransformer, MethodIterator then {
+		set((cast ArgumentIteration) this);
+	}
 
 	with Text[] types = [];
 	with Text[] aliases = [];
@@ -30,10 +32,11 @@ every ArgumentWatcherGatherer (an ArgumentIterator, capable ArgumentIteration, c
 		if(!types.contains(typename)) types.push(typename);
 		aliases.push(alias);
 		declarations.push(typename + " " + alias);
-		declarations.push(typename + ":" + alias);
+		provisions.push(typename + ":" + alias);
 	}
 
 	iterate(WakeClass) {
+
 		MethodIterator.set((cast MethodIteration) this);
 		MethodIterator.iterate(WakeClass);
 	}

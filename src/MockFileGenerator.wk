@@ -37,9 +37,11 @@ every MockFileGenerator is:
 	provides File <- { return File; }, MockMethodGenerator, ArgumentIterator, ImportIterator, NameTransformer, MethodIterator, ArgumentWatcherGatherer;
 
 	generate(WakeClass) {
-		File.write("every " + WakeClass.classname + "Mock (capable " + WakeClass.classname + ") is:");
-
 		generateImports(WakeClass);
+
+		File.write("\n");
+		File.write("every " + WakeClass.classname + "Mock (capable " + WakeClass.classname + ") is:\n");
+
 		generateNeeds(WakeClass);
 		generateProvisions(WakeClass);
 		generateMethods(WakeClass);
@@ -49,9 +51,10 @@ every MockFileGenerator is:
 		var ImportIterator <- this;
 
 		MethodIterator.set((cast MethodIteration) ImportIterator);
+		MethodIterator.iterate(WakeClass);
 
 		foreach(ImportIterator.getImports()) { // @TODO foreach as
-			File.write("import " + Text + ";");
+			File.write("import " + Text + ";\n");
 		}
 	}
 
@@ -65,11 +68,11 @@ every MockFileGenerator is:
 		MethodIterator.set((cast MethodIteration) ArgumentWatcherGatherer);
 		MethodIterator.iterate(WakeClass);
 
-		File.write("provides ");
+		File.write("\tprovides\n");
 		for(var Num = 0; Num < ArgumentWatcherGatherer.declarations.getSize(); Num += 1) {
-			File.write(ArgumentWatcherGatherer.provisions[Num] + " <- { return " + ArgumentWatcherGatherer.aliases[Num] + "; }, ");
+			File.write("\t\t" + ArgumentWatcherGatherer.provisions[Num] + " <- { return " + ArgumentWatcherGatherer.aliases[Num] + "; }, \n");
 		}
-		File.write("Mock" + WakeClass.classname + "Stubber, Mock" + WakeClass.classname + "Verifier;");
+		File.write("\t\tMock" + WakeClass.classname + "Stubber,\n\t\tMock" + WakeClass.classname + "Verifier;\n\n");
 	}
 
 	generateNeeds(WakeClass) {
@@ -77,12 +80,12 @@ every MockFileGenerator is:
 		MethodIterator.set((cast MethodIteration) ArgumentWatcherGatherer);
 		MethodIterator.iterate(WakeClass);
 
-		File.write("needs ");
+		File.write("\tneeds\n");
 
 		var Text[] = ArgumentWatcherGatherer.declarations;
 		foreach(Text[]) {
-			File.write(Text + ", ");
+			File.write("\t\t" + Text + ",\n");
 		}
 
-		File.write(" MockTracker;");
+		File.write("\t\tMockTracker;\n\n");
 	}

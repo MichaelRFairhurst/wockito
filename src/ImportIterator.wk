@@ -9,7 +9,10 @@ import NameTransformer;
 
 every ImportIterator (an ArgumentIterator, capable ArgumentIteration) is:
 
-	needs NameTransformer;
+	needs NameTransformer then {
+		set((cast ArgumentIteration) this);
+	}
+
 	with Text[] imports = [];
 
 	iterate(WakeClass, WakeProperty, WakeType? returntype, WakeType arg, Num argnum) {
