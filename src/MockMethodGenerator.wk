@@ -33,22 +33,24 @@ every MockMethodGenerator (capable MethodIteration) is:
 		File.write(WakeProperty.casing[args.getSize()]); // might be just ')' but might be ')ALastMethodSegment()'
 		File.write(" {\n");
 
-		for(var Num = 0; Num < ArgumentWatcherGatherer.aliases.getSize(); Num += 1) { // @TODO foreach in at
-			File.write("\t\t" + ArgumentWatcherGatherer.aliases[Num] + ".tell(arg" + Num.toString() + ");\n");
-			if returntype exists {
-				File.write("\t\t");
-				if(Num == 0) {
-					File.write("var ReturnValueStubber{" + returntype.getPureName() + "}[] = ");
-					File.write(ArgumentWatcherGatherer.aliases[Num] + ".getPossibleStubs(arg0);");
-				} else {
-					File.write("ReturnValueStubber[] = ReturnValueStubber[].intersect(" + ArgumentWatcherGatherer.aliases[Num] + ".getPossibleStubs(arg" + Num.toString() + "));");
+		if(args.getSize() > 0) {
+			for(var Num = 0; Num < ArgumentWatcherGatherer.aliases.getSize(); Num += 1) { // @TODO foreach in at
+				File.write("\t\t" + ArgumentWatcherGatherer.aliases[Num] + ".tell(arg" + Num.toString() + ");\n");
+				if returntype exists {
+					File.write("\t\t");
+					if(Num == 0) {
+						File.write("var ReturnValueStubber{" + returntype.getPureName() + "}[] = ");
+						File.write(ArgumentWatcherGatherer.aliases[Num] + ".getPossibleStubs(arg0);");
+					} else {
+						File.write("ReturnValueStubber[] = ReturnValueStubber[].intersect(" + ArgumentWatcherGatherer.aliases[Num] + ".getPossibleStubs(arg" + Num.toString() + "));");
+					}
+					File.write("\n");
 				}
-				File.write("\n");
 			}
-		}
 
-		if returntype exists {
-			File.write("\t\treturn ReturnValueStubber[0].get();\n");
+			if returntype exists {
+				File.write("\t\treturn ReturnValueStubber[0].get();\n");
+			}
 		}
 
 		File.write("\t}\n\n");
