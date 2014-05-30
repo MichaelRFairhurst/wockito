@@ -50,6 +50,10 @@ every MockFileGenerator is:
 	generateImports(WakeClass) {
 		var ImportIterator <- this;
 
+		ImportIterator.addImport('ReturnValueStubber');
+		ImportIterator.addImport('ArgumentWatcher');
+		ImportIterator.addImport(WakeClass.classname);
+
 		MethodIterator.set((cast MethodIteration) ImportIterator);
 		MethodIterator.iterate(WakeClass);
 

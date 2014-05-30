@@ -16,11 +16,15 @@ every ImportIterator (an ArgumentIterator, capable ArgumentIteration) is:
 	with Text[] imports = [];
 
 	iterate(WakeClass, WakeProperty, WakeType? returntype, WakeType arg, Num argnum) {
-		addImport(arg.getImportName());
+		addImports(arg.getNeededImports());
 
 		if returntype exists {
-			addImport(returntype.getImportName());
+			addImports(returntype.getNeededImports());
 		}
+	}
+
+	addImports(Text[]) {
+		foreach(Text[]) addImport(Text);
 	}
 
 	addImport(Text) {
