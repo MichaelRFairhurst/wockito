@@ -1,0 +1,24 @@
+import MethodIteration;
+import WakeClass;
+import WakeType;
+import WakeProperty;
+import NameTransformer;
+
+every ReturnValueStubberGatherer (capable MethodIteration) is:
+
+	needs NameTransformer;
+
+	with Text[] aliases = [];
+	with Text[] provisions = [];
+	with Text[] declarations = [];
+
+	iterate(WakeClass, WakeProperty method, WakeType[] args, WakeType? returnval) {
+		if(args.getSize() != 0) return;
+		if returnval exists {
+			var Text alias = NameTransformer.methodToProperty(method.name);
+			var Text type = "ReturnValueStubber{" + returnval.getPureName() + "}";
+			aliases.push(alias);
+			declarations.push(type + " " + alias);
+			provisions.push(type + ":" + alias);
+		}
+	}

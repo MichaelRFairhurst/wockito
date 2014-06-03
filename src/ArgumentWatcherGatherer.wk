@@ -27,7 +27,7 @@ every ArgumentWatcherGatherer (an ArgumentIterator, capable ArgumentIteration, c
 			returntypename = returntype.getPureName();
 		}
 
-		var Text typename = "ArgumentWatcher{" + returntypename + "," + arg.getPureName() + "}";
+		var Text typename = "ArgumentWatcher{" + arg.getPureName() + "," + returntypename + "}";
 		var Text alias = NameTransformer.methodToProperty(WakeProperty.name) + "Za" + argn.toString();
 		if(!types.contains(typename)) types.push(typename);
 		aliases.push(alias);

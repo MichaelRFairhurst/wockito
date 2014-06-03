@@ -10,6 +10,7 @@ import MethodIteration;
 import ImportIterator;
 import ArgumentIteration;
 import ArgumentWatcherGatherer;
+import ReturnValueStubberGatherer;
 
 #>
 # Generates code along the lines of:
@@ -34,7 +35,7 @@ every MockFileGenerator is:
 
 	needs NameTransformer, File, MethodIterator;
 
-	provides File <- { return File; }, MockMethodGenerator, ArgumentIterator, ImportIterator, NameTransformer, MethodIterator, ArgumentWatcherGatherer;
+	provides File <- { return File; }, MockMethodGenerator, ArgumentIterator, ImportIterator, NameTransformer, MethodIterator, ArgumentWatcherGatherer, ReturnValueStubberGatherer;
 
 	generate(WakeClass) {
 		generateImports(WakeClass);
@@ -52,6 +53,7 @@ every MockFileGenerator is:
 
 		ImportIterator.addImport('ReturnValueStubber');
 		ImportIterator.addImport('ArgumentWatcher');
+		ImportIterator.addImport('MockTracker');
 		ImportIterator.addImport(WakeClass.classname);
 
 		MethodIterator.set((cast MethodIteration) ImportIterator);
@@ -73,9 +75,18 @@ every MockFileGenerator is:
 		MethodIterator.iterate(WakeClass);
 
 		File.write("\tprovides\n");
-		for(var Num = 0; Num < ArgumentWatcherGatherer.declarations.getSize(); Num += 1) {
-			File.write("\t\t" + ArgumentWatcherGatherer.provisions[Num] + " <- { return " + ArgumentWatcherGatherer.aliases[Num] + "; }, \n");
+		for(var Num = 0; Num < ArgumentWatcherGatherer.declarations.getSize(); Num += 1) { // @TODO foreach at
+			File.write("\t\t" + ArgumentWatcherGatherer.provisions[Num] + " <- { return " + ArgumentWatcherGatherer.aliases[Num] + "; },\n");
 		}
+
+		var ReturnValueStubberGatherer <- this;
+		MethodIterator.set((cast MethodIteration) ReturnValueStubberGatherer);
+		MethodIterator.iterate(WakeClass);
+
+		for(var Num = 0; Num < ReturnValueStubberGatherer.declarations.getSize(); Num += 1) { // @TODO foreach at
+			File.write("\t\t" + ReturnValueStubberGatherer.provisions[Num] + " <- { return " + ReturnValueStubberGatherer.aliases[Num] + "; },\n");
+		}
+
 		File.write("\t\tMock" + WakeClass.classname + "Stubber,\n\t\tMock" + WakeClass.classname + "Verifier;\n\n");
 	}
 
@@ -87,6 +98,15 @@ every MockFileGenerator is:
 		File.write("\tneeds\n");
 
 		var Text[] = ArgumentWatcherGatherer.declarations;
+		foreach(Text[]) {
+			File.write("\t\t" + Text + ",\n");
+		}
+
+		var ReturnValueStubberGatherer <- this;
+		MethodIterator.set((cast MethodIteration) ReturnValueStubberGatherer);
+		MethodIterator.iterate(WakeClass);
+
+		Text[] = ReturnValueStubberGatherer.declarations;
 		foreach(Text[]) {
 			File.write("\t\t" + Text + ",\n");
 		}
