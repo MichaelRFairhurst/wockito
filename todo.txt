@@ -1,0 +1,23 @@
+- Generated files:
+
+	- MockProvider
+	- MockVerifier
+
+- Mock functionality
+
+	- Mock provisions
+	- Spies
+	- In order verification
+	- Expect function call with no args
+
+- Missing Wake functionality
+
+	- Unsafe cast
+	- commandline args
+	- Parent method calls
+
+- Build integration
+
+	- Trigger mock generation for depended files
+	- Generate MockProvider for depended files (harder)
+	- Compile all in proper order
