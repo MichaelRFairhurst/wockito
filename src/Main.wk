@@ -1,4 +1,5 @@
 import MockFileGenerator;
+import MockStubberFileGenerator;
 import File;
 import FileSystem;
 import FilePath;
@@ -15,6 +16,7 @@ every Main is:
 	provides
 		MethodIterator,
 		MockFileGenerator,
+		MockStubberFileGenerator,
 		NameTransformer,
 		File <- { return File <- FileSystem.getPath("MockAsserts.wk"); };
 
@@ -22,7 +24,10 @@ every Main is:
 		var File <- FileSystem.getPath("bin/waketable/Asserts.table");
 
 		var WakeClass = TableFileReader.readFrom(File);
-		var MockFileGenerator <- this;
 
+		var MockStubberFileGenerator <- this;
+		MockStubberFileGenerator.generate(WakeClass);
+
+		var MockFileGenerator <- this;
 		MockFileGenerator.generate(WakeClass);
 	}

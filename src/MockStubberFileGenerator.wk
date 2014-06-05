@@ -1,5 +1,17 @@
 import File;
 import WakeClass;
+import NameTransformer;
+import MethodIterator;
+import StubberMethodGenerator;
+import MethodBodyGenerator;
+import ArgumentIterator;
+import ArgumentWatcherGatherer;
+import ReturnValueStubberGatherer;
+import MethodGenerator;
+import MethodReturnGenerator;
+import ImportIterator;
+import StubberMethodReturnGenerator;
+import MethodIteration;
 
 #>
 # Generates files along the lines of:
@@ -18,3 +30,92 @@ import WakeClass;
 # 	}
 ##
 every MockStubberFileGenerator is:
+
+	needs NameTransformer, File, MethodIterator;
+
+	provides File <- { return File; },
+		MethodGenerator,
+		MethodBodyGenerator <- StubberMethodGenerator, StubberMethodGenerator,
+		MethodReturnGenerator <- StubberMethodReturnGenerator, StubberMethodReturnGenerator,
+		ArgumentIterator,
+		ImportIterator,
+		NameTransformer,
+		MethodIterator,
+		ArgumentWatcherGatherer,
+		ReturnValueStubberGatherer;
+
+	generate(WakeClass) {
+		generateImports(WakeClass);
+
+		File.write("\n");
+		File.write("every " + WakeClass.classname + "Stubber (capable " + WakeClass.classname + ") is:\n");
+
+		generateNeeds(WakeClass);
+		generateProvisions(WakeClass);
+		generateMethods(WakeClass);
+	}
+
+	generateImports(WakeClass) {
+		var ImportIterator <- this;
+
+		ImportIterator.addImport('ReturnValueStubber');
+		ImportIterator.addImport('ArgumentWatcher');
+		ImportIterator.addImport(WakeClass.classname);
+
+		MethodIterator.set((cast MethodIteration) ImportIterator);
+		MethodIterator.iterate(WakeClass);
+
+		foreach(ImportIterator.getImports()) { // @TODO foreach as
+			File.write("import " + Text + ";\n");
+		}
+	}
+
+	generateMethods(WakeClass) {
+		MethodIterator.set((cast MethodIteration) (MethodGenerator <- this));
+		MethodIterator.iterate(WakeClass);
+	}
+
+	generateProvisions(WakeClass) {
+		var ArgumentWatcherGatherer <- this;
+		MethodIterator.set((cast MethodIteration) ArgumentWatcherGatherer);
+		MethodIterator.iterate(WakeClass);
+
+		var Bool first = true;
+
+		File.write("\tprovides\n");
+		for(var Num = 0; Num < ArgumentWatcherGatherer.types.getSize(); Num += 1) { // @TODO foreach at
+			if(!first) File.write(",\n");
+			else first = false;
+
+			File.write("\t\tReturnValueStubber{" + ArgumentWatcherGatherer.types[Num] + "}");
+		}
+		File.write(";\n");
+	}
+
+	generateNeeds(WakeClass) {
+		var ArgumentWatcherGatherer <- this;
+		MethodIterator.set((cast MethodIteration) ArgumentWatcherGatherer);
+		MethodIterator.iterate(WakeClass);
+
+		File.write("\tneeds\n");
+
+		var Bool first = true;
+
+		var Text[] = ArgumentWatcherGatherer.provisions;
+		foreach(Text[]) {
+			if(!first) File.write(",\n");
+			else first = false;
+			File.write("\t\t" + Text);
+		}
+
+		var ReturnValueStubberGatherer <- this;
+		MethodIterator.set((cast MethodIteration) ReturnValueStubberGatherer);
+		MethodIterator.iterate(WakeClass);
+
+		Text[] = ReturnValueStubberGatherer.provisions;
+		foreach(Text[]) {
+			File.write(",\n\t\t" + Text);
+		}
+
+		File.write(";\n");
+	}
