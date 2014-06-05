@@ -2,16 +2,14 @@ import WakeClass;
 import WakeProperty;
 import File;
 import ArgumentWatcherGatherer;
-import WakeType;
 import MethodBodyGenerator;
-import NameTransformer;
+import WakeType;
 
-every MockMethodGenerator (capable MethodBodyGenerator) is:
-
-	needs NameTransformer;
+every StubberMethodGenerator (capable MethodBodyGenerator) is:
 
 	generate(File, WakeClass, WakeProperty, ArgumentWatcherGatherer, WakeType? returntype) {
-		if(ArgumentWatcherGatherer.aliases.getSize() > 0) {
+		#>
+		if(args.getSize() > 0) {
 			for(var Num = 0; Num < ArgumentWatcherGatherer.aliases.getSize(); Num += 1) { // @TODO foreach in at
 				File.write("\t\t" + ArgumentWatcherGatherer.aliases[Num] + ".tell(arg" + Num.toString() + ", MockTracker.current());\n");
 				if returntype exists {
@@ -35,7 +33,8 @@ every MockMethodGenerator (capable MethodBodyGenerator) is:
 			File.write('\t\tMockTracker.next();\n');
 
 			if returntype exists {
-				File.write("\t\treturn " + NameTransformer.methodToProperty(WakeProperty.name) + ".get();\n");
+				File.write("\t\treturn " + (NameTransformer <- this).methodToProperty(WakeProperty.name) + ".get();\n");
 			}
 		}
+		##
 	}

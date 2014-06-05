@@ -1,0 +1,39 @@
+import MethodIteration;
+import ArgumentIteration;
+import WakeClass;
+import WakeProperty;
+import WakeType;
+import ArgumentWatcherGatherer;
+import ArgumentIterator;
+import File;
+import NameTransformer;
+import MethodIterator;
+import MethodBodyGenerator;
+import MethodReturnGenerator;
+
+every MethodGenerator (capable MethodIteration) is:
+
+	needs File, ArgumentIterator, MethodBodyGenerator, MethodReturnGenerator;
+	provides ArgumentWatcherGatherer, NameTransformer, MethodIterator;
+
+	iterate(WakeClass, WakeProperty, WakeType[] args, WakeType? returntype) {
+		var ArgumentWatcherGatherer <- this;
+		ArgumentIterator.set((cast ArgumentIteration) ArgumentWatcherGatherer);
+
+		ArgumentIterator.iterate(WakeClass, WakeProperty, WakeProperty.WakeType.arguments, WakeProperty.WakeType.returntype);
+
+		File.write("\t");
+		MethodReturnGenerator.generate(File, returntype);
+
+		for(var Num = 0; Num < args.getSize(); Num += 1) { // @TODO foreach in at
+			File.write(WakeProperty.casing[Num]);
+			File.write(args[Num].getPureName() + " arg" + Num.toString());
+		}
+
+		File.write(WakeProperty.casing[args.getSize()]); // might be just ')' but might be ')ALastMethodSegment()'
+		File.write(" {\n");
+
+		MethodBodyGenerator.generate(File, WakeClass, WakeProperty, ArgumentWatcherGatherer, returntype);
+
+		File.write("\t}\n\n");
+	}

@@ -11,6 +11,10 @@ import ImportIterator;
 import ArgumentIteration;
 import ArgumentWatcherGatherer;
 import ReturnValueStubberGatherer;
+import MethodBodyGenerator;
+import MethodGenerator;
+import MethodReturnGenerator;
+import MockMethodReturnGenerator;
 
 #>
 # Generates code along the lines of:
@@ -35,7 +39,16 @@ every MockFileGenerator is:
 
 	needs NameTransformer, File, MethodIterator;
 
-	provides File <- { return File; }, MockMethodGenerator, ArgumentIterator, ImportIterator, NameTransformer, MethodIterator, ArgumentWatcherGatherer, ReturnValueStubberGatherer;
+	provides File <- { return File; },
+		MethodGenerator,
+		MethodBodyGenerator <- MockMethodGenerator, MockMethodGenerator,
+		MethodReturnGenerator <- MockMethodReturnGenerator, MockMethodReturnGenerator,
+		ArgumentIterator,
+		ImportIterator,
+		NameTransformer,
+		MethodIterator,
+		ArgumentWatcherGatherer,
+		ReturnValueStubberGatherer;
 
 	generate(WakeClass) {
 		generateImports(WakeClass);
@@ -65,7 +78,7 @@ every MockFileGenerator is:
 	}
 
 	generateMethods(WakeClass) {
-		MethodIterator.set((cast MethodIteration) (MockMethodGenerator <- this));
+		MethodIterator.set((cast MethodIteration) (MethodGenerator <- this));
 		MethodIterator.iterate(WakeClass);
 	}
 

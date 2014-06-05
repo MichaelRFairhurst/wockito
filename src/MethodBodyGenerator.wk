@@ -1,0 +1,9 @@
+import WakeType;
+import WakeClass;
+import WakeProperty;
+import File;
+import ArgumentWatcherGatherer;
+
+every MethodBodyGenerator is:
+
+	generate(File, WakeClass, WakeProperty, ArgumentWatcherGatherer, WakeType? returntype);

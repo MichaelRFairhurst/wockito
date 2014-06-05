@@ -1,0 +1,11 @@
+import File;
+import WakeType;
+import MethodReturnGenerator;
+
+every MockMethodReturnGenerator (capable MethodReturnGenerator) is:
+
+	generate(File, WakeType?) {
+		if WakeType exists {
+			File.write(WakeType.getPureName() + " -- ");
+		}
+	}
