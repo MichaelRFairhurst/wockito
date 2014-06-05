@@ -102,10 +102,10 @@ every MockStubberFileGenerator is:
 		var Bool first = true;
 
 		var Text[] = ArgumentWatcherGatherer.provisions;
-		foreach(Text[]) {
+		for(var Num = 0; Num < ArgumentWatcherGatherer.provisions.getSize(); Num += 1) {
 			if(!first) File.write(",\n");
 			else first = false;
-			File.write("\t\t" + Text);
+			File.write("\t\t" + ArgumentWatcherGatherer.provisions[Num] + " " + ArgumentWatcherGatherer.aliases[Num]);
 		}
 
 		var ReturnValueStubberGatherer <- this;
@@ -113,8 +113,8 @@ every MockStubberFileGenerator is:
 		MethodIterator.iterate(WakeClass);
 
 		Text[] = ReturnValueStubberGatherer.provisions;
-		foreach(Text[]) {
-			File.write(",\n\t\t" + Text);
+		for(var Num = 0; Num < ReturnValueStubberGatherer.provisions.getSize(); Num += 1) {
+			File.write(",\n\t\t" + ReturnValueStubberGatherer.provisions[Num] + " " + ReturnValueStubberGatherer.aliases[Num]);
 		}
 
 		File.write(";\n");
