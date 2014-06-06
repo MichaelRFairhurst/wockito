@@ -100,7 +100,7 @@ every MockFileGenerator is:
 			File.write("\t\t" + ReturnValueStubberGatherer.provisions[Num] + " <- { return " + ReturnValueStubberGatherer.aliases[Num] + "; },\n");
 		}
 
-		File.write("\t\tMock" + WakeClass.classname + "Stubber,\n\t\tMock" + WakeClass.classname + "Verifier;\n\n");
+		File.write("\t\t" + WakeClass.classname + "Stubber,\n\t\t" + WakeClass.classname + "Verifier;\n\n");
 	}
 
 	generateNeeds(WakeClass) {

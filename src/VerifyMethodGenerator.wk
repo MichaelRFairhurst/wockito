@@ -5,36 +5,33 @@ import File;
 import ArgumentWatcherGatherer;
 import MethodBodyGenerator;
 
+#>
+# generate like
+#
+#	var Num[] calls = getZpTextZcNumZpZa1.getCallIndices(Text);
+#	calls = calls.intersect(getZpTextZcNumZpZa2.getCallIndices(Num));
+#	var $CallValidator? = CallValidator; // bugfix.....
+#	if $CallValidator exists {
+#		$CallValidator.validate(calls);
+#	}
+##
 every VerifyMethodGenerator (capable MethodBodyGenerator) is:
 
 	generate(File, WakeClass, WakeProperty, ArgumentWatcherGatherer, WakeType? returntype) {
-		#>
-		if(ArgumentWatcherGatherer.aliases.getSize() > 0) {
-			for(var Num = 0; Num < ArgumentWatcherGatherer.aliases.getSize(); Num += 1) { // @TODO foreach in at
-				File.write("\t\t" + ArgumentWatcherGatherer.aliases[Num] + ".tell(arg" + Num.toString() + ", MockTracker.current());\n");
-				if returntype exists {
-					File.write("\t\t");
-					if(Num == 0) {
-						File.write("var ReturnValueStubber{" + returntype.getPureName() + "}[] = ");
-						File.write(ArgumentWatcherGatherer.aliases[Num] + ".getPossibleStubs(arg0);");
-					} else {
-						File.write("ReturnValueStubber[] = ReturnValueStubber[].intersect(" + ArgumentWatcherGatherer.aliases[Num] + ".getPossibleStubs(arg" + Num.toString() + "));");
-					}
-					File.write("\n");
-				}
-			}
+		if(ArgumentWatcherGatherer.aliases.getSize() == 0) return;
 
-			File.write('\t\tMockTracker.next();\n');
-
-			if returntype exists {
-				File.write("\t\treturn ReturnValueStubber[0].get();\n");
-			}
-		} else {
-			File.write('\t\tMockTracker.next();\n');
-
-			if returntype exists {
-				File.write("\t\treturn " + (NameTransformer <- this).methodToProperty(WakeProperty.name) + ".get();\n");
+		for(var Num = 0; Num < ArgumentWatcherGatherer.aliases.getSize(); Num += 1) { // @TODO foreach in at
+			File.write("\t\t");
+			if(Num == 0) {
+				File.write("var Num[] = ");
+				File.write(ArgumentWatcherGatherer.aliases[Num] + ".getCallIndices(arg0);\n");
+			} else {
+				File.write("Num[] = Num[].intersect(" + ArgumentWatcherGatherer.aliases[Num] + ".getCallIndices(arg" + Num.toString() + "));\n");
 			}
 		}
-		##
+
+		File.write("\t\t"); File.write("var $CallValidator? = CallValidator;\n");
+		File.write("\t\t"); File.write("if $CallValidator exists {\n");
+		File.write("\t\t\t"); File.write("$CallValidator.validate(Num[]);\n");
+		File.write("\t\t"); File.write("}\n");
 	}

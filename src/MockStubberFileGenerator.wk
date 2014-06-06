@@ -48,7 +48,7 @@ every MockStubberFileGenerator is:
 		generateImports(WakeClass);
 
 		File.write("\n");
-		File.write("every " + WakeClass.classname + "Stubber (capable " + WakeClass.classname + ") is:\n");
+		File.write("every " + WakeClass.classname + "Stubber is:\n");
 
 		generateNeeds(WakeClass);
 		generateProvisions(WakeClass);
@@ -89,7 +89,7 @@ every MockStubberFileGenerator is:
 
 			File.write("\t\tReturnValueStubber{" + ArgumentWatcherGatherer.types[Num] + "}");
 		}
-		File.write(";\n");
+		File.write(";\n\n");
 	}
 
 	generateNeeds(WakeClass) {
@@ -117,5 +117,5 @@ every MockStubberFileGenerator is:
 			File.write(",\n\t\t" + ReturnValueStubberGatherer.provisions[Num] + " " + ReturnValueStubberGatherer.aliases[Num]);
 		}
 
-		File.write(";\n");
+		File.write(";\n\n");
 	}

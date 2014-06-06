@@ -1,5 +1,6 @@
 import MockFileGenerator;
 import MockStubberFileGenerator;
+import MockVerifierFileGenerator;
 import File;
 import FileSystem;
 import FilePath;
@@ -17,6 +18,7 @@ every Main is:
 		MethodIterator,
 		MockFileGenerator,
 		MockStubberFileGenerator,
+		MockVerifierFileGenerator,
 		NameTransformer,
 		File <- { return File <- FileSystem.getPath("MockAsserts.wk"); };
 
@@ -27,6 +29,9 @@ every Main is:
 
 		var MockStubberFileGenerator <- this;
 		MockStubberFileGenerator.generate(WakeClass);
+
+		var MockVerifierFileGenerator <- this;
+		MockVerifierFileGenerator.generate(WakeClass);
 
 		var MockFileGenerator <- this;
 		MockFileGenerator.generate(WakeClass);
