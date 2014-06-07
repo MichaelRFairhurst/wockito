@@ -1,0 +1,14 @@
+import Asserts;
+import When;
+
+every WhenTest is:
+
+	needs When{Num};
+
+	~[ test .thenReturn() on an argument stubber, and then getting its return value ]~(Asserts) {
+		When.thenReturn(1).thenReturn(2).thenReturn(3);
+
+		Asserts.that(When.get())Equals(1);
+		Asserts.that(When.get())Equals(2);
+		Asserts.that(When.get())Equals(3);
+	}

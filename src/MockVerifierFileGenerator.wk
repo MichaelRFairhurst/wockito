@@ -10,7 +10,7 @@ import MethodIteration;
 import ImportIterator;
 import ArgumentIteration;
 import ArgumentWatcherGatherer;
-import ReturnValueStubberGatherer;
+import WhenGatherer;
 import MethodBodyGenerator;
 import MethodGenerator;
 import MethodReturnGenerator;
@@ -47,7 +47,7 @@ every MockVerifierFileGenerator is:
 		NameTransformer,
 		MethodIterator,
 		ArgumentWatcherGatherer,
-		ReturnValueStubberGatherer;
+		WhenGatherer;
 
 	generate(WakeClass) {
 		generateImports(WakeClass);
@@ -67,7 +67,7 @@ every MockVerifierFileGenerator is:
 	generateImports(WakeClass) {
 		var ImportIterator <- this;
 
-		ImportIterator.addImport('ReturnValueStubber');
+		ImportIterator.addImport('When');
 		ImportIterator.addImport('ArgumentWatcher');
 		ImportIterator.addImport('CallValidator');
 		ImportIterator.addImport(WakeClass.classname);
@@ -101,13 +101,13 @@ every MockVerifierFileGenerator is:
 			File.write("\t\t" + ArgumentWatcherGatherer.provisions[Num] + " " + ArgumentWatcherGatherer.aliases[Num]);
 		}
 
-		var ReturnValueStubberGatherer <- this;
-		MethodIterator.set((cast MethodIteration) ReturnValueStubberGatherer);
+		var WhenGatherer <- this;
+		MethodIterator.set((cast MethodIteration) WhenGatherer);
 		MethodIterator.iterate(WakeClass);
 
-		Text[] = ReturnValueStubberGatherer.provisions;
-		for(var Num = 0; Num < ReturnValueStubberGatherer.provisions.getSize(); Num += 1) {
-			File.write(",\n\t\t" + ReturnValueStubberGatherer.provisions[Num] + " " + ReturnValueStubberGatherer.aliases[Num]);
+		Text[] = WhenGatherer.provisions;
+		for(var Num = 0; Num < WhenGatherer.provisions.getSize(); Num += 1) {
+			File.write(",\n\t\t" + WhenGatherer.provisions[Num] + " " + WhenGatherer.aliases[Num]);
 		}
 
 		File.write(";\n\n");

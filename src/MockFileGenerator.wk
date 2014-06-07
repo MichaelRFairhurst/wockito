@@ -10,7 +10,7 @@ import MethodIteration;
 import ImportIterator;
 import ArgumentIteration;
 import ArgumentWatcherGatherer;
-import ReturnValueStubberGatherer;
+import WhenGatherer;
 import MethodBodyGenerator;
 import MethodGenerator;
 import MethodReturnGenerator;
@@ -30,9 +30,9 @@ import MockMethodReturnGenerator;
 #		ExampleMockValidator;
 #
 #	Text -- get(Text, Num) {
-#		var ReturnValueStubber{Text}[] = getZpTextZcNumZpZa1.getPossibleStubs(Text);
-#		ReturnValueStubber = ReturnValueStubber.intersect(getZpTextZcNumZpZa2.getPossibleStubs(Num));
-#		return ReturnValueStubber[0].get();
+#		var When{Text}[] = getZpTextZcNumZpZa1.getPossibleStubs(Text);
+#		When = When.intersect(getZpTextZcNumZpZa2.getPossibleStubs(Num));
+#		return When[0].get();
 #	}
 ##
 every MockFileGenerator is:
@@ -48,7 +48,7 @@ every MockFileGenerator is:
 		NameTransformer,
 		MethodIterator,
 		ArgumentWatcherGatherer,
-		ReturnValueStubberGatherer;
+		WhenGatherer;
 
 	generate(WakeClass) {
 		generateImports(WakeClass);
@@ -64,7 +64,7 @@ every MockFileGenerator is:
 	generateImports(WakeClass) {
 		var ImportIterator <- this;
 
-		ImportIterator.addImport('ReturnValueStubber');
+		ImportIterator.addImport('When');
 		ImportIterator.addImport('ArgumentWatcher');
 		ImportIterator.addImport('MockTracker');
 		ImportIterator.addImport(WakeClass.classname);
@@ -92,12 +92,12 @@ every MockFileGenerator is:
 			File.write("\t\t" + ArgumentWatcherGatherer.provisions[Num] + " <- { return " + ArgumentWatcherGatherer.aliases[Num] + "; },\n");
 		}
 
-		var ReturnValueStubberGatherer <- this;
-		MethodIterator.set((cast MethodIteration) ReturnValueStubberGatherer);
+		var WhenGatherer <- this;
+		MethodIterator.set((cast MethodIteration) WhenGatherer);
 		MethodIterator.iterate(WakeClass);
 
-		for(var Num = 0; Num < ReturnValueStubberGatherer.declarations.getSize(); Num += 1) { // @TODO foreach at
-			File.write("\t\t" + ReturnValueStubberGatherer.provisions[Num] + " <- { return " + ReturnValueStubberGatherer.aliases[Num] + "; },\n");
+		for(var Num = 0; Num < WhenGatherer.declarations.getSize(); Num += 1) { // @TODO foreach at
+			File.write("\t\t" + WhenGatherer.provisions[Num] + " <- { return " + WhenGatherer.aliases[Num] + "; },\n");
 		}
 
 		File.write("\t\t" + WakeClass.classname + "Stubber,\n\t\t" + WakeClass.classname + "Verifier;\n\n");
@@ -115,11 +115,11 @@ every MockFileGenerator is:
 			File.write("\t\t" + Text + ",\n");
 		}
 
-		var ReturnValueStubberGatherer <- this;
-		MethodIterator.set((cast MethodIteration) ReturnValueStubberGatherer);
+		var WhenGatherer <- this;
+		MethodIterator.set((cast MethodIteration) WhenGatherer);
 		MethodIterator.iterate(WakeClass);
 
-		Text[] = ReturnValueStubberGatherer.declarations;
+		Text[] = WhenGatherer.declarations;
 		foreach(Text[]) {
 			File.write("\t\t" + Text + ",\n");
 		}

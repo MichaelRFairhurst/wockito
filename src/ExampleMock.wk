@@ -1,5 +1,5 @@
 import ArgumentWatcher;
-import ReturnValueStubber;
+import When;
 import CallValidator;
 import Asserts;
 import TimesCalledValidator;
@@ -9,13 +9,13 @@ every ExampleMockStubber is:
 
 	needs ArgumentWatcher{Text, Text}:getZpTextZcNumZpZa1 getZpTextZcNumZpZa1, ArgumentWatcher{Num, Text}:getZpTextZcNumZpZa2 getZpTextZcNumZpZa2;
 
-	provides ReturnValueStubber{Text};
+	provides When{Text};
 
-	ReturnValueStubber{Text} -- get(Text, Num) {
-		var ReturnValueStubber{Text} <- this;
-		getZpTextZcNumZpZa1.expect(Text, ReturnValueStubber);
-		getZpTextZcNumZpZa2.expect(Num, ReturnValueStubber);
-		return ReturnValueStubber;
+	When{Text} -- get(Text, Num) {
+		var When{Text} <- this;
+		getZpTextZcNumZpZa1.expect(Text, When);
+		getZpTextZcNumZpZa2.expect(Num, When);
+		return When;
 	}
 
 every Example is:
@@ -34,12 +34,12 @@ every ExampleMock (capable Example) is:
 		ExampleMockVerifier;
 
 	Text -- get(Text, Num) {
-		var ReturnValueStubber{Text}[] = getZpTextZcNumZpZa1.getPossibleStubs(Text);
-		ReturnValueStubber[] = ReturnValueStubber[].intersect(getZpTextZcNumZpZa2.getPossibleStubs(Num));
+		var When{Text}[] = getZpTextZcNumZpZa1.getPossibleStubs(Text);
+		When[] = When[].intersect(getZpTextZcNumZpZa2.getPossibleStubs(Num));
 		getZpTextZcNumZpZa1.tell(Text, MockTracker.current());
 		getZpTextZcNumZpZa2.tell(Num, MockTracker.current());
 		MockTracker.next();
-		return ReturnValueStubber[0].get();
+		return When[0].get();
 	}
 
 every ExampleMockVerifier (capable Example) is:

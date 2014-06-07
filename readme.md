@@ -53,8 +53,8 @@ Eventually I will add matchers to arguments, but not yet.
 
 ### Stub a provision value from a mock
 
-	(Stub{File} <- mocks.when(FilePath)).thenReturn(mockFile);
-	(Stub{User}:LoggedIn <- mocks.when(App)).thenReturn(mockUser);
+	(When{File} <- FilePath).thenReturn(mockFile);
+	(When{User}:LoggedIn <- App).thenReturn(mockUser);
 
 ### Verify mock interactions
 

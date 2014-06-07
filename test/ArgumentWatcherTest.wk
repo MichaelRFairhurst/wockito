@@ -1,43 +1,43 @@
 import Asserts;
 import ArgumentWatcher;
-import ReturnValueStubber;
+import When;
 
 every ArgumentWatcherTest is:
 
 	needs ArgumentWatcher{Num, Num};
 
-	provides ReturnValueStubber{Num};
+	provides When{Num};
 
 	~[ test get a nonexist stub ]~(Asserts) {
-		var ReturnValueStubber{Num}[] = ArgumentWatcher.getPossibleStubs(1234);
-		Asserts.that(ReturnValueStubber[].getSize())Equals(0);
-		Asserts.that(ReturnValueStubber[].getSize())Equals(0);
+		var When{Num}[] = ArgumentWatcher.getPossibleStubs(1234);
+		Asserts.that(When[].getSize())Equals(0);
+		Asserts.that(When[].getSize())Equals(0);
 	}
 
 	~[ test set and get an expected stub ]~(Asserts) {
-		var ReturnValueStubber{Num} <- this;
-		var $ReturnValueStubber{Num} <- this;
+		var When{Num} <- this;
+		var $When{Num} <- this;
 
-		ArgumentWatcher.expect(1, ReturnValueStubber);
-		ArgumentWatcher.expect(2, $ReturnValueStubber);
-		var ReturnValueStubber{Num}[] arr = ArgumentWatcher.getPossibleStubs(1);
+		ArgumentWatcher.expect(1, When);
+		ArgumentWatcher.expect(2, $When);
+		var When{Num}[] arr = ArgumentWatcher.getPossibleStubs(1);
 		Asserts.that(arr.getSize())Equals(1);
-		Asserts.that(arr[0] == ReturnValueStubber);
+		Asserts.that(arr[0] == When);
 		arr = ArgumentWatcher.getPossibleStubs(2);
 		Asserts.that(arr.getSize())Equals(1);
-		Asserts.that(arr[0] == $ReturnValueStubber);
+		Asserts.that(arr[0] == $When);
 	}
 
 	~[ test set and get a overlapping expected stubs ]~(Asserts) {
-		var ReturnValueStubber{Num} <- this;
-		var $ReturnValueStubber{Num} <- this;
+		var When{Num} <- this;
+		var $When{Num} <- this;
 
-		ArgumentWatcher.expect(3, ReturnValueStubber);
-		ArgumentWatcher.expect(3, $ReturnValueStubber);
-		var ReturnValueStubber{Num}[] arr = ArgumentWatcher.getPossibleStubs(3);
+		ArgumentWatcher.expect(3, When);
+		ArgumentWatcher.expect(3, $When);
+		var When{Num}[] arr = ArgumentWatcher.getPossibleStubs(3);
 		Asserts.that(arr.getSize())Equals(2);
-		Asserts.that(arr[0] == ReturnValueStubber);
-		Asserts.that(arr[1] == $ReturnValueStubber);
+		Asserts.that(arr[0] == When);
+		Asserts.that(arr[1] == $When);
 	}
 
 	~[ test call nums with a nonmatching call ]~(Asserts) {

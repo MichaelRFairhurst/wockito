@@ -6,7 +6,7 @@ import StubberMethodGenerator;
 import MethodBodyGenerator;
 import ArgumentIterator;
 import ArgumentWatcherGatherer;
-import ReturnValueStubberGatherer;
+import WhenGatherer;
 import MethodGenerator;
 import MethodReturnGenerator;
 import ImportIterator;
@@ -20,13 +20,13 @@ import MethodIteration;
 #
 # 	needs ArgumentWatcher{Text, Text}:getZpTextZcNumZpZa1 getZpTextZcNumZpZa1, ArgumentWatcher{Num, Text}:getZpTextZcNumZpZa1 getZpTextZcNumZpZa2;
 #
-# 	provides ReturnValueStubber{Text};
+# 	provides When{Text};
 #
-# 	ReturnValueStubber{Text} -- get(Text, Num) {
-# 		var ReturnValueStubber{Text} <- this;
-# 		getZpTextZcNumZpZa1.expect(Text, ReturnValueStubber);
-# 		getZpTextZcNumZpZa2.expect(Num, ReturnValueStubber);
-# 		return ReturnValueStubber;
+# 	When{Text} -- get(Text, Num) {
+# 		var When{Text} <- this;
+# 		getZpTextZcNumZpZa1.expect(Text, When);
+# 		getZpTextZcNumZpZa2.expect(Num, When);
+# 		return When;
 # 	}
 ##
 every MockStubberFileGenerator is:
@@ -42,7 +42,7 @@ every MockStubberFileGenerator is:
 		NameTransformer,
 		MethodIterator,
 		ArgumentWatcherGatherer,
-		ReturnValueStubberGatherer;
+		WhenGatherer;
 
 	generate(WakeClass) {
 		generateImports(WakeClass);
@@ -58,7 +58,7 @@ every MockStubberFileGenerator is:
 	generateImports(WakeClass) {
 		var ImportIterator <- this;
 
-		ImportIterator.addImport('ReturnValueStubber');
+		ImportIterator.addImport('When');
 		ImportIterator.addImport('ArgumentWatcher');
 		ImportIterator.addImport(WakeClass.classname);
 
@@ -87,7 +87,7 @@ every MockStubberFileGenerator is:
 			if(!first) File.write(",\n");
 			else first = false;
 
-			File.write("\t\tReturnValueStubber{" + ArgumentWatcherGatherer.types[Num] + "}");
+			File.write("\t\tWhen{" + ArgumentWatcherGatherer.types[Num] + "}");
 		}
 		File.write(";\n\n");
 	}
@@ -108,13 +108,13 @@ every MockStubberFileGenerator is:
 			File.write("\t\t" + ArgumentWatcherGatherer.provisions[Num] + " " + ArgumentWatcherGatherer.aliases[Num]);
 		}
 
-		var ReturnValueStubberGatherer <- this;
-		MethodIterator.set((cast MethodIteration) ReturnValueStubberGatherer);
+		var WhenGatherer <- this;
+		MethodIterator.set((cast MethodIteration) WhenGatherer);
 		MethodIterator.iterate(WakeClass);
 
-		Text[] = ReturnValueStubberGatherer.provisions;
-		for(var Num = 0; Num < ReturnValueStubberGatherer.provisions.getSize(); Num += 1) {
-			File.write(",\n\t\t" + ReturnValueStubberGatherer.provisions[Num] + " " + ReturnValueStubberGatherer.aliases[Num]);
+		Text[] = WhenGatherer.provisions;
+		for(var Num = 0; Num < WhenGatherer.provisions.getSize(); Num += 1) {
+			File.write(",\n\t\t" + WhenGatherer.provisions[Num] + " " + WhenGatherer.aliases[Num]);
 		}
 
 		File.write(";\n\n");

@@ -6,6 +6,6 @@ every StubberMethodReturnGenerator (capable MethodReturnGenerator) is:
 
 	generate(File, WakeType?) {
 		if WakeType exists {
-			File.write("ReturnValueStubber{" + WakeType.getPureName() + "} -- ");
+			File.write("when{" + WakeType.getPureName() + "} -- ");
 		}
 	}
