@@ -15,6 +15,7 @@ import MethodBodyGenerator;
 import MethodGenerator;
 import MethodReturnGenerator;
 import MockMethodReturnGenerator;
+import WakeProperty;
 
 #>
 # Generates code along the lines of:
@@ -99,6 +100,26 @@ every MockFileGenerator is:
 		for(var Num = 0; Num < WhenGatherer.declarations.getSize(); Num += 1) { // @TODO foreach at
 			File.write("\t\t" + WhenGatherer.provisions[Num] + " <- { return " + WhenGatherer.aliases[Num] + "; },\n");
 		}
+
+		foreach(WakeClass.properties.getKeys()) { // @Todo foreach in
+			if(Text.indexOf('<-') == nothing) continue;
+			var WakeProperty? = WakeClass.properties.get(Text);
+			if WakeProperty exists {
+				var WakeType? method = WakeProperty.WakeType;
+				if method exists {
+					var WakeType? provision = method.returntype;
+					if provision exists {
+						File.write("\t\t" + provision.getPureName());
+						if(provision.specialty != "") File.write(":" + provision.specialty);
+						File.write(" <- { return " + NameTransformer.methodToProperty(WakeProperty.name) + provision.specialty + ".get(); },\n");
+						File.write("\t\tWhen{" + provision.getPureName() + "}");
+						if(provision.specialty != "") File.write(":" + provision.specialty);
+						File.write(" <- { return " + NameTransformer.methodToProperty(WakeProperty.name) + provision.specialty + "; },\n");
+					}
+				}
+			}
+		}
+
 
 		File.write("\t\t" + WakeClass.classname + "Stubber,\n\t\t" + WakeClass.classname + "Verifier;\n\n");
 	}

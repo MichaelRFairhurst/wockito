@@ -20,10 +20,10 @@ every Main is:
 		MockStubberFileGenerator,
 		MockVerifierFileGenerator,
 		NameTransformer,
-		File <- { return File <- FileSystem.getPath("MockAsserts.wk"); };
+		File <- { return File <- FileSystem.getPath("MockFilePath.wk"); };
 
 	main() {
-		var File <- FileSystem.getPath("bin/waketable/Asserts.table");
+		var File <- FileSystem.getPath("bin/waketable/FilePath.table");
 
 		var WakeClass = TableFileReader.readFrom(File);
 

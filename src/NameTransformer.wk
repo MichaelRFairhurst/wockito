@@ -12,9 +12,15 @@ every NameTransformer is:
 				$Text += "Zs";
 			} else if (char == "}") {
 				$Text += "Ze";
+			} else if (char == "<") {
+				$Text += "Zl";
+			} else if (char == "-") {
+				$Text += "Zd";
 			} else {
 				$Text += char;
 			}
+
+			if(Num == 0) $Text = $Text.toLower();
 		}
 		return $Text;
 	}
