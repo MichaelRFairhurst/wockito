@@ -7,7 +7,6 @@ import MockMethodGenerator;
 import ArgumentIterator;
 import MethodIterator;
 import MethodIteration;
-import ImportIterator;
 import ArgumentIteration;
 import ArgumentWatcherGatherer;
 import WhenGatherer;
@@ -46,7 +45,6 @@ every MockFileGenerator is:
 		MethodBodyGenerator <- MockMethodGenerator, MockMethodGenerator,
 		MethodReturnGenerator <- MockMethodReturnGenerator, MockMethodReturnGenerator,
 		ArgumentIterator,
-		ImportIterator,
 		NameTransformer,
 		MethodIterator,
 		ArgumentWatcherGatherer,
@@ -64,17 +62,12 @@ every MockFileGenerator is:
 	}
 
 	generateImports(WakeClass) {
-		var ImportIterator <- this;
+		File.write('import When;');
+		File.write('import ArgumentWatcher;');
+		File.write('import MockTracker;');
+		File.write('import ' + WakeClass.classname + ';');
 
-		ImportIterator.addImport('When');
-		ImportIterator.addImport('ArgumentWatcher');
-		ImportIterator.addImport('MockTracker');
-		ImportIterator.addImport(WakeClass.classname);
-
-		MethodIterator.set((cast MethodIteration) ImportIterator);
-		MethodIterator.iterate(WakeClass);
-
-		foreach(ImportIterator.getImports()) { // @TODO foreach as
+		foreach(WakeClass.getApiImports()) { // @TODO foreach as
 			File.write("import " + Text + ";\n");
 		}
 	}
@@ -154,7 +147,7 @@ every MockFileGenerator is:
 				if method exists {
 					var WakeType? provision = method.returntype;
 					if provision exists {
-						deps.push(provision.getPureName() + " " + NameTransformer.methodToProperty(WakeProperty.name));
+						deps.push("When{" + provision.getPureName() + "} " + NameTransformer.methodToProperty(WakeProperty.name));
 					}
 				}
 			}

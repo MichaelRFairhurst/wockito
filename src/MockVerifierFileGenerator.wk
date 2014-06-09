@@ -7,7 +7,6 @@ import VerifyMethodGenerator;
 import ArgumentIterator;
 import MethodIterator;
 import MethodIteration;
-import ImportIterator;
 import ArgumentIteration;
 import ArgumentWatcherGatherer;
 import WhenGatherer;
@@ -44,7 +43,6 @@ every MockVerifierFileGenerator is:
 		MethodBodyGenerator <- VerifyMethodGenerator, VerifyMethodGenerator,
 		MethodReturnGenerator <- VerifyMethodReturnGenerator, VerifyMethodReturnGenerator,
 		ArgumentIterator,
-		ImportIterator,
 		NameTransformer,
 		MethodIterator,
 		ArgumentWatcherGatherer,
@@ -66,17 +64,12 @@ every MockVerifierFileGenerator is:
 	}
 
 	generateImports(WakeClass) {
-		var ImportIterator <- this;
+		File.write('import When;');
+		File.write('import ArgumentWatcher;');
+		File.write('import CallValidator;');
+		File.write('import ' + WakeClass.classname + ';');
 
-		ImportIterator.addImport('When');
-		ImportIterator.addImport('ArgumentWatcher');
-		ImportIterator.addImport('CallValidator');
-		ImportIterator.addImport(WakeClass.classname);
-
-		MethodIterator.set((cast MethodIteration) ImportIterator);
-		MethodIterator.iterate(WakeClass);
-
-		foreach(ImportIterator.getImports()) { // @TODO foreach as
+		foreach(WakeClass.getApiImports()) { // @TODO foreach as
 			File.write("import " + Text + ";\n");
 		}
 	}
