@@ -1,0 +1,24 @@
+import Asserts;
+import CommaStatementGenerator;
+
+every CommaStatementGeneratorTest is:
+
+	needs CommaStatementGenerator;
+
+	~[ test generate no items generates nothing ]~(Asserts) {
+		var Text[] = [];
+		Asserts.that(CommaStatementGenerator.generate("provides", Text[]))Equals("");
+	}
+
+	~[ test generate one item generates keyword and terminator ]~(Asserts) {
+		var Text[] = [];
+		Text[].push("test");
+		Asserts.that(CommaStatementGenerator.generate("provides", Text[]))Equals("\tprovides\n\t\ttest;\n\n");
+	}
+
+	~[ test generate two items generates keyword and delimiter and terminator ]~(Asserts) {
+		var Text[] = [];
+		Text[].push("test");
+		Text[].push("alsome");
+		Asserts.that(CommaStatementGenerator.generate("provides", Text[]))Equals("\tprovides\n\t\ttest,\n\t\talsome;\n\n");
+	}

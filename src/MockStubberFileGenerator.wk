@@ -12,6 +12,7 @@ import MethodReturnGenerator;
 import ImportIterator;
 import StubberMethodReturnGenerator;
 import MethodIteration;
+import CommaStatementGenerator;
 
 #>
 # Generates files along the lines of:
@@ -31,7 +32,7 @@ import MethodIteration;
 ##
 every MockStubberFileGenerator is:
 
-	needs NameTransformer, File, MethodIterator;
+	needs NameTransformer, File, MethodIterator, CommaStatementGenerator;
 
 	provides File <- { return File; },
 		MethodGenerator,
@@ -80,16 +81,14 @@ every MockStubberFileGenerator is:
 		MethodIterator.set((cast MethodIteration) ArgumentWatcherGatherer);
 		MethodIterator.iterate(WakeClass);
 
-		var Bool first = true;
+		var Text[] provisions = [];
 
-		File.write("\tprovides\n");
-		for(var Num = 0; Num < ArgumentWatcherGatherer.types.getSize(); Num += 1) { // @TODO foreach at
-			if(!first) File.write(",\n");
-			else first = false;
-
-			File.write("\t\tWhen{" + ArgumentWatcherGatherer.types[Num] + "}");
+		var Text[] = ArgumentWatcherGatherer.types;
+		foreach(Text[]) { // @TODO foreach as?
+			provisions.push("When{" + Text + "}");
 		}
-		File.write(";\n\n");
+
+		File.write(CommaStatementGenerator.generate("provides", provisions));
 	}
 
 	generateNeeds(WakeClass) {
@@ -97,25 +96,19 @@ every MockStubberFileGenerator is:
 		MethodIterator.set((cast MethodIteration) ArgumentWatcherGatherer);
 		MethodIterator.iterate(WakeClass);
 
-		File.write("\tneeds\n");
+		var Text[] deps = [];
 
-		var Bool first = true;
-
-		var Text[] = ArgumentWatcherGatherer.provisions;
 		for(var Num = 0; Num < ArgumentWatcherGatherer.provisions.getSize(); Num += 1) {
-			if(!first) File.write(",\n");
-			else first = false;
-			File.write("\t\t" + ArgumentWatcherGatherer.provisions[Num] + " " + ArgumentWatcherGatherer.aliases[Num]);
+			deps.push(ArgumentWatcherGatherer.provisions[Num] + " " + ArgumentWatcherGatherer.aliases[Num]);
 		}
 
 		var WhenGatherer <- this;
 		MethodIterator.set((cast MethodIteration) WhenGatherer);
 		MethodIterator.iterate(WakeClass);
 
-		Text[] = WhenGatherer.provisions;
 		for(var Num = 0; Num < WhenGatherer.provisions.getSize(); Num += 1) {
-			File.write(",\n\t\t" + WhenGatherer.provisions[Num] + " " + WhenGatherer.aliases[Num]);
+			deps.push(WhenGatherer.provisions[Num] + " " + WhenGatherer.aliases[Num]);
 		}
 
-		File.write(";\n\n");
+		File.write(CommaStatementGenerator.generate("needs", deps));
 	}

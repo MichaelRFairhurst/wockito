@@ -20,3 +20,7 @@ every NameTransformerTest is:
 	~[ test classnames  ]~(Asserts) {
 		Asserts.that(NameTransformer.classToProperty("TestClass"))Equals("testClass");
 	}
+
+	~[ test provision ]~(Asserts) {
+		Asserts.that(NameTransformer.methodToProperty("Blah{Blah}<-Blah"))Equals("blahZsBlahZeZlZdBlah");
+	}

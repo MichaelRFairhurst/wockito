@@ -9,6 +9,7 @@ import TableDirectoryScanner;
 import NameTransformer;
 import WakeClass;
 import MethodIterator;
+import CommaStatementGenerator;
 
 every Main is:
 
@@ -20,7 +21,8 @@ every Main is:
 		MockStubberFileGenerator,
 		MockVerifierFileGenerator,
 		NameTransformer,
-		File <- { return File <- FileSystem.getPath("MockFilePath.wk"); };
+		File <- { return File <- FileSystem.getPath("MockFilePath.wk"); },
+		CommaStatementGenerator;
 
 	main() {
 		var File <- FileSystem.getPath("bin/waketable/FilePath.table");
