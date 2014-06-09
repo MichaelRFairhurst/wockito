@@ -29,6 +29,20 @@ every Main is:
 
 		var WakeClass = TableFileReader.readFrom(File);
 
+		var $File <- this;
+
+		$File.write('import When;\n');
+		$File.write('import ArgumentWatcher;\n');
+		$File.write('import MockTracker;\n');
+		$File.write('import CallValidator;\n');
+
+		if(!WakeClass.getApiImports().contains(WakeClass.classname))
+			$File.write('import ' + WakeClass.classname + ';\n');
+
+		foreach(WakeClass.getApiImports()) { // @TODO foreach as
+			$File.write("import " + Text + ";\n");
+		}
+
 		var MockStubberFileGenerator <- this;
 		MockStubberFileGenerator.generate(WakeClass);
 

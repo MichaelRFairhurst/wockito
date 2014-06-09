@@ -49,9 +49,6 @@ every MockVerifierFileGenerator is:
 		WhenGatherer;
 
 	generate(WakeClass) {
-		generateImports(WakeClass);
-
-		File.write("\n");
 		File.write("every " + WakeClass.classname + "Verifier is:\n");
 
 		generateNeeds(WakeClass);
@@ -61,17 +58,6 @@ every MockVerifierFileGenerator is:
 
 	generateValidatorProperty() {
 		File.write("\twith public CallValidator? = nothing;\n\n");
-	}
-
-	generateImports(WakeClass) {
-		File.write('import When;');
-		File.write('import ArgumentWatcher;');
-		File.write('import CallValidator;');
-		File.write('import ' + WakeClass.classname + ';');
-
-		foreach(WakeClass.getApiImports()) { // @TODO foreach as
-			File.write("import " + Text + ";\n");
-		}
 	}
 
 	generateMethods(WakeClass) {

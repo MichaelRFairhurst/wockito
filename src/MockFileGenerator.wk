@@ -62,14 +62,6 @@ every MockFileGenerator is:
 	}
 
 	generateImports(WakeClass) {
-		File.write('import When;');
-		File.write('import ArgumentWatcher;');
-		File.write('import MockTracker;');
-		File.write('import ' + WakeClass.classname + ';');
-
-		foreach(WakeClass.getApiImports()) { // @TODO foreach as
-			File.write("import " + Text + ";\n");
-		}
 	}
 
 	generateMethods(WakeClass) {
@@ -128,6 +120,8 @@ every MockFileGenerator is:
 		var ArgumentWatcherGatherer <- this;
 		MethodIterator.set((cast MethodIteration) ArgumentWatcherGatherer);
 		MethodIterator.iterate(WakeClass);
+
+		deps.push('MockTracker');
 
 		var Text[] = ArgumentWatcherGatherer.declarations;
 		foreach(Text[]) deps.push(Text);

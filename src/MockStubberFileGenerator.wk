@@ -44,25 +44,11 @@ every MockStubberFileGenerator is:
 		WhenGatherer;
 
 	generate(WakeClass) {
-		generateImports(WakeClass);
-
-		File.write("\n");
 		File.write("every " + WakeClass.classname + "Stubber is:\n");
 
 		generateNeeds(WakeClass);
 		generateProvisions(WakeClass);
 		generateMethods(WakeClass);
-	}
-
-	generateImports(WakeClass) {
-
-		foreach(WakeClass.getApiImports()) { // @TODO foreach as
-			File.write("import " + Text + ";\n");
-		}
-
-		File.write("import When;");
-		File.write("import ArgumentWatcher;");
-		File.write("import " + WakeClass.classname + ";");
 	}
 
 	generateMethods(WakeClass) {
