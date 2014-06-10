@@ -1,20 +1,19 @@
 - Generated files:
 
-	- MockProvider
-	- MockVerifier
+	- ClassSpy
+	- IsolateClass
 
 - Mock functionality
 
-	- Mock provisions
+	- Isolate classes
 	- Spies
 	- In order verification
 	- Expect function call with no args
+	- generate public properties
 
 - Missing Wake functionality
 
 	- Unsafe cast
-	- commandline args
-	- Parent method calls
 
 - Build integration
 
