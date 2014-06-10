@@ -1,0 +1,30 @@
+import Argv;
+
+every MockGenerationOptions is:
+
+	with Bool generateProvider = false;
+	with public Text[] mockedClasses = [];
+	with Text mockedClassname = '';
+	with Text outputfile = '';
+	with Text tabledir = '';
+
+	needs Argv then {
+		var Text[] = Argv.getArgv();
+
+		for(var Num = 0; Num < Text[].getSize(); Num += 1) {
+			var Text = Text[Num];
+
+			if(Text == "-p") generateProvider = true;
+			else if(Text == "-d") {
+				Num += 1;
+				tabledir = Text[Num];
+			} else if(Text == "-o") {
+				Num += 1;
+				outputfile = Text[Num];
+			} else if(generateProvider) {
+				mockedClasses.push(Text);
+			} else {
+				mockedClassname = Text;
+			}
+		}
+	}
