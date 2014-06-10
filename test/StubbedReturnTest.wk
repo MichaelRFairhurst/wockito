@@ -1,0 +1,24 @@
+import Asserts;
+import StubbedReturn;
+
+every StubbedReturnTest is:
+
+	needs StubbedReturn;
+
+	~[ test get stubbed type ]~(Asserts) {
+		StubbedReturn.type = "Test{Blah}";
+		Asserts.that(StubbedReturn.getStubbedType())Equals("When{Test{Blah}}");
+	}
+
+	~[ test declaration ]~(Asserts) {
+		StubbedReturn.type = "Test{Blah}";
+		StubbedReturn.alias = "alrehZoZoodoZl";
+		Asserts.that(StubbedReturn.getDeclaration())Equals("When{Test{Blah}} alrehZoZoodoZl");
+	}
+
+	~[ test specialized declaration ]~(Asserts) {
+		StubbedReturn.type = "Test{Blah}";
+		StubbedReturn.alias = "alrehZoZoodoZl";
+		StubbedReturn.specialty = "lapped";
+		Asserts.that(StubbedReturn.getSpecializedDeclaration())Equals("When{Test{Blah}}:lapped alrehZoZoodoZl");
+	}

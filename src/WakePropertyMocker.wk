@@ -1,0 +1,48 @@
+import WatchedArgument;
+import StubbedReturn;
+import WakeProperty;
+import NameTransformer;
+import WakeType;
+
+every WakePropertyMocker is:
+
+	provides StubbedReturn, WatchedArgument;
+
+	needs NameTransformer;
+
+	WatchedArgument[] -- getWatchedArguments(WakeProperty) {
+		var WatchedArgument[] = [];
+
+		var Text base = NameTransformer.methodToProperty(WakeProperty.name);
+
+		var Text retname = "";
+		var WakeType? ret = WakeProperty.WakeType.returntype;
+		if ret exists {
+			retname = ret.getPureName();
+		}
+
+		var WakeType[] = WakeProperty.WakeType.arguments;
+		for(var Num = 0; Num < WakeProperty.WakeType.arguments.getSize(); Num += 1) { // @Todo foreach at
+			var WatchedArgument <- this;
+			WatchedArgument.type = WakeProperty.WakeType.arguments[Num].getPureName();
+			WatchedArgument.rettype = retname;
+			WatchedArgument.specialty = WatchedArgument.alias := base + "_arg" + Num.toString();
+
+			WatchedArgument[].push(WatchedArgument);
+		}
+
+		return WatchedArgument[];
+	}
+
+	StubbedReturn? -- getStubbedReturn(WakeProperty) {
+		if(WakeProperty.WakeType.type != 1 || WakeProperty.WakeType.arguments.getSize() > 0) return nothing;
+		var WakeType? = WakeProperty.WakeType.returntype;
+		if WakeType exists {
+			var StubbedReturn <- this;
+			StubbedReturn.type = WakeType.getPureName();
+			StubbedReturn.alias = NameTransformer.methodToProperty(WakeProperty.name);
+			StubbedReturn.specialty = StubbedReturn.alias;
+			return StubbedReturn;
+		}
+		return nothing;
+	}

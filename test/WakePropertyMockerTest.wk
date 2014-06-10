@@ -1,0 +1,111 @@
+import WakePropertyMocker;
+import WakeProperty;
+import WakeType;
+import Asserts;
+import Map;
+import ImportFilterer;
+import ReflectionProvider;
+import StubbedReturn;
+import WatchedArgument;
+
+every WakePropertyMockerTest is:
+
+	needs ReflectionProvider, WakePropertyMocker;
+
+	~[ test get stubber from property returns nothing ]~(Asserts) {
+		var WakeProperty <- ReflectionProvider;
+		WakeProperty.WakeType.type = 2; // class, not lambda
+		var StubbedReturn? = WakePropertyMocker.getStubbedReturn(WakeProperty);
+		Asserts.that(StubbedReturn == nothing);
+	}
+
+	~[ test get stubber from method with arguments returns nothing ]~(Asserts) {
+		var WakeProperty <- ReflectionProvider;
+		WakeProperty.WakeType.type = 1; // lambda
+		WakeProperty.WakeType.arguments.push(WakeType <- ReflectionProvider);
+		WakeProperty.WakeType.returntype = WakeType <- ReflectionProvider;
+		var StubbedReturn? = WakePropertyMocker.getStubbedReturn(WakeProperty);
+		Asserts.that(StubbedReturn == nothing);
+	}
+
+	~[ test get stubber from method with no arguments but no return returns nothing ]~(Asserts) {
+		var WakeProperty <- ReflectionProvider;
+		WakeProperty.WakeType.type = 1; // lambda
+		var StubbedReturn? = WakePropertyMocker.getStubbedReturn(WakeProperty);
+		Asserts.that(StubbedReturn == nothing);
+	}
+
+	~[ test get stubber from method with no arguments and return gets a StubbedReturn ]~(Asserts) {
+		var WakeProperty <- ReflectionProvider;
+		WakeProperty.name = "hey()";
+		WakeProperty.WakeType.type = 1; // lambda
+		var WakeType <- ReflectionProvider;
+		WakeType.type = 2; // class
+		WakeType.classname = "Me";
+		WakeProperty.WakeType.returntype = WakeType;
+		var StubbedReturn? = WakePropertyMocker.getStubbedReturn(WakeProperty);
+		if StubbedReturn exists {
+			Asserts.that(StubbedReturn.type)Equals("Me");
+			Asserts.that(StubbedReturn.alias)Equals("heyZpZp");
+			Asserts.that(StubbedReturn.specialty)Equals("heyZpZp");
+		} else {
+			Asserts.fail("Stubbed return should have existed");
+		}
+	}
+
+	~[ test get watched args from property returns nothing ]~(Asserts) {
+		var WakeProperty <- ReflectionProvider;
+		WakeProperty.WakeType.type = 2; // class, not lambda
+		var WatchedArgument[] = WakePropertyMocker.getWatchedArguments(WakeProperty);
+		Asserts.that(WatchedArgument[].getSize())Equals(0);
+	}
+
+	~[ test get watched args from property with no args returns nothing ]~(Asserts) {
+		var WakeProperty <- ReflectionProvider;
+		WakeProperty.WakeType.type = 1; // lambda
+		var WatchedArgument[] = WakePropertyMocker.getWatchedArguments(WakeProperty);
+		Asserts.that(WatchedArgument[].getSize())Equals(0);
+	}
+
+	~[ test get watched args from property with no return returns args with num returntype ]~(Asserts) {
+		var WakeProperty <- ReflectionProvider;
+		WakeProperty.name = "MyProp(Firstarg,Secondarg)";
+		WakeProperty.WakeType.arguments.push(WakeType <- ReflectionProvider);
+		WakeProperty.WakeType.arguments.push(WakeType <- ReflectionProvider);
+		WakeProperty.WakeType.arguments[0].classname = "Firstarg";
+		WakeProperty.WakeType.arguments[1].classname = "Secondarg";
+		var WatchedArgument[] = WakePropertyMocker.getWatchedArguments(WakeProperty);
+		Asserts.that(WatchedArgument[].getSize())Equals(2);
+		Asserts.that(WatchedArgument[0].type)Equals("Firstarg");
+		Asserts.that(WatchedArgument[1].type)Equals("Secondarg");
+		Asserts.that(WatchedArgument[0].alias)Equals("myPropZpFirstargZcSecondargZp_arg0");
+		Asserts.that(WatchedArgument[1].alias)Equals("myPropZpFirstargZcSecondargZp_arg1");
+		Asserts.that(WatchedArgument[0].specialty)Equals("myPropZpFirstargZcSecondargZp_arg0");
+		Asserts.that(WatchedArgument[1].specialty)Equals("myPropZpFirstargZcSecondargZp_arg1");
+		Asserts.that(WatchedArgument[0].rettype)Equals("");
+		Asserts.that(WatchedArgument[1].rettype)Equals("");
+	}
+
+	~[ test get watched args from property with return returns args with proper returntype ]~(Asserts) {
+		var WakeProperty <- ReflectionProvider;
+		WakeProperty.name = "MyProp(Firstarg,Secondarg)";
+		WakeProperty.WakeType.arguments.push(WakeType <- ReflectionProvider);
+		WakeProperty.WakeType.arguments.push(WakeType <- ReflectionProvider);
+		WakeProperty.WakeType.arguments[0].classname = "Firstarg";
+		WakeProperty.WakeType.arguments[1].classname = "Secondarg";
+
+		var WakeType <- ReflectionProvider;
+		WakeType.classname = "Ret";
+		WakeProperty.WakeType.returntype = WakeType;
+
+		var WatchedArgument[] = WakePropertyMocker.getWatchedArguments(WakeProperty);
+		Asserts.that(WatchedArgument[].getSize())Equals(2);
+		Asserts.that(WatchedArgument[0].type)Equals("Firstarg");
+		Asserts.that(WatchedArgument[1].type)Equals("Secondarg");
+		Asserts.that(WatchedArgument[0].alias)Equals("myPropZpFirstargZcSecondargZp_arg0");
+		Asserts.that(WatchedArgument[1].alias)Equals("myPropZpFirstargZcSecondargZp_arg1");
+		Asserts.that(WatchedArgument[0].specialty)Equals("myPropZpFirstargZcSecondargZp_arg0");
+		Asserts.that(WatchedArgument[1].specialty)Equals("myPropZpFirstargZcSecondargZp_arg1");
+		Asserts.that(WatchedArgument[0].rettype)Equals("Ret");
+		Asserts.that(WatchedArgument[1].rettype)Equals("Ret");
+	}

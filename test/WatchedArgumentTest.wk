@@ -1,0 +1,27 @@
+import WatchedArgument;
+import Asserts;
+
+every WatchedArgumentTest is:
+
+	needs WatchedArgument;
+
+	~[ test get watched type ]~(Asserts) {
+		WatchedArgument.type = "Blap";
+		WatchedArgument.rettype = "Bloop";
+		Asserts.that(WatchedArgument.getWatchedType())Equals("ArgumentWatcher{Blap,Bloop}");
+	}
+
+	~[ test get declaration ]~(Asserts) {
+		WatchedArgument.type = "Argl";
+		WatchedArgument.rettype = "Argd";
+		WatchedArgument.alias = "blaaargh";
+		Asserts.that(WatchedArgument.getDeclaration())Equals("ArgumentWatcher{Argl,Argd} blaaargh");
+	}
+
+	~[ test get specialized declaration ]~(Asserts) {
+		WatchedArgument.type = "Barp";
+		WatchedArgument.rettype = "Slarp";
+		WatchedArgument.alias = "Grarp";
+		WatchedArgument.specialty = "Glalp";
+		Asserts.that(WatchedArgument.getSpecializedDeclaration())Equals("ArgumentWatcher{Barp,Slarp}:Glalp Grarp");
+	}

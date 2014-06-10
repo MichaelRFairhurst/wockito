@@ -1,0 +1,18 @@
+every WatchedArgument is:
+
+	with public Text alias = "";
+	with public Text specialty = "";
+	with public Text type = "";
+	with public Text rettype = "";
+
+	Text -- getDeclaration() {
+		return getWatchedType() + " " + alias;
+	}
+
+	Text -- getSpecializedDeclaration() {
+		return getWatchedType() + ":" + specialty + " " + alias;
+	}
+
+	Text -- getWatchedType() {
+		return "ArgumentWatcher{" + type + "," + rettype + "}";
+	}

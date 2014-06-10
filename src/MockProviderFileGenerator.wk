@@ -1,5 +1,21 @@
 import File;
 import WakeClass;
+import WakeType;
+import NameTransformer;
+import Map;
+import MockMethodGenerator;
+import ArgumentIterator;
+import MethodIterator;
+import MethodIteration;
+import ArgumentIteration;
+import ArgumentWatcherGatherer;
+import WhenGatherer;
+import MethodBodyGenerator;
+import MethodGenerator;
+import MethodReturnGenerator;
+import MockMethodReturnGenerator;
+import WakeProperty;
+import CommaStatementGenerator;
 
 #>
 # Generates files along the lines of:
@@ -18,22 +34,120 @@ import WakeClass;
 #		Asserts <- { return Asserts[0]; },
 #		TimesCalledValidator;
 #
-#	ExampleMockStubber -- when(ExampleMock) {
-#		return ExampleMockStubber <- ExampleMock;
+#	ExampleStubber -- when(ExampleMock) {
+#		return ExampleStubber <- ExampleMock;
 #	}
 #
-#	ExampleMockVerifier -- verify(ExampleMock) {
+#	ExampleVerifier -- verify(ExampleMock) {
 #		var TimesCalledValidator <- this;
-#		var ExampleMockVerifier <- ExampleMock;
-#		ExampleMockVerifier.CallValidator = TimesCalledValidator;
-#		return ExampleMockVerifier;
+#		var ExampleVerifier <- ExampleMock;
+#		ExampleVerifier.CallValidator = TimesCalledValidator;
+#		return ExampleVerifier;
 #	}
 #
-#	ExampleMockVerifier -- verify(Num)Times(ExampleMock) {
-#		var ExampleMockVerifier <- this;
-#		ExampleMockVerifier.CallValidator.minTimesCalled = Num;
-#		ExampleMockVerifier.CallValidator.maxTimesCalled = Num;
+#	ExampleVerifier -- verify(Num)Times(ExampleMock) {
+#		var ExampleVerifier <- this;
+#		ExampleVerifier.CallValidator.minTimesCalled = Num;
+#		ExampleVerifier.CallValidator.maxTimesCalled = Num;
 #	}
 #
 ##
 every MockProviderFileGenerator is:
+
+	#>
+	needs NameTransformer, CommaStatementGenerator;
+
+	generate(WakeClass) {
+		File.write("\n");
+		File.write("every " + WakeClass.classname + "Mock (capable " + WakeClass.classname + ") is:\n");
+
+		generateProvisions(WakeClass);
+		generateMethods(WakeClass);
+	}
+
+	generateMethods(WakeClass) {
+		MethodIterator.set((cast MethodIteration) (MethodGenerator <- this));
+		MethodIterator.iterate(WakeClass);
+	}
+
+	generateProvisions(WakeClass) {
+		var Text[] provisions = [];
+		var ArgumentWatcherGatherer <- this;
+		MethodIterator.set((cast MethodIteration) ArgumentWatcherGatherer);
+		MethodIterator.iterate(WakeClass);
+
+		for(var Num = 0; Num < ArgumentWatcherGatherer.declarations.getSize(); Num += 1) { // @TODO foreach at
+			provisions.push(ArgumentWatcherGatherer.provisions[Num] + " <- { return " + ArgumentWatcherGatherer.aliases[Num] + "; }");
+		}
+
+		var WhenGatherer <- this;
+		MethodIterator.set((cast MethodIteration) WhenGatherer);
+		MethodIterator.iterate(WakeClass);
+
+		for(var Num = 0; Num < WhenGatherer.declarations.getSize(); Num += 1) { // @TODO foreach at
+			provisions.push(WhenGatherer.provisions[Num] + " <- { return " + WhenGatherer.aliases[Num] + "; }");
+		}
+
+		foreach(WakeClass.properties.getKeys()) { // @Todo foreach in
+			if(Text.indexOf('<-') == nothing) continue;
+			var WakeProperty? = WakeClass.properties.get(Text);
+			if WakeProperty exists {
+				var WakeType? method = WakeProperty.WakeType;
+				if method exists {
+					var WakeType? provision = method.returntype;
+					if provision exists {
+						var Text current = provision.getPureName();
+						if(provision.specialty != "") current += ":" + provision.specialty;
+						current += " <- { return " + NameTransformer.methodToProperty(WakeProperty.name) + provision.specialty + ".get(); }";
+						provisions.push(current);
+
+						current = "When{" + provision.getPureName() + "}";
+						if(provision.specialty != "") current += ":" + provision.specialty;
+						current += " <- { return " + NameTransformer.methodToProperty(WakeProperty.name) + provision.specialty + "; }";
+						provisions.push(current);
+					}
+				}
+			}
+		}
+
+		provisions.push(WakeClass.classname + "Stubber");
+		provisions.push(WakeClass.classname + "Verifier");
+
+		File.write(CommaStatementGenerator.generate("provides", provisions));
+	}
+
+	generateNeeds(WakeClass) {
+		var Text[] deps = [];
+		var ArgumentWatcherGatherer <- this;
+		MethodIterator.set((cast MethodIteration) ArgumentWatcherGatherer);
+		MethodIterator.iterate(WakeClass);
+
+		deps.push('MockTracker');
+
+		var Text[] = ArgumentWatcherGatherer.declarations;
+		foreach(Text[]) deps.push(Text);
+
+		var WhenGatherer <- this;
+		MethodIterator.set((cast MethodIteration) WhenGatherer);
+		MethodIterator.iterate(WakeClass);
+
+		Text[] = WhenGatherer.declarations;
+		foreach(Text[]) deps.push(Text);
+
+		foreach(WakeClass.properties.getKeys()) { // @Todo foreach in
+			if(Text.indexOf('<-') == nothing) continue;
+			var WakeProperty? = WakeClass.properties.get(Text);
+			if WakeProperty exists {
+				var WakeType? method = WakeProperty.WakeType;
+				if method exists {
+					var WakeType? provision = method.returntype;
+					if provision exists {
+						deps.push("When{" + provision.getPureName() + "} " + NameTransformer.methodToProperty(WakeProperty.name));
+					}
+				}
+			}
+		}
+
+		File.write(CommaStatementGenerator.generate("needs", deps));
+	}
+	##

@@ -1,0 +1,7 @@
+import WatchedArgument;
+import StubbedReturn;
+import WakeClass;
+
+every WakeClassMocker is:
+
+
