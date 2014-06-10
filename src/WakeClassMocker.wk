@@ -1,7 +1,40 @@
 import WatchedArgument;
 import StubbedReturn;
 import WakeClass;
+import WakePropertyMocker;
+import Map;
+import WakeProperty;
 
 every WakeClassMocker is:
 
+	needs WakePropertyMocker;
 
+	WatchedArgument[] -- getWatchedArguments(WakeClass) {
+		var WatchedArgument[] = [];
+
+		foreach(WakeClass.properties.getKeys()) {
+			var WakeProperty? = WakeClass.properties.get(Text);
+			if WakeProperty exists {
+				var $WatchedArgument[] = WakePropertyMocker.getWatchedArguments(WakeProperty);
+				foreach($WatchedArgument[]) WatchedArgument[].push($WatchedArgument);
+			}
+		}
+
+		return WatchedArgument[];
+	}
+
+	StubbedReturn[] -- getStubbedReturns(WakeClass) {
+		var StubbedReturn[] = [];
+
+		foreach(WakeClass.properties.getKeys()) {
+			var WakeProperty? = WakeClass.properties.get(Text);
+			if WakeProperty exists {
+				var StubbedReturn? = WakePropertyMocker.getStubbedReturn(WakeProperty);
+				if StubbedReturn exists {
+					StubbedReturn[].push(StubbedReturn);
+				}
+			}
+		}
+
+		return StubbedReturn[];
+	}

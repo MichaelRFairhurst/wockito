@@ -10,10 +10,11 @@ import NameTransformer;
 import WakeClass;
 import MethodIterator;
 import CommaStatementGenerator;
+import MockProviderFileGenerator;
 
 every Main is:
 
-	needs FileSystem, TableFileReader, TableDirectoryScanner;
+	needs FileSystem, TableFileReader, TableDirectoryScanner, MockProviderFileGenerator;
 
 	provides
 		MethodIterator,
@@ -35,6 +36,8 @@ every Main is:
 		$File.write('import ArgumentWatcher;\n');
 		$File.write('import MockTracker;\n');
 		$File.write('import CallValidator;\n');
+		$File.write('import TimesCalledValidator;\n');
+		$File.write('import Asserts;\n');
 
 		if(!WakeClass.getApiImports().contains(WakeClass.classname))
 			$File.write('import ' + WakeClass.classname + ';\n');
@@ -51,4 +54,9 @@ every Main is:
 
 		var MockFileGenerator <- this;
 		MockFileGenerator.generate(WakeClass);
+
+		var WakeClass[] = [];
+		WakeClass[].push(WakeClass);
+
+		MockProviderFileGenerator.generate($File, WakeClass[]);
 	}
