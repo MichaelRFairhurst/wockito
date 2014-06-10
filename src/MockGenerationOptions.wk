@@ -8,7 +8,9 @@ every MockGenerationOptions is:
 	with Text outputfile = '';
 	with Text tabledir = '';
 
-	needs Argv then {
+	needs Argv;
+
+	parse() {
 		var Text[] = Argv.getArgv();
 
 		for(var Num = 0; Num < Text[].getSize(); Num += 1) {

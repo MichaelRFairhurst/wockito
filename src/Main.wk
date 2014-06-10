@@ -27,6 +27,7 @@ every Main is:
 		CommaStatementGenerator;
 
 	main() {
+		MockGenerationOptions.parse();
 		if(MockGenerationOptions.generateProvider) {
 			var WakeClass[] = [];
 
