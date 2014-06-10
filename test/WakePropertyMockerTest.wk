@@ -82,8 +82,8 @@ every WakePropertyMockerTest is:
 		Asserts.that(WatchedArgument[1].alias)Equals("myPropZpFirstargZcSecondargZp_arg1");
 		Asserts.that(WatchedArgument[0].specialty)Equals("myPropZpFirstargZcSecondargZp_arg0");
 		Asserts.that(WatchedArgument[1].specialty)Equals("myPropZpFirstargZcSecondargZp_arg1");
-		Asserts.that(WatchedArgument[0].rettype)Equals("");
-		Asserts.that(WatchedArgument[1].rettype)Equals("");
+		Asserts.that(WatchedArgument[0].rettype)Equals("Num");
+		Asserts.that(WatchedArgument[1].rettype)Equals("Num");
 	}
 
 	~[ test get watched args from property with return returns args with proper returntype ]~(Asserts) {

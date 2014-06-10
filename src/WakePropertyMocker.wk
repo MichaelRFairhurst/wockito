@@ -15,7 +15,7 @@ every WakePropertyMocker is:
 
 		var Text base = NameTransformer.methodToProperty(WakeProperty.name);
 
-		var Text retname = "";
+		var Text retname = "Num";
 		var WakeType? ret = WakeProperty.WakeType.returntype;
 		if ret exists {
 			retname = ret.getPureName();
