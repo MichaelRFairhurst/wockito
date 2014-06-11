@@ -97,12 +97,12 @@ every MockFileGenerator is:
 					if provision exists {
 						var Text current = provision.getPureName();
 						if(provision.specialty != "") current += ":" + provision.specialty;
-						current += " <- { return " + NameTransformer.methodToProperty(WakeProperty.name) + provision.specialty + ".get(); }";
+						current += " <- { return " + NameTransformer.methodToProperty(WakeProperty.name) + ".get(); }";
 						provisions.push(current);
 
 						current = "When{" + provision.getPureName() + "}";
 						if(provision.specialty != "") current += ":" + provision.specialty;
-						current += " <- { return " + NameTransformer.methodToProperty(WakeProperty.name) + provision.specialty + "; }";
+						current += " <- { return " + NameTransformer.methodToProperty(WakeProperty.name) + "; }";
 						provisions.push(current);
 					}
 				}

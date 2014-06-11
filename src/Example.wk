@@ -3,3 +3,9 @@ every Example is:
 	Text -- get(Text, Num) {
 		return Text;
 	}
+
+	Text -- get() {
+		return "heeY";
+	}
+
+	provides Text:hey <- "hello";

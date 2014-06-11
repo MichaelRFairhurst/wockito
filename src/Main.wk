@@ -25,7 +25,8 @@ every Main is:
 		MockStubberFileGenerator,
 		MockVerifierFileGenerator,
 		NameTransformer,
-		File <- { return File <- FileSystem.getPath(MockGenerationOptions.outputfile); },
+		File <- { return File <- (FilePath <- this); },
+		FilePath <- { return FileSystem.getPath(MockGenerationOptions.outputfile); },
 		CommaStatementGenerator,
 		WakeClassMocker, WakePropertyMocker;
 
@@ -34,6 +35,8 @@ every Main is:
 		if(MockGenerationOptions.generateProvider) {
 			var WakeClass[] = [];
 
+			var FilePath <- this;
+			FilePath.delete();
 			var $File <- this;
 
 			$File.write('import When;\n');
@@ -59,6 +62,8 @@ every Main is:
 
 			var WakeClass = TableFileReader.readFrom(File);
 
+			var FilePath <- this;
+			FilePath.delete();
 			var $File <- this;
 
 			$File.write('import When;\n');
