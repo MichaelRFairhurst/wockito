@@ -7,6 +7,9 @@ import ArgumentWatcher;
 import Example;
 import When;
 import MockTracker;
+import AssertsMock;
+import AssertsStubber;
+import AssertsVerifier;
 
 every ExampleMockTest is:
 
@@ -88,9 +91,9 @@ every ExampleMockTest is:
 		mocks.verify(2)Times(ExampleMock).get("toast", 430);
 	}
 
-	#>
-	~[ test FAILS not called ]~(Asserts) {
-		mocks.use(Asserts);
+	~[ test fails not called ]~(Asserts) {
+		var AssertsMock <- mocks;
+		mocks.use((cast Asserts) AssertsMock);
 		var ExampleMock <- mocks;
 		mocks.when(ExampleMock).get("hey", 5).thenReturn("useless");
 		mocks.when(ExampleMock).get("heyy", 4).thenReturn("useless");
@@ -99,21 +102,33 @@ every ExampleMockTest is:
 		ExampleMock.get("heyy", 4);
 		ExampleMock.get("heyy", 5);
 		mocks.verify(1)Times(ExampleMock).get("hey", 4);
+
+		mocks.use(Asserts);
+		mocks.verify(1)Times(AssertsMock).fail("Expected get(Text,Num) to be called more than 1 times, actually called 0 times");
 	}
 
-	~[ test FAILS should not have been called ]~(Asserts) {
-		mocks.use(Asserts);
+	~[ test fails should not have been called ]~(Asserts) {
+		var AssertsMock <- mocks;
+		mocks.use((cast Asserts) AssertsMock);
+
 		var ExampleMock <- mocks;
 		mocks.when(ExampleMock).get("what", 7).thenReturn("useless");
 		ExampleMock.get("what", 7);
 		mocks.verify(0)Times(ExampleMock).get("what", 7);
+
+		mocks.use(Asserts);
+		mocks.verify(1)Times(AssertsMock).fail("Expected get(Text,Num) to be called fewer than 0 times, actually called 1 times");
 	}
 
-	~[ test FAILS not called enough times ]~(Asserts) {
-		mocks.use(Asserts);
+	~[ test fails not called enough times ]~(Asserts) {
+		var AssertsMock <- mocks;
+		mocks.use((cast Asserts) AssertsMock);
+
 		var ExampleMock <- mocks;
 		mocks.when(ExampleMock).get("what", 7).thenReturn("useless");
 		ExampleMock.get("what", 7);
 		mocks.verify(2)Times(ExampleMock).get("what", 7);
+
+		mocks.use(Asserts);
+		mocks.verify(1)Times(AssertsMock).fail("Expected get(Text,Num) to be called more than 2 times, actually called 1 times");
 	}
-	##

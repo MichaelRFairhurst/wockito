@@ -32,6 +32,7 @@ every VerifyMethodGenerator (capable MethodBodyGenerator) is:
 
 		File.write("\t\t"); File.write("var $CallValidator? = CallValidator;\n");
 		File.write("\t\t"); File.write("if $CallValidator exists {\n");
+		File.write("\t\t\t"); File.write("$CallValidator.methodname = '" + WakeProperty.name + "';\n");
 		File.write("\t\t\t"); File.write("$CallValidator.validate(Num[]);\n");
 		File.write("\t\t"); File.write("}\n");
 	}

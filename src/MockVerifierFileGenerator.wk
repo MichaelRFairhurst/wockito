@@ -30,6 +30,7 @@ import CommaStatementGenerator;
 #		calls = calls.intersect(getZpTextZcNumZpZa2.getCallIndices(Num));
 #		var $CallValidator? = CallValidator; // bugfix.....
 #		if $CallValidator exists {
+#			$CallValidator.methodname = "get(Text,Num)";
 #			$CallValidator.validate(calls);
 #		}
 #	}
