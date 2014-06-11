@@ -1,0 +1,5 @@
+every Example is:
+
+	Text -- get(Text, Num) {
+		return Text;
+	}
