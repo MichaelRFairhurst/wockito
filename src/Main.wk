@@ -12,6 +12,8 @@ import MethodIterator;
 import CommaStatementGenerator;
 import MockProviderFileGenerator;
 import MockGenerationOptions;
+import WakeClassMocker;
+import WakePropertyMocker;
 
 every Main is:
 
@@ -24,7 +26,8 @@ every Main is:
 		MockVerifierFileGenerator,
 		NameTransformer,
 		File <- { return File <- FileSystem.getPath(MockGenerationOptions.outputfile); },
-		CommaStatementGenerator;
+		CommaStatementGenerator,
+		WakeClassMocker, WakePropertyMocker;
 
 	main() {
 		MockGenerationOptions.parse();

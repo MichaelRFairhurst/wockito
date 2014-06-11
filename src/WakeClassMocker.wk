@@ -4,6 +4,7 @@ import WakeClass;
 import WakePropertyMocker;
 import Map;
 import WakeProperty;
+import WakeType;
 
 every WakeClassMocker is:
 
@@ -37,4 +38,21 @@ every WakeClassMocker is:
 		}
 
 		return StubbedReturn[];
+	}
+
+	WakeType[] -- getReturnTypes(WakeClass) {
+		var WakeType[] = [];
+
+
+		foreach(WakeClass.properties.getKeys()) {
+			var WakeProperty? = WakeClass.properties.get(Text);
+			if WakeProperty exists {
+				var WakeType? = WakeProperty.WakeType.returntype;
+				if WakeType exists {
+					WakeType[].push(WakeType);
+				}
+			}
+		}
+
+		return WakeType[];
 	}

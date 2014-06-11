@@ -12,6 +12,8 @@ import MethodReturnGenerator;
 import StubberMethodReturnGenerator;
 import MethodIteration;
 import CommaStatementGenerator;
+import WakeClassMocker;
+import WakeType;
 
 #>
 # Generates files along the lines of:
@@ -31,7 +33,7 @@ import CommaStatementGenerator;
 ##
 every MockStubberFileGenerator is:
 
-	needs NameTransformer, File, MethodIterator, CommaStatementGenerator;
+	needs NameTransformer, File, MethodIterator, CommaStatementGenerator, WakeClassMocker;
 
 	provides File <- { return File; },
 		MethodGenerator,
@@ -57,15 +59,10 @@ every MockStubberFileGenerator is:
 	}
 
 	generateProvisions(WakeClass) {
-		var ArgumentWatcherGatherer <- this;
-		MethodIterator.set((cast MethodIteration) ArgumentWatcherGatherer);
-		MethodIterator.iterate(WakeClass);
-
 		var Text[] provisions = [];
 
-		var Text[] = ArgumentWatcherGatherer.types;
-		foreach(Text[]) { // @TODO foreach as?
-			provisions.push("When{" + Text + "}");
+		foreach(WakeClassMocker.getReturnTypes(WakeClass)) { // @TODO foreach as?
+			provisions.push("When{" + WakeType.getPureName() + "}");
 		}
 
 		File.write(CommaStatementGenerator.generate("provides", provisions));
