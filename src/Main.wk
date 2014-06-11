@@ -2,6 +2,7 @@ import MockFileGenerator;
 import MockStubberFileGenerator;
 import MockVerifierFileGenerator;
 import File;
+import File;
 import FileSystem;
 import FilePath;
 import TableFileReader;
@@ -36,7 +37,7 @@ every Main is:
 			var WakeClass[] = [];
 
 			var FilePath <- this;
-			FilePath.delete();
+			if(FilePath.fileExists()) FilePath.delete();
 			var $File <- this;
 
 			$File.write('import When;\n');
@@ -50,10 +51,16 @@ every Main is:
 			foreach(Text[]) {
 				var File <- FileSystem.getPath(MockGenerationOptions.tabledir + '/' + Text + ".table");
 
-				WakeClass[].push(TableFileReader.readFrom(File));
+				var WakeClass = TableFileReader.readFrom(File);
+				WakeClass[].push(WakeClass);
 				$File.write('import ' + Text + 'Mock;\n');
 				$File.write('import ' + Text + 'Stubber;\n');
 				$File.write('import ' + Text + 'Verifier;\n');
+
+				var $Text[] = WakeClass.getApiImports();
+				foreach($Text[]) { // @TODO foreach as
+					$File.write("import " + $Text + ";\n");
+				}
 			}
 
 			MockProviderFileGenerator.generate($File, WakeClass[]);
@@ -63,7 +70,7 @@ every Main is:
 			var WakeClass = TableFileReader.readFrom(File);
 
 			var FilePath <- this;
-			FilePath.delete();
+			if(FilePath.fileExists()) FilePath.delete();
 			var $File <- this;
 
 			$File.write('import When;\n');

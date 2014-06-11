@@ -8,4 +8,5 @@ every Example is:
 		return "heeY";
 	}
 
-	provides Text:hey <- "hello";
+	provides Text:hey <- "hello",
+		Example <- { return this; };
