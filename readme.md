@@ -89,7 +89,7 @@ Currently, verifying a method with no arguments was called doesn't work! Sorry!
 
 ### Verify provisions (not sure why you would do this)
 
-* not implemented yet *
+*not implemented yet*
 
     Verify{File} <- mocks.verify(FilePathMock);
     Verify{File} <- mocks.verify(0)Times(FilePathMock);
@@ -99,7 +99,7 @@ Currently, verifying a method with no arguments was called doesn't work! Sorry!
 
 ### Verify in order
 
-* not implemented yet *
+*not implemented yet*
 
 	var InOrder <- mocks;
 	InOrder.add(File).add(FilePath);
