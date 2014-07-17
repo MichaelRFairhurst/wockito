@@ -23,7 +23,7 @@ every WakePropertyMocker is:
 
 		var WakeType[] = WakeProperty.WakeType.arguments;
 		for(var Num = 0; Num < WakeProperty.WakeType.arguments.getSize(); Num += 1) { // @Todo foreach at
-			var WatchedArgument <- this;
+			var WatchedArgument from this;
 			WatchedArgument.type = WakeProperty.WakeType.arguments[Num].getPureName();
 			WatchedArgument.rettype = retname;
 			WatchedArgument.specialty = WatchedArgument.alias := base + "_arg" + Num.toString();
@@ -38,7 +38,7 @@ every WakePropertyMocker is:
 		if(WakeProperty.WakeType.type != 1 || WakeProperty.WakeType.arguments.getSize() > 0) return nothing;
 		var WakeType? = WakeProperty.WakeType.returntype;
 		if WakeType exists {
-			var StubbedReturn <- this;
+			var StubbedReturn from this;
 			StubbedReturn.type = WakeType.getPureName();
 			StubbedReturn.alias = NameTransformer.methodToProperty(WakeProperty.name);
 			StubbedReturn.specialty = StubbedReturn.alias;

@@ -54,7 +54,7 @@ every MockStubberFileGenerator is:
 	}
 
 	generateMethods(WakeClass) {
-		MethodIterator.set((cast MethodIteration) (MethodGenerator <- this));
+		MethodIterator.set((cast MethodIteration) (MethodGenerator from this));
 		MethodIterator.iterate(WakeClass);
 	}
 
@@ -70,7 +70,7 @@ every MockStubberFileGenerator is:
 	}
 
 	generateNeeds(WakeClass) {
-		var ArgumentWatcherGatherer <- this;
+		var ArgumentWatcherGatherer from this;
 		MethodIterator.set((cast MethodIteration) ArgumentWatcherGatherer);
 		MethodIterator.iterate(WakeClass);
 
@@ -80,7 +80,7 @@ every MockStubberFileGenerator is:
 			deps.push(ArgumentWatcherGatherer.provisions[Num] + " " + ArgumentWatcherGatherer.aliases[Num]);
 		}
 
-		var WhenGatherer <- this;
+		var WhenGatherer from this;
 		MethodIterator.set((cast MethodIteration) WhenGatherer);
 		MethodIterator.iterate(WakeClass);
 

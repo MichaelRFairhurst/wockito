@@ -17,7 +17,7 @@ every MethodGenerator (capable MethodIteration) is:
 	provides ArgumentWatcherGatherer, NameTransformer, MethodIterator;
 
 	iterate(WakeClass, WakeProperty, WakeType[] args, WakeType? returntype) {
-		var ArgumentWatcherGatherer <- this;
+		var ArgumentWatcherGatherer from this;
 		ArgumentIterator.set((cast ArgumentIteration) ArgumentWatcherGatherer);
 
 		ArgumentIterator.iterate(WakeClass, WakeProperty, WakeProperty.WakeType.arguments, WakeProperty.WakeType.returntype);

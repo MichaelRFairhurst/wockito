@@ -13,7 +13,7 @@ every StubberMethodGenerator (capable MethodBodyGenerator) is:
 	generate(File, WakeClass, WakeProperty, ArgumentWatcherGatherer, WakeType? returntype) {
 		if returntype exists {
 			if(ArgumentWatcherGatherer.aliases.getSize() > 0) {
-				File.write("\t\tvar When{" + returntype.getPureName() + "} <- this;\n");
+				File.write("\t\tvar When{" + returntype.getPureName() + "} from this;\n");
 				for(var Num = 0; Num < ArgumentWatcherGatherer.aliases.getSize(); Num += 1) { // @TODO foreach in at
 					File.write("\t\t" + ArgumentWatcherGatherer.aliases[Num] + ".expect(arg" + Num.toString() + ", When);\n");
 				}

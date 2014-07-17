@@ -16,13 +16,13 @@ every ExampleMockTest is:
 	needs MockProvider mocks;
 
 	~[ test set and use a stub ]~(Asserts) {
-		var ExampleMock <- mocks;
+		var ExampleMock from mocks;
 		mocks.when(ExampleMock).get("hello", 5).thenReturn("hey");
 		Asserts.that(ExampleMock.get("hello", 5))Equals("hey");
 	}
 
 	~[ test and use multiple stubs ]~(Asserts) {
-		var ExampleMock <- mocks;
+		var ExampleMock from mocks;
 		mocks.when(ExampleMock).get("hey there", 54).thenReturn("hey back!");
 		mocks.when(ExampleMock).get("hey here", 54).thenReturn("hey front!");
 		mocks.when(ExampleMock).get("hey here", 55).thenReturn("hey up!");
@@ -34,7 +34,7 @@ every ExampleMockTest is:
 	}
 
 	~[ test and use multiple stub returns ]~(Asserts) {
-		var ExampleMock <- mocks;
+		var ExampleMock from mocks;
 		mocks.when(ExampleMock).get("hey", 1).thenReturn("yo").thenReturn("yoo").thenReturn("whaddup.");
 		Asserts.that(ExampleMock.get("hey", 1))Equals("yo");
 		Asserts.that(ExampleMock.get("hey", 1))Equals("yoo");
@@ -42,8 +42,8 @@ every ExampleMockTest is:
 	}
 
 	~[ test and use multiple mocks ]~(Asserts) {
-		var ExampleMock <- mocks;
-		var $ExampleMock <- mocks;
+		var ExampleMock from mocks;
+		var $ExampleMock from mocks;
 		mocks.when(ExampleMock).get("one", 2).thenReturn("hey man");
 		mocks.when($ExampleMock).get("one", 2).thenReturn("hey dawg");
 		Asserts.that(ExampleMock.get("one", 2))Equals("hey man");
@@ -52,7 +52,7 @@ every ExampleMockTest is:
 
 	~[ test verify valid ]~(Asserts) {
 		mocks.use(Asserts);
-		var ExampleMock <- mocks;
+		var ExampleMock from mocks;
 		mocks.when(ExampleMock).get("toast", 430).thenReturn("That's too early for toast!");
 		ExampleMock.get("toast", 430);
 		mocks.verify(ExampleMock).get("toast", 430);
@@ -60,7 +60,7 @@ every ExampleMockTest is:
 
 	~[ test verify twice valid ]~(Asserts) {
 		mocks.use(Asserts);
-		var ExampleMock <- mocks;
+		var ExampleMock from mocks;
 		mocks.when(ExampleMock).get("toast", 430).thenReturn("That's too early for toast!");
 		ExampleMock.get("toast", 430);
 		ExampleMock.get("toast", 430);
@@ -69,14 +69,14 @@ every ExampleMockTest is:
 
 	~[ test verify times 0 valid ]~(Asserts) {
 		mocks.use(Asserts);
-		var ExampleMock <- mocks;
+		var ExampleMock from mocks;
 		mocks.when(ExampleMock).get("toast", 430).thenReturn("That's too early for toast!");
 		mocks.verify(0)Times(ExampleMock).get("toast", 430);
 	}
 
 	~[ test verify times 1 valid ]~(Asserts) {
 		mocks.use(Asserts);
-		var ExampleMock <- mocks;
+		var ExampleMock from mocks;
 		mocks.when(ExampleMock).get("toast", 430).thenReturn("That's too early for toast!");
 		ExampleMock.get("toast", 430);
 		mocks.verify(1)Times(ExampleMock).get("toast", 430);
@@ -84,7 +84,7 @@ every ExampleMockTest is:
 
 	~[ test verify times 2 valid ]~(Asserts) {
 		mocks.use(Asserts);
-		var ExampleMock <- mocks;
+		var ExampleMock from mocks;
 		mocks.when(ExampleMock).get("toast", 430).thenReturn("That's too early for toast!");
 		ExampleMock.get("toast", 430);
 		ExampleMock.get("toast", 430);
@@ -92,9 +92,9 @@ every ExampleMockTest is:
 	}
 
 	~[ test fails not called ]~(Asserts) {
-		var AssertsMock <- mocks;
+		var AssertsMock from mocks;
 		mocks.use((cast Asserts) AssertsMock);
-		var ExampleMock <- mocks;
+		var ExampleMock from mocks;
 		mocks.when(ExampleMock).get("hey", 5).thenReturn("useless");
 		mocks.when(ExampleMock).get("heyy", 4).thenReturn("useless");
 		mocks.when(ExampleMock).get("heyy", 5).thenReturn("useless");
@@ -108,10 +108,10 @@ every ExampleMockTest is:
 	}
 
 	~[ test fails should not have been called ]~(Asserts) {
-		var AssertsMock <- mocks;
+		var AssertsMock from mocks;
 		mocks.use((cast Asserts) AssertsMock);
 
-		var ExampleMock <- mocks;
+		var ExampleMock from mocks;
 		mocks.when(ExampleMock).get("what", 7).thenReturn("useless");
 		ExampleMock.get("what", 7);
 		mocks.verify(0)Times(ExampleMock).get("what", 7);
@@ -121,10 +121,10 @@ every ExampleMockTest is:
 	}
 
 	~[ test fails not called enough times ]~(Asserts) {
-		var AssertsMock <- mocks;
+		var AssertsMock from mocks;
 		mocks.use((cast Asserts) AssertsMock);
 
-		var ExampleMock <- mocks;
+		var ExampleMock from mocks;
 		mocks.when(ExampleMock).get("what", 7).thenReturn("useless");
 		ExampleMock.get("what", 7);
 		mocks.verify(2)Times(ExampleMock).get("what", 7);

@@ -33,7 +33,7 @@ every Main is:
 			if openedFileVar exists {
 				return openedFileVar;
 			} else {
-				var File <- (FilePath <- this);
+				var File from (FilePath from this);
 				openedFile = File;
 				return File;
 			}
@@ -47,9 +47,9 @@ every Main is:
 		if(MockGenerationOptions.generateProvider) {
 			var WakeClass[] = [];
 
-			var FilePath <- this;
+			var FilePath from this;
 			if(FilePath.fileExists()) FilePath.delete();
-			var $File <- this;
+			var $File from this;
 
 			$File.write('import When;\n');
 			$File.write('import ArgumentWatcher;\n');
@@ -60,7 +60,7 @@ every Main is:
 
 			var Text[] = MockGenerationOptions.mockedClasses;
 			foreach(Text[]) {
-				var File <- FileSystem.getPath(MockGenerationOptions.tabledir + '/' + Text + ".table");
+				var File from FileSystem.getPath(MockGenerationOptions.tabledir + '/' + Text + ".table");
 
 				var WakeClass = TableFileReader.readFrom(File);
 				WakeClass[].push(WakeClass);
@@ -76,13 +76,13 @@ every Main is:
 
 			MockProviderFileGenerator.generate($File, WakeClass[]);
 		} else {
-			var File <- FileSystem.getPath(MockGenerationOptions.tabledir + '/' + MockGenerationOptions.mockedClassname + ".table");
+			var File from FileSystem.getPath(MockGenerationOptions.tabledir + '/' + MockGenerationOptions.mockedClassname + ".table");
 
 			var WakeClass = TableFileReader.readFrom(File);
 
-			var FilePath <- this;
+			var FilePath from this;
 			if(FilePath.fileExists()) FilePath.delete();
-			var $File <- this;
+			var $File from this;
 
 			$File.write('import When;\n');
 			$File.write('import ArgumentWatcher;\n');
@@ -96,13 +96,13 @@ every Main is:
 				$File.write("import " + Text + ";\n");
 			}
 
-			var MockStubberFileGenerator <- this;
+			var MockStubberFileGenerator from this;
 			MockStubberFileGenerator.generate(WakeClass);
 
-			var MockVerifierFileGenerator <- this;
+			var MockVerifierFileGenerator from this;
 			MockVerifierFileGenerator.generate(WakeClass);
 
-			var MockFileGenerator <- this;
+			var MockFileGenerator from this;
 			MockFileGenerator.generate(WakeClass);
 		}
 	}

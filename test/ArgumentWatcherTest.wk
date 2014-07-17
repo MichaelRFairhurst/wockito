@@ -15,8 +15,8 @@ every ArgumentWatcherTest is:
 	}
 
 	~[ test set and get an expected stub ]~(Asserts) {
-		var When{Num} <- this;
-		var $When{Num} <- this;
+		var When{Num} from this;
+		var $When{Num} from this;
 
 		ArgumentWatcher.expect(1, When);
 		ArgumentWatcher.expect(2, $When);
@@ -29,8 +29,8 @@ every ArgumentWatcherTest is:
 	}
 
 	~[ test set and get a overlapping expected stubs ]~(Asserts) {
-		var When{Num} <- this;
-		var $When{Num} <- this;
+		var When{Num} from this;
+		var $When{Num} from this;
 
 		ArgumentWatcher.expect(3, When);
 		ArgumentWatcher.expect(3, $When);

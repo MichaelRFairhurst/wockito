@@ -22,22 +22,22 @@ import Map;
 #	provides ExampleMock,
 #		ArgumentWatcher{Text, Text},
 #		ArgumentWatcher{Num, Text},
-#		Asserts <- { return Asserts[0]; },
+#		Asserts from { return Asserts[0]; },
 #		TimesCalledValidator;
 #
 #	ExampleStubber -- when(ExampleMock) {
-#		return ExampleStubber <- ExampleMock;
+#		return ExampleStubber from ExampleMock;
 #	}
 #
 #	ExampleVerifier -- verify(ExampleMock) {
-#		var TimesCalledValidator <- this;
-#		var ExampleVerifier <- ExampleMock;
+#		var TimesCalledValidator from this;
+#		var ExampleVerifier from ExampleMock;
 #		ExampleVerifier.CallValidator = TimesCalledValidator;
 #		return ExampleVerifier;
 #	}
 #
 #	ExampleVerifier -- verify(Num)Times(ExampleMock) {
-#		var ExampleVerifier <- this;
+#		var ExampleVerifier from this;
 #		ExampleVerifier.CallValidator.minTimesCalled = Num;
 #		ExampleVerifier.CallValidator.maxTimesCalled = Num;
 #	}
@@ -76,21 +76,21 @@ every MockProviderFileGenerator is:
 
 		foreach(WakeClass[]) {
 			File.write("\t" + WakeClass.classname + "Stubber -- when(" + WakeClass.classname + "Mock) {\n");
-			File.write("\t\treturn " + WakeClass.classname + "Stubber <- " + WakeClass.classname + "Mock;\n");
+			File.write("\t\treturn " + WakeClass.classname + "Stubber from " + WakeClass.classname + "Mock;\n");
 			File.write("\t}\n\n");
 
 			File.write("\t" + WakeClass.classname + "Verifier -- verify(" + WakeClass.classname + "Mock) {\n");
-			File.write("\t\tvar TimesCalledValidator <- this;\n");
-			File.write("\t\tvar " + WakeClass.classname + "Verifier <- " + WakeClass.classname + "Mock;\n");
+			File.write("\t\tvar TimesCalledValidator from this;\n");
+			File.write("\t\tvar " + WakeClass.classname + "Verifier from " + WakeClass.classname + "Mock;\n");
 			File.write("\t\t" + WakeClass.classname + "Verifier.CallValidator = TimesCalledValidator;\n");
 			File.write("\t\treturn " + WakeClass.classname + "Verifier;\n");
 			File.write("\t}\n\n");
 
 			File.write("\t" + WakeClass.classname + "Verifier -- verify(Num)Times(" + WakeClass.classname + "Mock) {\n");
-			File.write("\t\tvar TimesCalledValidator <- this;\n");
+			File.write("\t\tvar TimesCalledValidator from this;\n");
 			File.write("\t\tTimesCalledValidator.minExpectedTimes = Num;\n");
 			File.write("\t\tTimesCalledValidator.maxExpectedTimes = Num;\n");
-			File.write("\t\tvar " + WakeClass.classname + "Verifier <- " + WakeClass.classname + "Mock;\n");
+			File.write("\t\tvar " + WakeClass.classname + "Verifier from " + WakeClass.classname + "Mock;\n");
 			File.write("\t\t" + WakeClass.classname + "Verifier.CallValidator = TimesCalledValidator;\n");
 			File.write("\t\treturn " + WakeClass.classname + "Verifier;\n");
 			File.write("\t}\n\n");
