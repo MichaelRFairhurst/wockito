@@ -20,13 +20,24 @@ every Main is:
 
 	needs FileSystem, TableFileReader, TableDirectoryScanner, MockProviderFileGenerator, MockGenerationOptions;
 
+	with File? openedFile = nothing;
+
 	provides
 		MethodIterator,
 		MockFileGenerator,
 		MockStubberFileGenerator,
 		MockVerifierFileGenerator,
 		NameTransformer,
-		File <- { return File <- (FilePath <- this); },
+		File <- {
+			var File? openedFileVar = openedFile;
+			if openedFileVar exists {
+				return openedFileVar;
+			} else {
+				var File <- (FilePath <- this);
+				openedFile = File;
+				return File;
+			}
+		},
 		FilePath <- { return FileSystem.getPath(MockGenerationOptions.outputfile); },
 		CommaStatementGenerator,
 		WakeClassMocker, WakePropertyMocker;
