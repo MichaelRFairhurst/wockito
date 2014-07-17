@@ -33,19 +33,40 @@ In your test case, it should look like this:
 
 For each test you must use(Asserts), until the day we have exceptions. Otherwise your failed assertions get squished!
 
+### Generate mock classes
+
+*If you're using the wake project seed, these commands are run for you when you import the right classes*
+
+To generate a mock class, its stubber, and its verifier, run the command
+
+	node wockito-generator -d $TABLE_DIRECTORY -o some/path/to/output/file.wk some/path/to/src/wake/class.wk
+
+To generate your mock provider, run the command
+
+	node wockito-generator -p -d $TABLE_DIRECTORY -o some/path/to/output/file.wk FirstProvidedClass SecondProvidedClass ThirdProvidedClass
+
+And then you can import the classes (you must import them all) like this:
+
+	import PrinterMock;
+	import PrinterVerifier;
+	import PrinterStubber;
+	import MockProvider;
+
+As I said before, wake-project-seed includes a makefile that will see those imports and automatically generate & compile their sources for you.
+
 ### Fetch a mock from the provider
 
-   var Printer <- mocks;
+   var PrinterMock <- mocks;
 
 Each mock you fetch will be unique.
 
 ### Set a return value from a mock
 
-    mocks.when(Map).get("Key").thenReturn(value);
+    mocks.when(MapMock).get("Key").thenReturn(value);
 
 You can also set multiple values to return in a row.
 
-    mocks.when(Map).get("Key")
+    mocks.when(MapMock).get("Key")
 		.thenReturn(valueOne)
 		.thenReturn(valueTwo);
 
@@ -53,26 +74,32 @@ Eventually I will add matchers to arguments, but not yet.
 
 ### Stub a provision value from a mock
 
-	(When{File} <- FilePath).thenReturn(mockFile);
-	(When{User}:LoggedIn <- App).thenReturn(mockUser);
+	(When{File} <- FilePathMock).thenReturn(mockFile);
+	(When{User}:LoggedIn <- AppMock).thenReturn(mockUser);
 
 ### Verify mock interactions
 
-    mocks.verify(Map).put("key", value);
-    mocks.verify(0)Times(Map).put("key", value);
-    mocks.verify(2)Times(Map).put("key", value);
-    mocks.verifyAtLeast(2)Times(Map).put("key", value);
-    mocks.verifyAtMost(2)Times(Map).put("key", value);
+Currently, verifying a method with no arguments was called doesn't work! Sorry!
+
+    mocks.verify(MapMock).put("key", value);
+    mocks.verify(0)Times(MapMock).put("key", value);
+    mocks.verify(2)Times(MapMock).put("key", value);
+    mocks.verifyAtLeast(2)Times(MapMock).put("key", value);
+    mocks.verifyAtMost(2)Times(MapMock).put("key", value);
 
 ### Verify provisions (not sure why you would do this)
 
-    Verify{File} <- mocks.verify(FilePath);
-    Verify{File} <- mocks.verify(0)Times(FilePath);
-    Verify{File} <- mocks.verify(2)Times(FilePath);
-    Verify{File} <- mocks.verifyAtLeast(2)Times(FilePath);
-    Verify{File} <- mocks.verifyAtMost(2)Times(FilePath);
+* not implemented yet *
+
+    Verify{File} <- mocks.verify(FilePathMock);
+    Verify{File} <- mocks.verify(0)Times(FilePathMock);
+    Verify{File} <- mocks.verify(2)Times(FilePathMock);
+    Verify{File} <- mocks.verifyAtLeast(2)Times(FilePathMock);
+    Verify{File} <- mocks.verifyAtMost(2)Times(FilePathMock);
 
 ### Verify in order
+
+* not implemented yet *
 
 	var InOrder <- mocks;
 	InOrder.add(File).add(FilePath);
