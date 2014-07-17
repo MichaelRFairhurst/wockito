@@ -3,7 +3,7 @@ every NameTransformer is:
 	Text -- methodToProperty(Text) {
 		var $Text = "";
 		for(var Num = 0; Num < Text.getSize(); Num += 1) {
-			var Text char = Text.substr(Num, 1);
+			var Text char = Text.substr(Num, Num + 1);
 			if(char == "(" || char == ")") {
 				$Text += "Zp";
 			} else if (char == ",") {
@@ -26,5 +26,5 @@ every NameTransformer is:
 	}
 
 	Text -- classToProperty(Text) {
-		return Text.substr(0, 1).toLower() + Text.substr(1);
+		return Text.substr(0, 1).toLower() + Text.substr(1, Text.getSize());
 	}
