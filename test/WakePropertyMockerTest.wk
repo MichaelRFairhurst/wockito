@@ -6,7 +6,9 @@ import Map;
 import ImportFilterer;
 import ReflectionProvider;
 import StubbedReturn;
+import WakeLambdaType;
 import WatchedArgument;
+import WakeClassType;
 
 every WakePropertyMockerTest is:
 
@@ -21,9 +23,11 @@ every WakePropertyMockerTest is:
 
 	~[ test get stubber from method with arguments returns nothing ]~(Asserts) {
 		var WakeProperty from ReflectionProvider;
+		var WakeLambdaType from ReflectionProvider;
+		WakeProperty.WakeType.WakeLambdaType = WakeLambdaType;
 		WakeProperty.WakeType.type = 1; // lambda
-		WakeProperty.WakeType.arguments.push(WakeType from ReflectionProvider);
-		WakeProperty.WakeType.returntype = WakeType from ReflectionProvider;
+		WakeLambdaType.arguments.push(WakeType from ReflectionProvider);
+		WakeLambdaType.returntype = WakeType from ReflectionProvider;
 		var StubbedReturn? = WakePropertyMocker.getStubbedReturn(WakeProperty);
 		Asserts.that(StubbedReturn == nothing);
 	}
@@ -37,12 +41,16 @@ every WakePropertyMockerTest is:
 
 	~[ test get stubber from method with no arguments and return gets a StubbedReturn ]~(Asserts) {
 		var WakeProperty from ReflectionProvider;
+		var WakeLambdaType from ReflectionProvider;
+		var WakeClassType from ReflectionProvider;
+		var WakeType from ReflectionProvider;
 		WakeProperty.name = "hey()";
 		WakeProperty.WakeType.type = 1; // lambda
-		var WakeType from ReflectionProvider;
 		WakeType.type = 2; // class
-		WakeType.classname = "Me";
-		WakeProperty.WakeType.returntype = WakeType;
+		WakeType.WakeClassType = WakeClassType;
+		WakeClassType.classname = "Me";
+		WakeLambdaType.returntype = WakeType;
+		WakeProperty.WakeType.WakeLambdaType = WakeLambdaType;
 		var StubbedReturn? = WakePropertyMocker.getStubbedReturn(WakeProperty);
 		if StubbedReturn exists {
 			Asserts.that(StubbedReturn.type)Equals("Me");
@@ -69,11 +77,17 @@ every WakePropertyMockerTest is:
 
 	~[ test get watched args from property with no return returns args with num returntype ]~(Asserts) {
 		var WakeProperty from ReflectionProvider;
+		var WakeLambdaType from ReflectionProvider;
+		var WakeClassType from ReflectionProvider;
+		var $WakeClassType from ReflectionProvider;
 		WakeProperty.name = "MyProp(Firstarg,Secondarg)";
-		WakeProperty.WakeType.arguments.push(WakeType from ReflectionProvider);
-		WakeProperty.WakeType.arguments.push(WakeType from ReflectionProvider);
-		WakeProperty.WakeType.arguments[0].classname = "Firstarg";
-		WakeProperty.WakeType.arguments[1].classname = "Secondarg";
+		WakeProperty.WakeType.WakeLambdaType = WakeLambdaType;
+		WakeLambdaType.arguments.push(WakeType from ReflectionProvider);
+		WakeLambdaType.arguments.push(WakeType from ReflectionProvider);
+		WakeLambdaType.arguments[0].WakeClassType = WakeClassType;
+		WakeLambdaType.arguments[1].WakeClassType = $WakeClassType;
+		WakeClassType.classname = "Firstarg";
+		$WakeClassType.classname = "Secondarg";
 		var WatchedArgument[] = WakePropertyMocker.getWatchedArguments(WakeProperty);
 		Asserts.that(WatchedArgument[].getSize())Equals(2);
 		Asserts.that(WatchedArgument[0].type)Equals("Firstarg");
@@ -88,15 +102,23 @@ every WakePropertyMockerTest is:
 
 	~[ test get watched args from property with return returns args with proper returntype ]~(Asserts) {
 		var WakeProperty from ReflectionProvider;
+		var WakeLambdaType from ReflectionProvider;
+		var WakeClassType from ReflectionProvider;
+		var $WakeClassType from ReflectionProvider;
 		WakeProperty.name = "MyProp(Firstarg,Secondarg)";
-		WakeProperty.WakeType.arguments.push(WakeType from ReflectionProvider);
-		WakeProperty.WakeType.arguments.push(WakeType from ReflectionProvider);
-		WakeProperty.WakeType.arguments[0].classname = "Firstarg";
-		WakeProperty.WakeType.arguments[1].classname = "Secondarg";
+		WakeProperty.WakeType.WakeLambdaType = WakeLambdaType;
+		WakeLambdaType.arguments.push(WakeType from ReflectionProvider);
+		WakeLambdaType.arguments.push(WakeType from ReflectionProvider);
+		WakeLambdaType.arguments[0].WakeClassType = WakeClassType;
+		WakeLambdaType.arguments[1].WakeClassType = $WakeClassType;
+		WakeClassType.classname = "Firstarg";
+		$WakeClassType.classname = "Secondarg";
 
 		var WakeType from ReflectionProvider;
-		WakeType.classname = "Ret";
-		WakeProperty.WakeType.returntype = WakeType;
+		var returned WakeClassType from ReflectionProvider;
+		WakeType.WakeClassType = returned;
+		returned.classname = "Ret";
+		WakeLambdaType.returntype = WakeType;
 
 		var WatchedArgument[] = WakePropertyMocker.getWatchedArguments(WakeProperty);
 		Asserts.that(WatchedArgument[].getSize())Equals(2);

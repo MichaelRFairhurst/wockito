@@ -16,6 +16,7 @@ import MethodReturnGenerator;
 import MockMethodReturnGenerator;
 import WakeProperty;
 import CommaStatementGenerator;
+import WakeLambdaType;
 
 #>
 # Generates code along the lines of:
@@ -91,7 +92,7 @@ every MockFileGenerator is:
 			if(Text.indexOf('<-') == nothing) continue;
 			var WakeProperty? = WakeClass.properties.get(Text);
 			if WakeProperty exists {
-				var WakeType? method = WakeProperty.WakeType;
+				var WakeLambdaType? method = WakeProperty.WakeType.WakeLambdaType;
 				if method exists {
 					var WakeType? provision = method.returntype;
 					if provision exists {
@@ -137,7 +138,7 @@ every MockFileGenerator is:
 			if(Text.indexOf('<-') == nothing) continue;
 			var WakeProperty? = WakeClass.properties.get(Text);
 			if WakeProperty exists {
-				var WakeType? method = WakeProperty.WakeType;
+				var WakeLambdaType? method = WakeProperty.WakeType.WakeLambdaType;
 				if method exists {
 					var WakeType? provision = method.returntype;
 					if provision exists {

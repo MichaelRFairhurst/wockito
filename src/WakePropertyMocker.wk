@@ -3,6 +3,7 @@ import StubbedReturn;
 import WakeProperty;
 import NameTransformer;
 import WakeType;
+import WakeLambdaType;
 
 every WakePropertyMocker is:
 
@@ -16,33 +17,44 @@ every WakePropertyMocker is:
 		var Text base = NameTransformer.methodToProperty(WakeProperty.name);
 
 		var Text retname = "Num";
-		var WakeType? ret = WakeProperty.WakeType.returntype;
-		if ret exists {
-			retname = ret.getPureName();
-		}
+		var WakeLambdaType? = WakeProperty.WakeType.WakeLambdaType;
 
-		var WakeType[] = WakeProperty.WakeType.arguments;
-		for(var Num = 0; Num < WakeProperty.WakeType.arguments.getSize(); Num += 1) { // @Todo foreach at
-			var WatchedArgument from this;
-			WatchedArgument.type = WakeProperty.WakeType.arguments[Num].getPureName();
-			WatchedArgument.rettype = retname;
-			WatchedArgument.specialty = WatchedArgument.alias := base + "_arg" + Num.toString();
+		if WakeLambdaType exists {
+			var returned WakeType? = WakeLambdaType.returntype;
+			if returned exists {
+				retname = returned.getPureName();
+			}
 
-			WatchedArgument[].push(WatchedArgument);
+			var WakeType[] = WakeLambdaType.arguments;
+			for(var Num = 0; Num < WakeLambdaType.arguments.getSize(); Num += 1) { // @Todo foreach at
+				var WatchedArgument from this;
+				WatchedArgument.type = WakeLambdaType.arguments[Num].getPureName();
+				WatchedArgument.rettype = retname;
+				WatchedArgument.specialty = WatchedArgument.alias := base + "_arg" + Num.toString();
+
+				WatchedArgument[].push(WatchedArgument);
+			}
 		}
 
 		return WatchedArgument[];
 	}
 
 	StubbedReturn? -- getStubbedReturn(WakeProperty) {
-		if(WakeProperty.WakeType.type != 1 || WakeProperty.WakeType.arguments.getSize() > 0) return nothing;
-		var WakeType? = WakeProperty.WakeType.returntype;
-		if WakeType exists {
-			var StubbedReturn from this;
-			StubbedReturn.type = WakeType.getPureName();
-			StubbedReturn.alias = NameTransformer.methodToProperty(WakeProperty.name);
-			StubbedReturn.specialty = StubbedReturn.alias;
-			return StubbedReturn;
+		if(WakeProperty.WakeType.type != 1) return nothing;
+
+		var WakeLambdaType? = WakeProperty.WakeType.WakeLambdaType;
+		if WakeLambdaType exists {
+			if(WakeLambdaType.arguments.getSize() > 0) return nothing;
+
+			var WakeType? = WakeLambdaType.returntype;
+			if WakeType exists {
+				var StubbedReturn from this;
+				StubbedReturn.type = WakeType.getPureName();
+				StubbedReturn.alias = NameTransformer.methodToProperty(WakeProperty.name);
+				StubbedReturn.specialty = StubbedReturn.alias;
+				return StubbedReturn;
+			}
 		}
+
 		return nothing;
 	}

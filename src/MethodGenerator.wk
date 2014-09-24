@@ -10,6 +10,7 @@ import NameTransformer;
 import MethodIterator;
 import MethodBodyGenerator;
 import MethodReturnGenerator;
+import WakeLambdaType;
 
 every MethodGenerator (capable MethodIteration) is:
 
@@ -20,7 +21,10 @@ every MethodGenerator (capable MethodIteration) is:
 		var ArgumentWatcherGatherer from this;
 		ArgumentIterator.set((cast ArgumentIteration) ArgumentWatcherGatherer);
 
-		ArgumentIterator.iterate(WakeClass, WakeProperty, WakeProperty.WakeType.arguments, WakeProperty.WakeType.returntype);
+		var WakeLambdaType? = WakeProperty.WakeType.WakeLambdaType;
+		if WakeLambdaType exists {
+			ArgumentIterator.iterate(WakeClass, WakeProperty, WakeLambdaType.arguments, WakeLambdaType.returntype);
+		}
 
 		File.write("\t");
 		MethodReturnGenerator.generate(File, returntype);

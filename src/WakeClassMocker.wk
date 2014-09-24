@@ -5,6 +5,7 @@ import WakePropertyMocker;
 import Map;
 import WakeProperty;
 import WakeType;
+import WakeLambdaType;
 
 every WakeClassMocker is:
 
@@ -47,9 +48,12 @@ every WakeClassMocker is:
 		foreach(WakeClass.properties.getKeys()) {
 			var WakeProperty? = WakeClass.properties.get(Text);
 			if WakeProperty exists {
-				var WakeType? = WakeProperty.WakeType.returntype;
-				if WakeType exists {
-					WakeType[].push(WakeType);
+				var WakeLambdaType? = WakeProperty.WakeType.WakeLambdaType;
+				if WakeLambdaType exists {
+					var WakeType? = WakeLambdaType.returntype;
+					if WakeType exists {
+						WakeType[].push(WakeType);
+					}
 				}
 			}
 		}

@@ -3,6 +3,7 @@ import WakeType;
 import WakeProperty;
 import MethodIteration;
 import Map;
+import WakeLambdaType;
 
 every MethodIterator is:
 
@@ -23,7 +24,10 @@ every MethodIterator is:
 				if(method.WakeType.type != 1) continue;
 				var $MethodIteration? = MethodIteration;
 				if $MethodIteration exists {
-					$MethodIteration.iterate(WakeClass, method, method.WakeType.arguments, method.WakeType.returntype);
+					var WakeLambdaType? = method.WakeType.WakeLambdaType;
+					if WakeLambdaType exists {
+						$MethodIteration.iterate(WakeClass, method, WakeLambdaType.arguments, WakeLambdaType.returntype);
+					}
 				}
 			}
 		}
