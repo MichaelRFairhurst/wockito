@@ -176,6 +176,8 @@ $(OBJECTDIR)/%Mock.o: $(GENDIR)/%Mock.wk
 $(TABLEDIR)/%Mock.table: $(GENDIR)/%Mock.wk $(OBJECTDIR)/%Mock.o
 	@:
 
+$(TABLEDIR)/%Mock.table.md5: $(TABLEDIR)/%Mock.table
+
 $(TABLEDIR)/%Stubber.table: $(OBJECTDIR)/%Mock.o
 	@:
 
