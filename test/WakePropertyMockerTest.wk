@@ -10,10 +10,12 @@ import WakeLambdaType;
 import WatchedArgument;
 import WakeClassType;
 
+@TestClass
 every WakePropertyMockerTest is:
 
 	needs ReflectionProvider, WakePropertyMocker;
 
+	@Test
 	~[ test get stubber from property returns nothing ]~(Asserts) {
 		var WakeProperty from ReflectionProvider;
 		WakeProperty.WakeType.type = 2; // class, not lambda
@@ -21,6 +23,7 @@ every WakePropertyMockerTest is:
 		Asserts.that(StubbedReturn == nothing);
 	}
 
+	@Test
 	~[ test get stubber from method with arguments returns nothing ]~(Asserts) {
 		var WakeProperty from ReflectionProvider;
 		var WakeLambdaType from ReflectionProvider;
@@ -32,6 +35,7 @@ every WakePropertyMockerTest is:
 		Asserts.that(StubbedReturn == nothing);
 	}
 
+	@Test
 	~[ test get stubber from method with no arguments but no return returns nothing ]~(Asserts) {
 		var WakeProperty from ReflectionProvider;
 		WakeProperty.WakeType.type = 1; // lambda
@@ -39,6 +43,7 @@ every WakePropertyMockerTest is:
 		Asserts.that(StubbedReturn == nothing);
 	}
 
+	@Test
 	~[ test get stubber from method with no arguments and return gets a StubbedReturn ]~(Asserts) {
 		var WakeProperty from ReflectionProvider;
 		var WakeLambdaType from ReflectionProvider;
@@ -61,6 +66,7 @@ every WakePropertyMockerTest is:
 		}
 	}
 
+	@Test
 	~[ test get watched args from property returns nothing ]~(Asserts) {
 		var WakeProperty from ReflectionProvider;
 		WakeProperty.WakeType.type = 2; // class, not lambda
@@ -68,6 +74,7 @@ every WakePropertyMockerTest is:
 		Asserts.that(WatchedArgument[].getSize())Equals(0);
 	}
 
+	@Test
 	~[ test get watched args from property with no args returns nothing ]~(Asserts) {
 		var WakeProperty from ReflectionProvider;
 		WakeProperty.WakeType.type = 1; // lambda
@@ -75,6 +82,7 @@ every WakePropertyMockerTest is:
 		Asserts.that(WatchedArgument[].getSize())Equals(0);
 	}
 
+	@Test
 	~[ test get watched args from property with no return returns args with num returntype ]~(Asserts) {
 		var WakeProperty from ReflectionProvider;
 		var WakeLambdaType from ReflectionProvider;
@@ -100,6 +108,7 @@ every WakePropertyMockerTest is:
 		Asserts.that(WatchedArgument[1].rettype)Equals("Num");
 	}
 
+	@Test
 	~[ test get watched args from property with return returns args with proper returntype ]~(Asserts) {
 		var WakeProperty from ReflectionProvider;
 		var WakeLambdaType from ReflectionProvider;

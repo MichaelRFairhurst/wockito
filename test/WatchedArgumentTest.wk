@@ -1,16 +1,19 @@
 import WatchedArgument;
 import Asserts;
 
+@TestClass
 every WatchedArgumentTest is:
 
 	needs WatchedArgument;
 
+	@Test
 	~[ test get watched type ]~(Asserts) {
 		WatchedArgument.type = "Blap";
 		WatchedArgument.rettype = "Bloop";
 		Asserts.that(WatchedArgument.getWatchedType())Equals("ArgumentWatcher{Blap,Bloop}");
 	}
 
+	@Test
 	~[ test get declaration ]~(Asserts) {
 		WatchedArgument.type = "Argl";
 		WatchedArgument.rettype = "Argd";
@@ -18,6 +21,7 @@ every WatchedArgumentTest is:
 		Asserts.that(WatchedArgument.getDeclaration())Equals("ArgumentWatcher{Argl,Argd} blaaargh");
 	}
 
+	@Test
 	~[ test get specialized declaration ]~(Asserts) {
 		WatchedArgument.type = "Barp";
 		WatchedArgument.rettype = "Slarp";

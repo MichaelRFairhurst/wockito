@@ -2,18 +2,21 @@ import Asserts;
 import ArgumentWatcher;
 import When;
 
+@TestClass
 every ArgumentWatcherTest is:
 
 	needs ArgumentWatcher{Num, Num};
 
 	provides When{Num};
 
+	@Test
 	~[ test get a nonexist stub ]~(Asserts) {
 		var When{Num}[] = ArgumentWatcher.getPossibleStubs(1234);
 		Asserts.that(When[].getSize())Equals(0);
 		Asserts.that(When[].getSize())Equals(0);
 	}
 
+	@Test
 	~[ test set and get an expected stub ]~(Asserts) {
 		var When{Num} from this;
 		var $When{Num} from this;
@@ -28,6 +31,7 @@ every ArgumentWatcherTest is:
 		Asserts.that(arr[0] == $When);
 	}
 
+	@Test
 	~[ test set and get a overlapping expected stubs ]~(Asserts) {
 		var When{Num} from this;
 		var $When{Num} from this;
@@ -40,6 +44,7 @@ every ArgumentWatcherTest is:
 		Asserts.that(arr[1] == $When);
 	}
 
+	@Test
 	~[ test call nums with a nonmatching call ]~(Asserts) {
 		ArgumentWatcher.tell(1, 3);
 		ArgumentWatcher.tell(2, 4);
@@ -47,6 +52,7 @@ every ArgumentWatcherTest is:
 		Asserts.that(Num[].getSize())Equals(0);
 	}
 
+	@Test
 	~[ test call nums with a single matching call ]~(Asserts) {
 		ArgumentWatcher.tell(4, 5);
 		var Num[] = ArgumentWatcher.getCallIndices(4);
@@ -54,6 +60,7 @@ every ArgumentWatcherTest is:
 		Asserts.that(Num[0])Equals(5);
 	}
 
+	@Test
 	~[ test call nums with multiple matching calls ]~(Asserts) {
 		ArgumentWatcher.tell(5, 6);
 		ArgumentWatcher.tell(5, 7);

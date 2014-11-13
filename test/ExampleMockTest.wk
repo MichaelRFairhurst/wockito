@@ -11,16 +11,19 @@ import AssertsMock;
 import AssertsStubber;
 import AssertsVerifier;
 
+@TestClass
 every ExampleMockTest is:
 
 	needs MockProvider mocks;
 
+	@Test
 	~[ test set and use a stub ]~(Asserts) {
 		var ExampleMock from mocks;
 		mocks.when(ExampleMock).get("hello", 5).thenReturn("hey");
 		Asserts.that(ExampleMock.get("hello", 5))Equals("hey");
 	}
 
+	@Test
 	~[ test and use multiple stubs ]~(Asserts) {
 		var ExampleMock from mocks;
 		mocks.when(ExampleMock).get("hey there", 54).thenReturn("hey back!");
@@ -33,6 +36,7 @@ every ExampleMockTest is:
 		Asserts.that(ExampleMock.get("hey there", 55))Equals("hey to the side!");
 	}
 
+	@Test
 	~[ test and use multiple stub returns ]~(Asserts) {
 		var ExampleMock from mocks;
 		mocks.when(ExampleMock).get("hey", 1).thenReturn("yo").thenReturn("yoo").thenReturn("whaddup.");
@@ -41,6 +45,7 @@ every ExampleMockTest is:
 		Asserts.that(ExampleMock.get("hey", 1))Equals("whaddup.");
 	}
 
+	@Test
 	~[ test and use multiple mocks ]~(Asserts) {
 		var ExampleMock from mocks;
 		var $ExampleMock from mocks;
@@ -50,6 +55,7 @@ every ExampleMockTest is:
 		Asserts.that($ExampleMock.get("one", 2))Equals("hey dawg");
 	}
 
+	@Test
 	~[ test verify valid ]~(Asserts) {
 		mocks.use(Asserts);
 		var ExampleMock from mocks;
@@ -58,6 +64,7 @@ every ExampleMockTest is:
 		mocks.verify(ExampleMock).get("toast", 430);
 	}
 
+	@Test
 	~[ test verify twice valid ]~(Asserts) {
 		mocks.use(Asserts);
 		var ExampleMock from mocks;
@@ -67,6 +74,7 @@ every ExampleMockTest is:
 		mocks.verify(ExampleMock).get("toast", 430);
 	}
 
+	@Test
 	~[ test verify times 0 valid ]~(Asserts) {
 		mocks.use(Asserts);
 		var ExampleMock from mocks;
@@ -74,6 +82,7 @@ every ExampleMockTest is:
 		mocks.verify(0)Times(ExampleMock).get("toast", 430);
 	}
 
+	@Test
 	~[ test verify times 1 valid ]~(Asserts) {
 		mocks.use(Asserts);
 		var ExampleMock from mocks;
@@ -82,6 +91,7 @@ every ExampleMockTest is:
 		mocks.verify(1)Times(ExampleMock).get("toast", 430);
 	}
 
+	@Test
 	~[ test verify times 2 valid ]~(Asserts) {
 		mocks.use(Asserts);
 		var ExampleMock from mocks;
@@ -91,6 +101,7 @@ every ExampleMockTest is:
 		mocks.verify(2)Times(ExampleMock).get("toast", 430);
 	}
 
+	@Test
 	~[ test fails not called ]~(Asserts) {
 		var AssertsMock from mocks;
 		mocks.use((cast Asserts) AssertsMock);
@@ -107,6 +118,7 @@ every ExampleMockTest is:
 		mocks.verify(1)Times(AssertsMock).fail("Expected get(Text,Num) to be called more than 1 times, actually called 0 times");
 	}
 
+	@Test
 	~[ test fails should not have been called ]~(Asserts) {
 		var AssertsMock from mocks;
 		mocks.use((cast Asserts) AssertsMock);
@@ -120,6 +132,7 @@ every ExampleMockTest is:
 		mocks.verify(1)Times(AssertsMock).fail("Expected get(Text,Num) to be called fewer than 0 times, actually called 1 times");
 	}
 
+	@Test
 	~[ test fails not called enough times ]~(Asserts) {
 		var AssertsMock from mocks;
 		mocks.use((cast Asserts) AssertsMock);

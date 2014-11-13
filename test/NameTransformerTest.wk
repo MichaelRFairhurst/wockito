@@ -1,26 +1,32 @@
 import Asserts;
 import NameTransformer;
 
+@TestClass
 every NameTransformerTest is:
 
 	needs NameTransformer;
 
+	@Test
 	~[ test two properties ]~(Asserts) {
 		Asserts.that(NameTransformer.methodToProperty("add(Num,Num)"))Equals("addZpNumZcNumZp");
 	}
 
+	@Test
 	~[ test two segments ]~(Asserts) {
 		Asserts.that(NameTransformer.methodToProperty("add(Num)To(Num)"))Equals("addZpNumZpToZpNumZp");
 	}
 
+	@Test
 	~[ test generics ]~(Asserts) {
 		Asserts.that(NameTransformer.methodToProperty("add(List{Num})"))Equals("addZpListZsNumZeZp");
 	}
 
+	@Test
 	~[ test classnames  ]~(Asserts) {
 		Asserts.that(NameTransformer.classToProperty("TestClass"))Equals("testClass");
 	}
 
+	@Test
 	~[ test provision ]~(Asserts) {
 		Asserts.that(NameTransformer.methodToProperty("Blah{Blah}<-Blah"))Equals("blahZsBlahZeZlZdBlah");
 	}

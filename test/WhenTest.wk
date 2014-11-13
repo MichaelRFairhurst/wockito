@@ -1,10 +1,12 @@
 import Asserts;
 import When;
 
+@TestClass
 every WhenTest is:
 
 	needs When{Num};
 
+	@Test
 	~[ test .thenReturn() on an argument stubber, and then getting its return value ]~(Asserts) {
 		When.thenReturn(1).thenReturn(2).thenReturn(3);
 
