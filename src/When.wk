@@ -9,7 +9,12 @@ every When{T} is:
 	}
 
 	T -- get() {
-		var T = returns[Num];
-		Num += 1;
-		return T;
+		var T? = returns[?Num];
+		if T exists {
+			Num += 1;
+			return T;
+		} else {
+			Num = 0.orMaxOf(Num - 1); // go back one, stopping at 0
+			return returns[Num]; // will throw when we stopped at 0
+		}
 	}
