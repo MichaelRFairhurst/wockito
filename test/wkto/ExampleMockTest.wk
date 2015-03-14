@@ -1,0 +1,149 @@
+module wkto;
+
+import wunit.Asserts;
+import wkto.ArgumentWatcher;
+import wkto.example.Example;
+import wkto.When;
+import wkto.MockTracker;
+import wkto.mocks.MockProvider;
+import wkto.mocks.wkto.example.ExampleMock;
+import wkto.mocks.wkto.example.ExampleStubber;
+import wkto.mocks.wkto.example.ExampleVerifier;
+import wkto.mocks.wunit.AssertsMock;
+import wkto.mocks.wunit.AssertsStubber;
+import wkto.mocks.wunit.AssertsVerifier;
+
+@TestClass
+every ExampleMockTest is:
+
+	needs MockProvider mocks;
+
+	@Test
+	~[ test set and use a stub ]~(Asserts) {
+		var ExampleMock from mocks;
+		mocks.when(ExampleMock).get("hello", 5).thenReturn("hey");
+		Asserts.that(ExampleMock.get("hello", 5))Equals("hey");
+	}
+
+	@Test
+	~[ test and use multiple stubs ]~(Asserts) {
+		var ExampleMock from mocks;
+		mocks.when(ExampleMock).get("hey there", 54).thenReturn("hey back!");
+		mocks.when(ExampleMock).get("hey here", 54).thenReturn("hey front!");
+		mocks.when(ExampleMock).get("hey here", 55).thenReturn("hey up!");
+		mocks.when(ExampleMock).get("hey there", 55).thenReturn("hey to the side!");
+		Asserts.that(ExampleMock.get("hey there", 54))Equals("hey back!");
+		Asserts.that(ExampleMock.get("hey here", 54))Equals("hey front!");
+		Asserts.that(ExampleMock.get("hey here", 55))Equals("hey up!");
+		Asserts.that(ExampleMock.get("hey there", 55))Equals("hey to the side!");
+	}
+
+	@Test
+	~[ test and use multiple stub returns ]~(Asserts) {
+		var ExampleMock from mocks;
+		mocks.when(ExampleMock).get("hey", 1).thenReturn("yo").thenReturn("yoo").thenReturn("whaddup.");
+		Asserts.that(ExampleMock.get("hey", 1))Equals("yo");
+		Asserts.that(ExampleMock.get("hey", 1))Equals("yoo");
+		Asserts.that(ExampleMock.get("hey", 1))Equals("whaddup.");
+	}
+
+	@Test
+	~[ test and use multiple mocks ]~(Asserts) {
+		var ExampleMock from mocks;
+		var $ExampleMock from mocks;
+		mocks.when(ExampleMock).get("one", 2).thenReturn("hey man");
+		mocks.when($ExampleMock).get("one", 2).thenReturn("hey dawg");
+		Asserts.that(ExampleMock.get("one", 2))Equals("hey man");
+		Asserts.that($ExampleMock.get("one", 2))Equals("hey dawg");
+	}
+
+	@Test
+	~[ test verify valid ]~(Asserts) {
+		mocks.use(Asserts);
+		var ExampleMock from mocks;
+		mocks.when(ExampleMock).get("toast", 430).thenReturn("That's too early for toast!");
+		ExampleMock.get("toast", 430);
+		mocks.verify(ExampleMock).get("toast", 430);
+	}
+
+	@Test
+	~[ test verify twice valid ]~(Asserts) {
+		mocks.use(Asserts);
+		var ExampleMock from mocks;
+		mocks.when(ExampleMock).get("toast", 430).thenReturn("That's too early for toast!");
+		ExampleMock.get("toast", 430);
+		ExampleMock.get("toast", 430);
+		mocks.verify(ExampleMock).get("toast", 430);
+	}
+
+	@Test
+	~[ test verify times 0 valid ]~(Asserts) {
+		mocks.use(Asserts);
+		var ExampleMock from mocks;
+		mocks.when(ExampleMock).get("toast", 430).thenReturn("That's too early for toast!");
+		mocks.verify(0)Times(ExampleMock).get("toast", 430);
+	}
+
+	@Test
+	~[ test verify times 1 valid ]~(Asserts) {
+		mocks.use(Asserts);
+		var ExampleMock from mocks;
+		mocks.when(ExampleMock).get("toast", 430).thenReturn("That's too early for toast!");
+		ExampleMock.get("toast", 430);
+		mocks.verify(1)Times(ExampleMock).get("toast", 430);
+	}
+
+	@Test
+	~[ test verify times 2 valid ]~(Asserts) {
+		mocks.use(Asserts);
+		var ExampleMock from mocks;
+		mocks.when(ExampleMock).get("toast", 430).thenReturn("That's too early for toast!");
+		ExampleMock.get("toast", 430);
+		ExampleMock.get("toast", 430);
+		mocks.verify(2)Times(ExampleMock).get("toast", 430);
+	}
+
+	@Test
+	~[ test fails not called ]~(Asserts) {
+		var AssertsMock from mocks;
+		mocks.use((cast Asserts) AssertsMock);
+		var ExampleMock from mocks;
+		mocks.when(ExampleMock).get("hey", 5).thenReturn("useless");
+		mocks.when(ExampleMock).get("heyy", 4).thenReturn("useless");
+		mocks.when(ExampleMock).get("heyy", 5).thenReturn("useless");
+		ExampleMock.get("hey", 5);
+		ExampleMock.get("heyy", 4);
+		ExampleMock.get("heyy", 5);
+		mocks.verify(1)Times(ExampleMock).get("hey", 4);
+
+		mocks.use(Asserts);
+		mocks.verify(1)Times(AssertsMock).fail("Expected get(Text,Num) to be called more than 1 times, actually called 0 times");
+	}
+
+	@Test
+	~[ test fails should not have been called ]~(Asserts) {
+		var AssertsMock from mocks;
+		mocks.use((cast Asserts) AssertsMock);
+
+		var ExampleMock from mocks;
+		mocks.when(ExampleMock).get("what", 7).thenReturn("useless");
+		ExampleMock.get("what", 7);
+		mocks.verify(0)Times(ExampleMock).get("what", 7);
+
+		mocks.use(Asserts);
+		mocks.verify(1)Times(AssertsMock).fail("Expected get(Text,Num) to be called fewer than 0 times, actually called 1 times");
+	}
+
+	@Test
+	~[ test fails not called enough times ]~(Asserts) {
+		var AssertsMock from mocks;
+		mocks.use((cast Asserts) AssertsMock);
+
+		var ExampleMock from mocks;
+		mocks.when(ExampleMock).get("what", 7).thenReturn("useless");
+		ExampleMock.get("what", 7);
+		mocks.verify(2)Times(ExampleMock).get("what", 7);
+
+		mocks.use(Asserts);
+		mocks.verify(1)Times(AssertsMock).fail("Expected get(Text,Num) to be called more than 2 times, actually called 1 times");
+	}

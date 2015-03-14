@@ -1,0 +1,154 @@
+module wkto;
+
+import std.Map;
+import io.File;
+import treflect.WakeClass;
+import treflect.WakeType;
+import treflect.WakeProperty;
+import treflect.WakeLambdaType;
+import wkto.NameTransformer;
+import wkto.MockMethodGenerator;
+import wkto.ArgumentIterator;
+import wkto.MethodIterator;
+import wkto.MethodIteration;
+import wkto.ArgumentIteration;
+import wkto.ArgumentWatcherGatherer;
+import wkto.WhenGatherer;
+import wkto.MethodBodyGenerator;
+import wkto.MethodGenerator;
+import wkto.MethodReturnGenerator;
+import wkto.MockMethodReturnGenerator;
+import wkto.CommaStatementGenerator;
+
+#>
+# Generates code along the lines of:
+#
+# every ExampleMock is:
+#
+#	needs ArgumentWatcher{Text, Text} getZpTextZcNumZpZa1, ArgumentWatcher{Num, Text}:getZpTextZcNumZpZa2 getZpTextZcNumZpZa2;
+#
+#	provides
+#		ArgumentWatcher{Text, Text}:getZpTextZcNumZpZa1 <- { return getZpTextZcNumZpZa1; },
+#		ArgumentWatcher{Num, Text}:getZpTextZcNumZpZa2 <- { return getZpTextZcNumZpZa2; },
+#		ExampleMockStubber,
+#		ExampleMockValidator;
+#
+#	Text -- get(Text, Num) {
+#		var When{Text}[] = getZpTextZcNumZpZa1.getPossibleStubs(Text);
+#		When = When.intersect(getZpTextZcNumZpZa2.getPossibleStubs(Num));
+#		return When[0].get();
+#	}
+##
+every MockFileGenerator is:
+
+	needs NameTransformer, File, MethodIterator, CommaStatementGenerator;
+
+	provides File <- { return File; },
+		MethodGenerator,
+		MethodBodyGenerator <- MockMethodGenerator, MockMethodGenerator,
+		MethodReturnGenerator <- MockMethodReturnGenerator, MockMethodReturnGenerator,
+		ArgumentIterator,
+		NameTransformer,
+		MethodIterator,
+		ArgumentWatcherGatherer,
+		WhenGatherer;
+
+	generate(WakeClass) {
+		generateImports(WakeClass);
+
+		File.write("\n");
+		File.write("every " + WakeClass.classname + "Mock (capable " + WakeClass.classname + ") is:\n");
+
+		generateNeeds(WakeClass);
+		generateProvisions(WakeClass);
+		generateMethods(WakeClass);
+	}
+
+	generateImports(WakeClass) {
+	}
+
+	generateMethods(WakeClass) {
+		MethodIterator.set((cast MethodIteration) (MethodGenerator from this));
+		MethodIterator.iterate(WakeClass);
+	}
+
+	generateProvisions(WakeClass) {
+		var Text[] provisions = [];
+		var ArgumentWatcherGatherer from this;
+		MethodIterator.set((cast MethodIteration) ArgumentWatcherGatherer);
+		MethodIterator.iterate(WakeClass);
+
+		for(var Num = 0; Num < ArgumentWatcherGatherer.declarations.getSize(); Num += 1) { // @TODO foreach at
+			provisions.push(ArgumentWatcherGatherer.provisions[Num] + " <- { return " + ArgumentWatcherGatherer.aliases[Num] + "; }");
+		}
+
+		var WhenGatherer from this;
+		MethodIterator.set((cast MethodIteration) WhenGatherer);
+		MethodIterator.iterate(WakeClass);
+
+		for(var Num = 0; Num < WhenGatherer.declarations.getSize(); Num += 1) { // @TODO foreach at
+			provisions.push(WhenGatherer.provisions[Num] + " <- { return " + WhenGatherer.aliases[Num] + "; }");
+		}
+
+		foreach(WakeClass.properties.getKeys()) { // @Todo foreach in
+			if(Text.indexOf('<-') == nothing) continue;
+			var WakeProperty? = WakeClass.properties.get(Text);
+			if WakeProperty exists {
+				var WakeLambdaType? method = WakeProperty.WakeType.WakeLambdaType;
+				if method exists {
+					var WakeType? provision = method.returntype;
+					if provision exists {
+						var Text current = provision.getPureName();
+						if(provision.specialty != "") current += ":" + provision.specialty;
+						current += " <- { return " + NameTransformer.methodToProperty(WakeProperty.name) + ".get(); }";
+						provisions.push(current);
+
+						current = "When{" + provision.getPureName() + "}";
+						if(provision.specialty != "") current += ":" + provision.specialty;
+						current += " <- { return " + NameTransformer.methodToProperty(WakeProperty.name) + "; }";
+						provisions.push(current);
+					}
+				}
+			}
+		}
+
+		provisions.push(WakeClass.classname + "Stubber");
+		provisions.push(WakeClass.classname + "Verifier");
+
+		File.write(CommaStatementGenerator.generate("provides", provisions));
+	}
+
+	generateNeeds(WakeClass) {
+		var Text[] deps = [];
+		var ArgumentWatcherGatherer from this;
+		MethodIterator.set((cast MethodIteration) ArgumentWatcherGatherer);
+		MethodIterator.iterate(WakeClass);
+
+		deps.push('MockTracker');
+
+		var Text[] = ArgumentWatcherGatherer.declarations;
+		foreach(Text[]) deps.push(Text);
+
+		var WhenGatherer from this;
+		MethodIterator.set((cast MethodIteration) WhenGatherer);
+		MethodIterator.iterate(WakeClass);
+
+		Text[] = WhenGatherer.declarations;
+		foreach(Text[]) deps.push(Text);
+
+		foreach(WakeClass.properties.getKeys()) { // @Todo foreach in
+			if(Text.indexOf('<-') == nothing) continue;
+			var WakeProperty? = WakeClass.properties.get(Text);
+			if WakeProperty exists {
+				var WakeLambdaType? method = WakeProperty.WakeType.WakeLambdaType;
+				if method exists {
+					var WakeType? provision = method.returntype;
+					if provision exists {
+						deps.push("When{" + provision.getPureName() + "} " + NameTransformer.methodToProperty(WakeProperty.name));
+					}
+				}
+			}
+		}
+
+		File.write(CommaStatementGenerator.generate("needs", deps));
+	}

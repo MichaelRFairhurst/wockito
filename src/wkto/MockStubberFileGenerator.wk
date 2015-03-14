@@ -1,0 +1,94 @@
+module wkto;
+
+import io.File;
+import treflect.WakeClass;
+import treflect.WakeType;
+import wkto.NameTransformer;
+import wkto.MethodIterator;
+import wkto.StubberMethodGenerator;
+import wkto.MethodBodyGenerator;
+import wkto.ArgumentIterator;
+import wkto.ArgumentWatcherGatherer;
+import wkto.WhenGatherer;
+import wkto.MethodGenerator;
+import wkto.MethodReturnGenerator;
+import wkto.StubberMethodReturnGenerator;
+import wkto.MethodIteration;
+import wkto.CommaStatementGenerator;
+import wkto.WakeClassMocker;
+
+#>
+# Generates files along the lines of:
+#
+# every ExampleMockStubber is:
+#
+# 	needs ArgumentWatcher{Text, Text}:getZpTextZcNumZpZa1 getZpTextZcNumZpZa1, ArgumentWatcher{Num, Text}:getZpTextZcNumZpZa1 getZpTextZcNumZpZa2;
+#
+# 	provides When{Text};
+#
+# 	When{Text} -- get(Text, Num) {
+# 		var When{Text} <- this;
+# 		getZpTextZcNumZpZa1.expect(Text, When);
+# 		getZpTextZcNumZpZa2.expect(Num, When);
+# 		return When;
+# 	}
+##
+every MockStubberFileGenerator is:
+
+	needs NameTransformer, File, MethodIterator, CommaStatementGenerator, WakeClassMocker;
+
+	provides File <- { return File; },
+		MethodGenerator,
+		MethodBodyGenerator <- StubberMethodGenerator, StubberMethodGenerator,
+		MethodReturnGenerator <- StubberMethodReturnGenerator, StubberMethodReturnGenerator,
+		ArgumentIterator,
+		NameTransformer,
+		MethodIterator,
+		ArgumentWatcherGatherer,
+		WhenGatherer;
+
+	generate(WakeClass) {
+		File.write("every " + WakeClass.classname + "Stubber is:\n");
+
+		generateNeeds(WakeClass);
+		generateProvisions(WakeClass);
+		generateMethods(WakeClass);
+	}
+
+	generateMethods(WakeClass) {
+		MethodIterator.set((cast MethodIteration) (MethodGenerator from this));
+		MethodIterator.iterate(WakeClass);
+	}
+
+	generateProvisions(WakeClass) {
+		var Text[] provisions = [];
+
+		foreach(WakeClassMocker.getReturnTypes(WakeClass)) { // @TODO foreach as?
+			if(!provisions.contains("When{" + WakeType.getPureName() + "}"))
+				provisions.push("When{" + WakeType.getPureName() + "}");
+		}
+
+		File.write(CommaStatementGenerator.generate("provides", provisions));
+	}
+
+	generateNeeds(WakeClass) {
+		var ArgumentWatcherGatherer from this;
+		MethodIterator.set((cast MethodIteration) ArgumentWatcherGatherer);
+		MethodIterator.iterate(WakeClass);
+
+		var Text[] deps = [];
+
+		for(var Num = 0; Num < ArgumentWatcherGatherer.provisions.getSize(); Num += 1) {
+			deps.push(ArgumentWatcherGatherer.provisions[Num] + " " + ArgumentWatcherGatherer.aliases[Num]);
+		}
+
+		var WhenGatherer from this;
+		MethodIterator.set((cast MethodIteration) WhenGatherer);
+		MethodIterator.iterate(WakeClass);
+
+		for(var Num = 0; Num < WhenGatherer.provisions.getSize(); Num += 1) {
+			deps.push(WhenGatherer.provisions[Num] + " " + WhenGatherer.aliases[Num]);
+		}
+
+		File.write(CommaStatementGenerator.generate("needs", deps));
+	}

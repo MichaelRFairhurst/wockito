@@ -1,6 +1,0 @@
-import WakeType;
-import File;
-
-every MethodReturnGenerator is:
-
-	generate(File, WakeType?);

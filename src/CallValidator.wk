@@ -1,8 +1,0 @@
-import Asserts;
-
-every CallValidator is:
-
-	with public Text methodname = "";
-
-	validate(Num[]) {
-	}

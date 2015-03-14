@@ -1,0 +1,27 @@
+module wkto;
+
+import io.File;
+import treflect.WakeClass;
+import treflect.WakeProperty;
+import treflect.WakeType;
+import wkto.ArgumentWatcherGatherer;
+import wkto.MethodBodyGenerator;
+import wkto.NameTransformer;
+
+every StubberMethodGenerator (capable MethodBodyGenerator) is:
+
+	needs NameTransformer;
+
+	generate(File, WakeClass, WakeProperty, ArgumentWatcherGatherer, WakeType? returntype) {
+		if returntype exists {
+			if(ArgumentWatcherGatherer.aliases.getSize() > 0) {
+				File.write("\t\tvar When{" + returntype.getPureName() + "} from this;\n");
+				for(var Num = 0; Num < ArgumentWatcherGatherer.aliases.getSize(); Num += 1) { // @TODO foreach in at
+					File.write("\t\t" + ArgumentWatcherGatherer.aliases[Num] + ".expect(arg" + Num.toString() + ", When);\n");
+				}
+				File.write("\t\treturn When;\n");
+			} else {
+				File.write("\t\treturn " + NameTransformer.methodToProperty(WakeProperty.name) + ";\n");
+			}
+		}
+	}

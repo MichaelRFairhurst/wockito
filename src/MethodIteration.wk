@@ -1,7 +1,0 @@
-import WakeClass;
-import WakeProperty;
-import WakeType;
-
-every MethodIteration is:
-
-	iterate(WakeClass, WakeProperty, WakeType[] args, WakeType? returntype);

@@ -1,0 +1,10 @@
+module wkto;
+
+import wunit.Asserts;
+
+every CallValidator is:
+
+	with public Text methodname = "";
+
+	validate(Num[]) {
+	}

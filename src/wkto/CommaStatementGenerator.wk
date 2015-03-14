@@ -1,0 +1,21 @@
+module wkto;
+
+every CommaStatementGenerator is:
+
+	Text -- generate(Text keyword, Text[]) {
+		var Bool first = true;
+		var $Text = "";
+
+		foreach(Text[]) {
+			if(first) {
+				$Text = '\t' + keyword + '\n\t\t' + Text;
+				first = false;
+			} else {
+				$Text += ',\n\t\t' + Text;
+			}
+		}
+
+		if(!first) $Text += ';\n\n';
+
+		return $Text;
+	}

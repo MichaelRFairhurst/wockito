@@ -1,0 +1,9 @@
+module wkto;
+
+import treflect.WakeClass;
+import treflect.WakeProperty;
+import treflect.WakeType;
+
+every MethodIteration is:
+
+	iterate(WakeClass, WakeProperty, WakeType[] args, WakeType? returntype);

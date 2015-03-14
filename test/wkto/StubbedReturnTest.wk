@@ -1,0 +1,30 @@
+module wkto;
+
+import wunit.Asserts;
+import wkto.StubbedReturn;
+
+@TestClass
+every StubbedReturnTest is:
+
+	needs StubbedReturn;
+
+	@Test
+	~[ test get stubbed type ]~(Asserts) {
+		StubbedReturn.type = "Test{Blah}";
+		Asserts.that(StubbedReturn.getStubbedType())Equals("When{Test{Blah}}");
+	}
+
+	@Test
+	~[ test declaration ]~(Asserts) {
+		StubbedReturn.type = "Test{Blah}";
+		StubbedReturn.alias = "alrehZoZoodoZl";
+		Asserts.that(StubbedReturn.getDeclaration())Equals("When{Test{Blah}} alrehZoZoodoZl");
+	}
+
+	@Test
+	~[ test specialized declaration ]~(Asserts) {
+		StubbedReturn.type = "Test{Blah}";
+		StubbedReturn.alias = "alrehZoZoodoZl";
+		StubbedReturn.specialty = "lapped";
+		Asserts.that(StubbedReturn.getSpecializedDeclaration())Equals("When{Test{Blah}}:lapped alrehZoZoodoZl");
+	}

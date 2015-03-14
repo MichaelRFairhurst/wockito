@@ -1,0 +1,44 @@
+module wkto;
+
+import wkto.MethodIterator;
+import wkto.ArgumentIterator;
+import wkto.MethodIteration;
+import wkto.ArgumentIteration;
+import treflect.WakeClass;
+import treflect.WakeType;
+import treflect.WakeProperty;
+import wkto.NameTransformer;
+
+every ArgumentWatcherGatherer (an ArgumentIterator, capable ArgumentIteration, capable MethodIteration) is:
+
+	needs NameTransformer, MethodIterator then {
+		set((cast ArgumentIteration) this);
+	}
+
+	with public Text[] types = [];
+	with public Text[] aliases = [];
+	with public Text[] declarations = [];
+	with public Text[] provisions = [];
+
+	with Num? lastCallIndex = nothing;
+
+	iterate(WakeClass, WakeProperty, WakeType? returntype, WakeType arg, argn Num) {
+		var Text returntypename = "Num";
+
+		if returntype exists {
+			returntypename = returntype.getPureName();
+		}
+
+		var Text typename = "ArgumentWatcher{" + arg.getPureName() + "," + returntypename + "}";
+		var Text alias = NameTransformer.methodToProperty(WakeProperty.name) + "Za" + argn.toString();
+		if(!types.contains(typename)) types.push(typename);
+		aliases.push(alias);
+		declarations.push(typename + " " + alias);
+		provisions.push(typename + ":" + alias);
+	}
+
+	iterate(WakeClass) {
+
+		MethodIterator.set((cast MethodIteration) this);
+		MethodIterator.iterate(WakeClass);
+	}

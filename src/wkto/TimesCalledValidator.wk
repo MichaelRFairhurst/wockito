@@ -1,0 +1,26 @@
+module wkto;
+
+import wunit.Asserts;
+import wkto.CallValidator;
+
+every TimesCalledValidator (a CallValidator) is:
+
+	needs Asserts;
+	with public Num? minExpectedTimes = nothing;
+	with public Num? maxExpectedTimes = nothing;
+
+	validate(Num[]) {
+		var $Num? = minExpectedTimes;
+		if $Num exists {
+			if(Num[].getSize() < $Num) {
+				Asserts.fail("Expected " + methodname + " to be called more than " + $Num.toString() + " times, actually called " + Num[].getSize().toString() + " times");
+			}
+		}
+
+		$Num = maxExpectedTimes;
+		if $Num exists {
+			if(Num[].getSize() > $Num) {
+				Asserts.fail("Expected " + methodname + " to be called fewer than " + $Num.toString() + " times, actually called " + Num[].getSize().toString() + " times");
+			}
+		}
+	}

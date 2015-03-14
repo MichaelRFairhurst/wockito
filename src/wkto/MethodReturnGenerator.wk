@@ -1,0 +1,8 @@
+module wkto;
+
+import treflect.WakeType;
+import io.File;
+
+every MethodReturnGenerator is:
+
+	generate(File, WakeType?);

@@ -1,0 +1,11 @@
+module wkto;
+
+import io.File;
+import treflect.WakeType;
+import wkto.MethodReturnGenerator;
+
+every VerifyMethodReturnGenerator (capable MethodReturnGenerator) is:
+
+	generate(File, WakeType?) {
+		// noop
+	}

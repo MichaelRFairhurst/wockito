@@ -1,9 +1,0 @@
-import File;
-import WakeType;
-import MethodReturnGenerator;
-
-every VerifyMethodReturnGenerator (capable MethodReturnGenerator) is:
-
-	generate(File, WakeType?) {
-		// noop
-	}

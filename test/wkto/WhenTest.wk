@@ -1,0 +1,41 @@
+module wkto;
+
+import std.UndefinedIndexException;
+import wunit.Asserts;
+import wkto.When;
+
+@TestClass
+every WhenTest is:
+
+	provides When{Num};
+
+	@Test
+	~[ test .thenReturn() on an argument stubber, and then getting its return value ]~(Asserts) {
+		var When{Num} from this;
+		When.thenReturn(1).thenReturn(2).thenReturn(3);
+
+		Asserts.that(When.get())Equals(1);
+		Asserts.that(When.get())Equals(2);
+		Asserts.that(When.get())Equals(3);
+	}
+
+	@Test
+	~[ test .get() repeats last setup ]~(Asserts) {
+		var When{Num} from this;
+		When.thenReturn(1).thenReturn(2);
+
+		Asserts.that(When.get())Equals(1);
+		Asserts.that(When.get())Equals(2);
+		Asserts.that(When.get())Equals(2);
+		Asserts.that(When.get())Equals(2);
+	}
+
+	@Test
+	~[ test .get() throws UndefinedIndexException if never set ]~(Asserts) {
+		var When{Num} from this;
+		try {
+			When.get();
+			Asserts.fail("Never threw");
+		} catch(UndefinedIndexException) {
+		}
+	}

@@ -1,0 +1,40 @@
+module wkto;
+
+import io.File;
+import treflect.WakeClass;
+import treflect.WakeType;
+import treflect.WakeProperty;
+import wkto.ArgumentWatcherGatherer;
+import wkto.MethodBodyGenerator;
+
+#>
+# generate like
+#
+#	var Num[] calls = getZpTextZcNumZpZa1.getCallIndices(Text);
+#	calls = calls.intersect(getZpTextZcNumZpZa2.getCallIndices(Num));
+#	var $CallValidator? = CallValidator; // bugfix.....
+#	if $CallValidator exists {
+#		$CallValidator.validate(calls);
+#	}
+##
+every VerifyMethodGenerator (capable MethodBodyGenerator) is:
+
+	generate(File, WakeClass, WakeProperty, ArgumentWatcherGatherer, WakeType? returntype) {
+		if(ArgumentWatcherGatherer.aliases.getSize() == 0) return;
+
+		for(var Num = 0; Num < ArgumentWatcherGatherer.aliases.getSize(); Num += 1) { // @TODO foreach in at
+			File.write("\t\t");
+			if(Num == 0) {
+				File.write("var Num[] = ");
+				File.write(ArgumentWatcherGatherer.aliases[Num] + ".getCallIndices(arg0);\n");
+			} else {
+				File.write("Num[] = Num[].intersect(" + ArgumentWatcherGatherer.aliases[Num] + ".getCallIndices(arg" + Num.toString() + "));\n");
+			}
+		}
+
+		File.write("\t\t"); File.write("var $CallValidator? = CallValidator;\n");
+		File.write("\t\t"); File.write("if $CallValidator exists {\n");
+		File.write("\t\t\t"); File.write("$CallValidator.methodname = '" + WakeProperty.name + "';\n");
+		File.write("\t\t\t"); File.write("$CallValidator.validate(Num[]);\n");
+		File.write("\t\t"); File.write("}\n");
+	}

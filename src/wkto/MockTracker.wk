@@ -1,0 +1,13 @@
+module wkto;
+
+every MockTracker is:
+
+	with Num = 0;
+
+	Num -- current() {
+		return Num;
+	}
+
+	next() {
+		Num += 1;
+	}

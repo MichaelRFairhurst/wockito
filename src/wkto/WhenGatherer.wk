@@ -1,0 +1,26 @@
+module wkto;
+
+import treflect.WakeClass;
+import treflect.WakeType;
+import treflect.WakeProperty;
+import wkto.NameTransformer;
+import wkto.MethodIteration;
+
+every WhenGatherer (capable MethodIteration) is:
+
+	needs NameTransformer;
+
+	with public Text[] aliases = [];
+	with public Text[] provisions = [];
+	with public Text[] declarations = [];
+
+	iterate(WakeClass, WakeProperty method, WakeType[] args, WakeType? returnval) {
+		if(args.getSize() != 0) return;
+		if returnval exists {
+			var Text alias = NameTransformer.methodToProperty(method.name);
+			var Text type = "When{" + returnval.getPureName() + "}";
+			aliases.push(alias);
+			declarations.push(type + " " + alias);
+			provisions.push(type + ":" + alias);
+		}
+	}

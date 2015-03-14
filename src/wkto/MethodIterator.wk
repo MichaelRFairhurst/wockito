@@ -1,0 +1,36 @@
+module wkto;
+
+import std.Map;
+import treflect.WakeClass;
+import treflect.WakeType;
+import treflect.WakeProperty;
+import treflect.WakeLambdaType;
+import wkto.MethodIteration;
+
+every MethodIterator is:
+
+	with MethodIteration? = nothing;
+
+	set($MethodIteration) {
+		MethodIteration = $MethodIteration;
+	}
+
+	iterate(WakeClass) {
+		foreach(WakeClass.properties.getKeys()) { // @TODO foreach in as methodname
+			var Text methodname = Text;
+
+			if(Text.indexOf("<-") != nothing) continue;
+
+			var WakeProperty? method = WakeClass.properties.get(methodname);
+			if method exists {
+				if(method.WakeType.type != 1) continue;
+				var $MethodIteration? = MethodIteration;
+				if $MethodIteration exists {
+					var WakeLambdaType? = method.WakeType.WakeLambdaType;
+					if WakeLambdaType exists {
+						$MethodIteration.iterate(WakeClass, method, WakeLambdaType.arguments, WakeLambdaType.returntype);
+					}
+				}
+			}
+		}
+	}

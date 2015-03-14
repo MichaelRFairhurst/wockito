@@ -1,0 +1,128 @@
+module wkto;
+
+import io.File;
+import std.Map;
+import treflect.WakeClass;
+import treflect.WakeType;
+import treflect.WakeProperty;
+import wkto.CommaStatementGenerator;
+import wkto.WatchedArgument;
+import wkto.StubbedReturn;
+import wkto.WakeClassMocker;
+
+#>
+# Generates files along the lines of:
+#
+# every MockProvider is:
+#
+#	with Asserts[] = [];
+#
+#	use($Asserts) {
+#		Asserts[0] = $Asserts;
+#	}
+#
+#	provides ExampleMock,
+#		ArgumentWatcher{Text, Text},
+#		ArgumentWatcher{Num, Text},
+#		Asserts from { return Asserts[0]; },
+#		TimesCalledValidator;
+#
+#	ExampleStubber -- when(ExampleMock) {
+#		return ExampleStubber from ExampleMock;
+#	}
+#
+#	ExampleVerifier -- verify(ExampleMock) {
+#		var TimesCalledValidator from this;
+#		var ExampleVerifier from ExampleMock;
+#		ExampleVerifier.CallValidator = TimesCalledValidator;
+#		return ExampleVerifier;
+#	}
+#
+#	ExampleVerifier -- verify(Num)Times(ExampleMock) {
+#		var ExampleVerifier from this;
+#		ExampleVerifier.CallValidator.minTimesCalled = Num;
+#		ExampleVerifier.CallValidator.maxTimesCalled = Num;
+#	}
+#
+##
+every MockProviderFileGenerator is:
+
+	needs CommaStatementGenerator, WakeClassMocker;
+
+	generate(File, WakeClass[]) {
+		File.write('\n');
+		File.write('every MockProvider is:\n');
+		File.write('\twith Asserts[] = [];\n');
+
+		var WatchedArgument[] = [];
+		var StubbedReturn[] = [];
+
+		foreach(WakeClass[]) {
+			foreach(WakeClassMocker.getWatchedArguments(WakeClass)) {
+				WatchedArgument[].push(WatchedArgument);
+			}
+
+			foreach(WakeClassMocker.getStubbedReturns(WakeClass)) {
+				StubbedReturn[].push(StubbedReturn);
+			}
+		}
+
+		generateProvisions(File, WatchedArgument[], StubbedReturn[], WakeClass[]);
+		generateMethods(File, WakeClass[]);
+	}
+
+	generateMethods(File, WakeClass[]) {
+		File.write("\tuse(Asserts) {\n");
+		File.write("\t\tAsserts[0] = Asserts;\n");
+		File.write("\t}\n\n");
+
+		foreach(WakeClass[]) {
+			File.write("\t" + WakeClass.classname + "Stubber -- when(" + WakeClass.classname + "Mock) {\n");
+			File.write("\t\treturn " + WakeClass.classname + "Stubber from " + WakeClass.classname + "Mock;\n");
+			File.write("\t}\n\n");
+
+			File.write("\t" + WakeClass.classname + "Verifier -- verify(" + WakeClass.classname + "Mock) {\n");
+			File.write("\t\tvar TimesCalledValidator from this;\n");
+			File.write("\t\tvar " + WakeClass.classname + "Verifier from " + WakeClass.classname + "Mock;\n");
+			File.write("\t\t" + WakeClass.classname + "Verifier.CallValidator = TimesCalledValidator;\n");
+			File.write("\t\treturn " + WakeClass.classname + "Verifier;\n");
+			File.write("\t}\n\n");
+
+			File.write("\t" + WakeClass.classname + "Verifier -- verify(Num)Times(" + WakeClass.classname + "Mock) {\n");
+			File.write("\t\tvar TimesCalledValidator from this;\n");
+			File.write("\t\tTimesCalledValidator.minExpectedTimes = Num;\n");
+			File.write("\t\tTimesCalledValidator.maxExpectedTimes = Num;\n");
+			File.write("\t\tvar " + WakeClass.classname + "Verifier from " + WakeClass.classname + "Mock;\n");
+			File.write("\t\t" + WakeClass.classname + "Verifier.CallValidator = TimesCalledValidator;\n");
+			File.write("\t\treturn " + WakeClass.classname + "Verifier;\n");
+			File.write("\t}\n\n");
+		}
+	}
+
+	generateProvisions(File, WatchedArgument[], StubbedReturn[], WakeClass[]) {
+		var Text[] = [];
+
+		Text[].push("MockTracker");
+		Text[].push("TimesCalledValidator");
+		Text[].push("Asserts <- { return Asserts[0]; }");
+
+		foreach(WatchedArgument[]) {
+			if(!Text[].contains(WatchedArgument.getWatchedType())) {
+				Text[].push(WatchedArgument.getWatchedType());
+			}
+		}
+
+		foreach(StubbedReturn[]) {
+			if(!Text[].contains(StubbedReturn.getStubbedType())) {
+				Text[].push(StubbedReturn.getStubbedType());
+			}
+		}
+
+		foreach(WakeClass[]) {
+			if(!Text[].contains(WakeClass.classname + "Mock")) {
+				Text[].push(WakeClass.classname + "Mock");
+			}
+		}
+
+		File.write(CommaStatementGenerator.generate("provides", Text[]));
+	}

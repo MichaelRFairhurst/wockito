@@ -1,0 +1,24 @@
+module wkto;
+
+import wkto.MethodIteration;
+import wkto.ArgumentIteration;
+import treflect.WakeClass;
+import treflect.WakeProperty;
+import treflect.WakeType;
+
+every ArgumentIterator (capable MethodIteration) is:
+
+	with ArgumentIteration? = nothing;
+
+	set($ArgumentIteration) {
+		ArgumentIteration = $ArgumentIteration;
+	}
+
+	iterate(WakeClass, WakeProperty, WakeType[] args, WakeType? returntype) {
+		for(var Num = 0; Num < args.getSize(); Num += 1) { // @TODO foreachin
+			var $ArgumentIteration? = ArgumentIteration;
+			if $ArgumentIteration exists {
+				$ArgumentIteration.iterate(WakeClass, WakeProperty, returntype, args[Num], Num);
+			}
+		}
+	}

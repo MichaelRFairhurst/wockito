@@ -1,0 +1,13 @@
+module wkto;
+
+import io.File;
+import treflect.WakeType;
+import wkto.MethodReturnGenerator;
+
+every MockMethodReturnGenerator (capable MethodReturnGenerator) is:
+
+	generate(File, WakeType?) {
+		if WakeType exists {
+			File.write(WakeType.getPureName() + " -- ");
+		}
+	}
