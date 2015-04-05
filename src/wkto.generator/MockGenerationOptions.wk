@@ -1,4 +1,4 @@
-module wkto;
+module wkto.generator;
 
 import std.Argv;
 
@@ -7,6 +7,7 @@ every MockGenerationOptions is:
 	with public Bool generateProvider = false;
 	with public Text[] mockedClasses = [];
 	with public Text mockedClassname = '';
+	with public Text moduleName = '';
 	with public Text outputfile = '';
 	with public Text tabledir = '';
 
@@ -28,7 +29,12 @@ every MockGenerationOptions is:
 			} else if(generateProvider) {
 				mockedClasses.push(Text);
 			} else {
-				mockedClassname = Text;
+				var Text[] parts = Text.split('.');
+				mockedClassname = parts[parts.getSize() - 1];
+
+				if(parts.getSize()) {
+					moduleName = '.'.join(parts).substr(0, -1 - mockedClassname.getSize());
+				}
 			}
 		}
 	}

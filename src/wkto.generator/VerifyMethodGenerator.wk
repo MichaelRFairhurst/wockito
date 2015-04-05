@@ -1,11 +1,11 @@
-module wkto;
+module wkto.generator;
 
 import io.File;
 import treflect.WakeClass;
 import treflect.WakeType;
 import treflect.WakeProperty;
-import wkto.ArgumentWatcherGatherer;
-import wkto.MethodBodyGenerator;
+import wkto.generator.ArgumentWatcherGatherer;
+import wkto.generator.MethodBodyGenerator;
 
 #>
 # generate like

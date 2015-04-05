@@ -1,10 +1,10 @@
-module wkto;
+module wkto.generator;
 
 import treflect.WakeClass;
 import treflect.WakeType;
 import treflect.WakeProperty;
-import wkto.NameTransformer;
-import wkto.MethodIteration;
+import wkto.generator.NameTransformer;
+import wkto.generator.MethodIteration;
 
 every WhenGatherer (capable MethodIteration) is:
 

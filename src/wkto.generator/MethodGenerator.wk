@@ -1,18 +1,18 @@
-module wkto;
+module wkto.generator;
 
 import io.File;
 import treflect.WakeClass;
 import treflect.WakeProperty;
 import treflect.WakeType;
 import treflect.WakeLambdaType;
-import wkto.MethodIteration;
-import wkto.ArgumentIteration;
-import wkto.ArgumentWatcherGatherer;
-import wkto.ArgumentIterator;
-import wkto.NameTransformer;
-import wkto.MethodIterator;
-import wkto.MethodBodyGenerator;
-import wkto.MethodReturnGenerator;
+import wkto.generator.MethodIteration;
+import wkto.generator.ArgumentIteration;
+import wkto.generator.ArgumentWatcherGatherer;
+import wkto.generator.ArgumentIterator;
+import wkto.generator.NameTransformer;
+import wkto.generator.MethodIterator;
+import wkto.generator.MethodBodyGenerator;
+import wkto.generator.MethodReturnGenerator;
 
 every MethodGenerator (capable MethodIteration) is:
 

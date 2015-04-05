@@ -1,10 +1,10 @@
-module wkto;
+module wkto.generator;
 
 import io.File;
 import treflect.WakeType;
 import treflect.WakeClass;
 import treflect.WakeProperty;
-import wkto.ArgumentWatcherGatherer;
+import wkto.generator.ArgumentWatcherGatherer;
 
 every MethodBodyGenerator is:
 

@@ -1,11 +1,11 @@
-module wkto;
+module wkto.generator;
 
 import std.Map;
 import treflect.WakeClass;
 import treflect.WakeType;
 import treflect.WakeProperty;
 import treflect.WakeLambdaType;
-import wkto.MethodIteration;
+import wkto.generator.MethodIteration;
 
 every MethodIterator is:
 

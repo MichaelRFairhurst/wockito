@@ -1,12 +1,12 @@
-module wkto;
+module wkto.generator;
 
 import io.File;
 import treflect.WakeClass;
 import treflect.WakeProperty;
 import treflect.WakeType;
-import wkto.ArgumentWatcherGatherer;
-import wkto.MethodBodyGenerator;
-import wkto.NameTransformer;
+import wkto.generator.ArgumentWatcherGatherer;
+import wkto.generator.MethodBodyGenerator;
+import wkto.generator.NameTransformer;
 
 every MockMethodGenerator (capable MethodBodyGenerator) is:
 

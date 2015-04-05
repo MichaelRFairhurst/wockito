@@ -1,4 +1,4 @@
-module wkto;
+module wkto.generator;
 
 import treflect.WakeClass;
 import treflect.WakeProperty;

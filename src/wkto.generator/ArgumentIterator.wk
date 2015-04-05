@@ -1,10 +1,10 @@
-module wkto;
+module wkto.generator;
 
-import wkto.MethodIteration;
-import wkto.ArgumentIteration;
 import treflect.WakeClass;
 import treflect.WakeProperty;
 import treflect.WakeType;
+import wkto.generator.MethodIteration;
+import wkto.generator.ArgumentIteration;
 
 every ArgumentIterator (capable MethodIteration) is:
 

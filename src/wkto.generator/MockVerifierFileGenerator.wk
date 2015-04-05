@@ -1,22 +1,22 @@
-module wkto;
+module wkto.generator;
 
 import std.Map;
 import io.File;
 import treflect.WakeClass;
 import treflect.WakeType;
-import wkto.NameTransformer;
-import wkto.VerifyMethodGenerator;
-import wkto.ArgumentIterator;
-import wkto.MethodIterator;
-import wkto.MethodIteration;
-import wkto.ArgumentIteration;
-import wkto.ArgumentWatcherGatherer;
-import wkto.WhenGatherer;
-import wkto.MethodBodyGenerator;
-import wkto.MethodGenerator;
-import wkto.MethodReturnGenerator;
-import wkto.VerifyMethodReturnGenerator;
-import wkto.CommaStatementGenerator;
+import wkto.generator.NameTransformer;
+import wkto.generator.VerifyMethodGenerator;
+import wkto.generator.ArgumentIterator;
+import wkto.generator.MethodIterator;
+import wkto.generator.MethodIteration;
+import wkto.generator.ArgumentIteration;
+import wkto.generator.ArgumentWatcherGatherer;
+import wkto.generator.WhenGatherer;
+import wkto.generator.MethodBodyGenerator;
+import wkto.generator.MethodGenerator;
+import wkto.generator.MethodReturnGenerator;
+import wkto.generator.VerifyMethodReturnGenerator;
+import wkto.generator.CommaStatementGenerator;
 
 #>
 # Generates files along the lines of:

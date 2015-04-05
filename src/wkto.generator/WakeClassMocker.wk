@@ -1,13 +1,13 @@
-module wkto;
+module wkto.generator;
 
 import std.Map;
 import treflect.WakeClass;
 import treflect.WakeProperty;
 import treflect.WakeType;
 import treflect.WakeLambdaType;
-import wkto.WatchedArgument;
-import wkto.StubbedReturn;
-import wkto.WakePropertyMocker;
+import wkto.generator.WatchedArgument;
+import wkto.generator.StubbedReturn;
+import wkto.generator.WakePropertyMocker;
 
 every WakeClassMocker is:
 

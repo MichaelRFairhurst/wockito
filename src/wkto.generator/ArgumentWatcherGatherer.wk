@@ -1,13 +1,13 @@
-module wkto;
+module wkto.generator;
 
-import wkto.MethodIterator;
-import wkto.ArgumentIterator;
-import wkto.MethodIteration;
-import wkto.ArgumentIteration;
 import treflect.WakeClass;
 import treflect.WakeType;
 import treflect.WakeProperty;
-import wkto.NameTransformer;
+import wkto.generator.MethodIterator;
+import wkto.generator.ArgumentIterator;
+import wkto.generator.MethodIteration;
+import wkto.generator.ArgumentIteration;
+import wkto.generator.NameTransformer;
 
 every ArgumentWatcherGatherer (an ArgumentIterator, capable ArgumentIteration, capable MethodIteration) is:
 

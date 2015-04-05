@@ -1,7 +1,7 @@
-module wkto;
+module wkto.generator;
 
-import treflect.WakeType;
 import io.File;
+import treflect.WakeType;
 
 every MethodReturnGenerator is:
 

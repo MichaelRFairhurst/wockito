@@ -1,8 +1,8 @@
-module wkto;
+module wkto.generator;
 
 import io.File;
 import treflect.WakeType;
-import wkto.MethodReturnGenerator;
+import wkto.generator.MethodReturnGenerator;
 
 every VerifyMethodReturnGenerator (capable MethodReturnGenerator) is:
 

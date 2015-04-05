@@ -1,0 +1,126 @@
+module wkto.generator;
+
+import io.File;
+import io.FileSystem;
+import io.FilePath;
+import io.Printer;
+import treflect.TableFileReader;
+import treflect.TableDirectoryScanner;
+import treflect.WakeClass;
+import wkto.generator.NameTransformer;
+import wkto.generator.MethodIterator;
+import wkto.generator.MockFileGenerator;
+import wkto.generator.MockStubberFileGenerator;
+import wkto.generator.MockVerifierFileGenerator;
+import wkto.generator.CommaStatementGenerator;
+import wkto.generator.MockProviderFileGenerator;
+import wkto.generator.MockGenerationOptions;
+import wkto.generator.WakeClassMocker;
+import wkto.generator.WakePropertyMocker;
+
+every Main is:
+
+	needs FileSystem, TableFileReader, TableDirectoryScanner, MockProviderFileGenerator, MockGenerationOptions, Printer;
+
+	with File? openedFile = nothing;
+
+	provides
+		MethodIterator,
+		MockFileGenerator,
+		MockStubberFileGenerator,
+		MockVerifierFileGenerator,
+		NameTransformer,
+		File <- {
+			var File? openedFileVar = openedFile;
+			if openedFileVar exists {
+				return openedFileVar;
+			} else {
+				var File from (FilePath from this);
+				openedFile = File;
+				return File;
+			}
+		},
+		FilePath <- {
+			return FileSystem.getPath(MockGenerationOptions.outputfile);
+		},
+		CommaStatementGenerator,
+		WakeClassMocker, WakePropertyMocker;
+
+	main() {
+		try {
+			MockGenerationOptions.parse();
+			if(MockGenerationOptions.generateProvider) {
+				var WakeClass[] = [];
+
+				var FilePath from this;
+				if(FilePath.fileExists()) FilePath.delete();
+				var File from this;
+
+				File.write('import When;\n');
+				File.write('import ArgumentWatcher;\n');
+				File.write('import MockTracker;\n');
+				File.write('import CallValidator;\n');
+				File.write('import TimesCalledValidator;\n');
+				File.write('import Asserts;\n');
+
+				var Text[] = MockGenerationOptions.mockedClasses;
+				foreach(Text[]) {
+					var $File from FileSystem.getPath(MockGenerationOptions.tabledir + '/' + Text + ".table");
+
+					var WakeClass = TableFileReader.readFrom($File);
+					WakeClass[].push(WakeClass);
+					File.write('import ' + Text + 'Mock;\n');
+					File.write('import ' + Text + 'Stubber;\n');
+					File.write('import ' + Text + 'Verifier;\n');
+
+					var $Text[] = WakeClass.getApiImports();
+					foreach($Text[]) { // @TODO foreach as
+						File.write("import " + $Text + ";\n");
+					}
+				}
+
+				MockProviderFileGenerator.generate(File, WakeClass[]);
+			} else {
+				var $File from (
+					FileSystem.getPath(MockGenerationOptions.tabledir + '/' + MockGenerationOptions.moduleName + '/' + MockGenerationOptions.mockedClassname + ".table")
+					if MockGenerationOptions.moduleName != ""
+					else FileSystem.getPath(MockGenerationOptions.tabledir + '/' + MockGenerationOptions.mockedClassname + ".table")
+				);
+
+				var WakeClass = TableFileReader.readFrom($File);
+
+				var FilePath from this;
+				if(FilePath.fileExists()) FilePath.delete();
+				var File from this;
+
+				if(WakeClass.modulename == "") {
+					File.write("module wkto.gen;\n\n");
+				} else {
+					File.write("module wkto.gen." + WakeClass.modulename + ';\n\n');
+				}
+
+				File.write('import When;\n');
+				File.write('import ArgumentWatcher;\n');
+				File.write('import MockTracker;\n');
+				File.write('import CallValidator;\n');
+
+				if(!WakeClass.getApiImports().contains(WakeClass.classname))
+					File.write('import ' + WakeClass.classname + ';\n');
+
+				foreach(WakeClass.getApiImports()) { // @TODO foreach as
+					File.write("import " + Text + ";\n");
+				}
+
+				var MockStubberFileGenerator from this;
+				MockStubberFileGenerator.generate(WakeClass);
+
+				var MockVerifierFileGenerator from this;
+				MockVerifierFileGenerator.generate(WakeClass);
+
+				var MockFileGenerator from this;
+				MockFileGenerator.generate(WakeClass);
+			}
+		} catch(Exception) {
+			Printer.printLine(Exception.getStacktrace());
+		}
+	}
