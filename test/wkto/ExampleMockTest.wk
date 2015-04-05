@@ -5,13 +5,13 @@ import wkto.ArgumentWatcher;
 import wkto.example.Example;
 import wkto.When;
 import wkto.MockTracker;
-import wkto.mocks.MockProvider;
-import wkto.mocks.wkto.example.ExampleMock;
-import wkto.mocks.wkto.example.ExampleStubber;
-import wkto.mocks.wkto.example.ExampleVerifier;
-import wkto.mocks.wunit.AssertsMock;
-import wkto.mocks.wunit.AssertsStubber;
-import wkto.mocks.wunit.AssertsVerifier;
+import wkto.gen.MockProvider;
+import wkto.gen.wkto.example.ExampleMock;
+import wkto.gen.wkto.example.ExampleStubber;
+import wkto.gen.wkto.example.ExampleVerifier;
+import wkto.gen.wunit.AssertsMock;
+import wkto.gen.wunit.AssertsStubber;
+import wkto.gen.wunit.AssertsVerifier;
 
 @TestClass
 every ExampleMockTest is:
