@@ -4,6 +4,7 @@ import io.File;
 import treflect.WakeClass;
 import treflect.WakeProperty;
 import treflect.WakeType;
+import treflect.WakeVarDecl;
 import treflect.WakeLambdaType;
 import wkto.generator.MethodIteration;
 import wkto.generator.ArgumentIteration;
@@ -23,7 +24,7 @@ every MethodGenerator (capable MethodIteration) is:
 		var ArgumentWatcherGatherer from this;
 		ArgumentIterator.set((cast ArgumentIteration) ArgumentWatcherGatherer);
 
-		var WakeLambdaType? = WakeProperty.WakeType.WakeLambdaType;
+		var WakeLambdaType? = WakeProperty.WakeVarDecl.WakeType.WakeLambdaType;
 		if WakeLambdaType exists {
 			ArgumentIterator.iterate(WakeClass, WakeProperty, WakeLambdaType.arguments, WakeLambdaType.returntype);
 		}

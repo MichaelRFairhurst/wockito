@@ -41,7 +41,14 @@ every Main is:
 			}
 		},
 		FilePath <- {
-			return FileSystem.getPath(MockGenerationOptions.outputfile);
+			var FilePath = FileSystem.getPath(MockGenerationOptions.outputfile);
+			var $FilePath? = FilePath.getParent();
+			if $FilePath exists {
+				if(!$FilePath.fileExists()) {
+					$FilePath.makeDirectory();
+				}
+			}
+			return FilePath;
 		},
 		CommaStatementGenerator,
 		WakeClassMocker, WakePropertyMocker;
@@ -56,12 +63,13 @@ every Main is:
 				if(FilePath.fileExists()) FilePath.delete();
 				var File from this;
 
-				File.write('import When;\n');
-				File.write('import ArgumentWatcher;\n');
-				File.write('import MockTracker;\n');
-				File.write('import CallValidator;\n');
-				File.write('import TimesCalledValidator;\n');
-				File.write('import Asserts;\n');
+				File.write('module wkto.gen;\n\n');
+				File.write('import wkto.When;\n');
+				File.write('import wkto.ArgumentWatcher;\n');
+				File.write('import wkto.MockTracker;\n');
+				File.write('import wkto.CallValidator;\n');
+				File.write('import wkto.TimesCalledValidator;\n');
+				File.write('import wunit.Asserts;\n');
 
 				var Text[] = MockGenerationOptions.mockedClasses;
 				foreach(Text[]) {
@@ -69,9 +77,9 @@ every Main is:
 
 					var WakeClass = TableFileReader.readFrom($File);
 					WakeClass[].push(WakeClass);
-					File.write('import ' + Text + 'Mock;\n');
-					File.write('import ' + Text + 'Stubber;\n');
-					File.write('import ' + Text + 'Verifier;\n');
+					File.write('import wkto.gen.' + (WakeClass.modulename + '.' if WakeClass.modulename != '' else '') + Text + 'Mock;\n');
+					File.write('import wkto.gen.' + (WakeClass.modulename + '.' if WakeClass.modulename != '' else '') + Text + 'Stubber;\n');
+					File.write('import wkto.gen.' + (WakeClass.modulename + '.' if WakeClass.modulename != '' else '') + Text + 'Verifier;\n');
 
 					var $Text[] = WakeClass.getApiImports();
 					foreach($Text[]) { // @TODO foreach as
@@ -99,13 +107,13 @@ every Main is:
 					File.write("module wkto.gen." + WakeClass.modulename + ';\n\n');
 				}
 
-				File.write('import When;\n');
-				File.write('import ArgumentWatcher;\n');
-				File.write('import MockTracker;\n');
-				File.write('import CallValidator;\n');
+				File.write('import wkto.When;\n');
+				File.write('import wkto.ArgumentWatcher;\n');
+				File.write('import wkto.MockTracker;\n');
+				File.write('import wkto.CallValidator;\n');
 
 				if(!WakeClass.getApiImports().contains(WakeClass.classname))
-					File.write('import ' + WakeClass.classname + ';\n');
+					File.write('import ' + (WakeClass.modulename + '.' if WakeClass.modulename != '' else '') +  WakeClass.classname + ';\n');
 
 				foreach(WakeClass.getApiImports()) { // @TODO foreach as
 					File.write("import " + Text + ";\n");

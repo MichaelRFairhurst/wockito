@@ -4,6 +4,7 @@ import std.Map;
 import io.File;
 import treflect.WakeClass;
 import treflect.WakeType;
+import treflect.WakeVarDecl;
 import treflect.WakeProperty;
 import treflect.WakeLambdaType;
 import wkto.generator.NameTransformer;
@@ -94,7 +95,7 @@ every MockFileGenerator is:
 			if(Text.indexOf('<-') == nothing) continue;
 			var WakeProperty? = WakeClass.properties.get(Text);
 			if WakeProperty exists {
-				var WakeLambdaType? method = WakeProperty.WakeType.WakeLambdaType;
+				var WakeLambdaType? method = WakeProperty.WakeVarDecl.WakeType.WakeLambdaType;
 				if method exists {
 					var WakeType? provision = method.returntype;
 					if provision exists {
@@ -140,7 +141,7 @@ every MockFileGenerator is:
 			if(Text.indexOf('<-') == nothing) continue;
 			var WakeProperty? = WakeClass.properties.get(Text);
 			if WakeProperty exists {
-				var WakeLambdaType? method = WakeProperty.WakeType.WakeLambdaType;
+				var WakeLambdaType? method = WakeProperty.WakeVarDecl.WakeType.WakeLambdaType;
 				if method exists {
 					var WakeType? provision = method.returntype;
 					if provision exists {

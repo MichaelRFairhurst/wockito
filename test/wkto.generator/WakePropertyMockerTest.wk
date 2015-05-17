@@ -1,4 +1,4 @@
-module wkto;
+module wkto.generator;
 
 import std.Map;
 import wunit.Asserts;
@@ -7,10 +7,9 @@ import treflect.WakeType;
 import treflect.ReflectionProvider;
 import treflect.WakeLambdaType;
 import treflect.WakeClassType;
-import wkto.WakePropertyMocker;
-import wkto.StubbedReturn;
-import wkto.WatchedArgument;
-import wkto.ImportFilterer;
+import wkto.generator.WakePropertyMocker;
+import wkto.generator.StubbedReturn;
+import wkto.generator.WatchedArgument;
 
 @TestClass
 every WakePropertyMockerTest is:

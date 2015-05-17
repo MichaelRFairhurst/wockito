@@ -4,6 +4,7 @@ import std.Map;
 import treflect.WakeClass;
 import treflect.WakeProperty;
 import treflect.WakeType;
+import treflect.WakeVarDecl;
 import treflect.WakeLambdaType;
 import wkto.generator.WatchedArgument;
 import wkto.generator.StubbedReturn;
@@ -50,7 +51,7 @@ every WakeClassMocker is:
 		foreach(WakeClass.properties.getKeys()) {
 			var WakeProperty? = WakeClass.properties.get(Text);
 			if WakeProperty exists {
-				var WakeLambdaType? = WakeProperty.WakeType.WakeLambdaType;
+				var WakeLambdaType? = WakeProperty.WakeVarDecl.WakeType.WakeLambdaType;
 				if WakeLambdaType exists {
 					var WakeType? = WakeLambdaType.returntype;
 					if WakeType exists {

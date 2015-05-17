@@ -2,6 +2,7 @@ module wkto.generator;
 
 import treflect.WakeProperty;
 import treflect.WakeType;
+import treflect.WakeVarDecl;
 import treflect.WakeLambdaType;
 import wkto.generator.WatchedArgument;
 import wkto.generator.StubbedReturn;
@@ -19,7 +20,7 @@ every WakePropertyMocker is:
 		var Text base = NameTransformer.methodToProperty(WakeProperty.name);
 
 		var Text retname = "Num";
-		var WakeLambdaType? = WakeProperty.WakeType.WakeLambdaType;
+		var WakeLambdaType? = WakeProperty.WakeVarDecl.WakeType.WakeLambdaType;
 
 		if WakeLambdaType exists {
 			var returned WakeType? = WakeLambdaType.returntype;
@@ -42,9 +43,9 @@ every WakePropertyMocker is:
 	}
 
 	StubbedReturn? -- getStubbedReturn(WakeProperty) {
-		if(WakeProperty.WakeType.type != 1) return nothing;
+		if(WakeProperty.WakeVarDecl.WakeType.type != 1) return nothing;
 
-		var WakeLambdaType? = WakeProperty.WakeType.WakeLambdaType;
+		var WakeLambdaType? = WakeProperty.WakeVarDecl.WakeType.WakeLambdaType;
 		if WakeLambdaType exists {
 			if(WakeLambdaType.arguments.getSize() > 0) return nothing;
 

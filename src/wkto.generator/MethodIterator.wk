@@ -3,6 +3,7 @@ module wkto.generator;
 import std.Map;
 import treflect.WakeClass;
 import treflect.WakeType;
+import treflect.WakeVarDecl;
 import treflect.WakeProperty;
 import treflect.WakeLambdaType;
 import wkto.generator.MethodIteration;
@@ -23,10 +24,10 @@ every MethodIterator is:
 
 			var WakeProperty? method = WakeClass.properties.get(methodname);
 			if method exists {
-				if(method.WakeType.type != 1) continue;
+				if(method.WakeVarDecl.WakeType.type != 1) continue;
 				var $MethodIteration? = MethodIteration;
 				if $MethodIteration exists {
-					var WakeLambdaType? = method.WakeType.WakeLambdaType;
+					var WakeLambdaType? = method.WakeVarDecl.WakeType.WakeLambdaType;
 					if WakeLambdaType exists {
 						$MethodIteration.iterate(WakeClass, method, WakeLambdaType.arguments, WakeLambdaType.returntype);
 					}

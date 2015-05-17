@@ -8,6 +8,7 @@ import wkto.generator.MethodIterator;
 import wkto.generator.StubberMethodGenerator;
 import wkto.generator.MethodBodyGenerator;
 import wkto.generator.ArgumentIterator;
+import wkto.generator.ArgumentIteration;
 import wkto.generator.ArgumentWatcherGatherer;
 import wkto.generator.WhenGatherer;
 import wkto.generator.MethodGenerator;

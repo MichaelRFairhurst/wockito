@@ -1,7 +1,7 @@
-module wkto;
+module wkto.generator;
 
 import wunit.Asserts;
-import wkto.WatchedArgument;
+import wkto.generator.WatchedArgument;
 
 @TestClass
 every WatchedArgumentTest is:

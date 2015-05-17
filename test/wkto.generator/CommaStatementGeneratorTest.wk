@@ -1,7 +1,7 @@
-module wkto;
+module wkto.generator;
 
 import wunit.Asserts;
-import wkto.CommaStatementGenerator;
+import wkto.generator.CommaStatementGenerator;
 
 @TestClass
 every CommaStatementGeneratorTest is:

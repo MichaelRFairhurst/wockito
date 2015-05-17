@@ -1,4 +1,4 @@
-PROGRAM := your-program-name
+PROGRAM := wockito-generator
 
 # set to false or it will be linked with a main()
 EXECUTABLE := true
@@ -246,24 +246,26 @@ $(TABLEDIR)/%Stubber.table: $(OBJECTDIR)/%Mock.o
 $(TABLEDIR)/%Verifier.table: $(OBJECTDIR)/%Mock.o
 	@:
 
-
 ##
 # Mock source generation
 ##
-$(GENDIR)/%Mock.wk: $(TABLEDIR)/%.table.md5
-	$(WOCKITO) -d $(TABLEDIR) -o $@ $*
+$(GENDIR)/wkto.gen.%Mock.wk: $(TABLEDIR)/%.table.md5
+	$(WOCKITO) -d $(TABLEDIR) -o $@ $(subst /,.,$*)
 
-$(GENDIR)/MockProvider.wk: $(MOCKS)
+$(GENDIR)/wkto.gen/%Mock.wk: $(TABLEDIR)/%.table.md5
+	$(WOCKITO) -d $(TABLEDIR) -o $@ $(subst /,.,$*)
+
+$(GENDIR)/wkto.gen/MockProvider.wk: $(MOCKS)
 	$(WOCKITO) -p -d $(TABLEDIR) -o $@ $(MOCKCLASSNAMES)
 
 
 ##
 # Mock provider compilation
 ##
-$(OBJECTDIR)/MockProvider.o: $(GENDIR)/MockProvider.wk
+$(OBJECTDIR)/wkto.gen/MockProvider.o: $(GENDIR)/wkto.gen/MockProvider.wk
 	$(WAKE) $< -d $(TABLEDIR) -o $@
 
-$(TABLEDIR)/MockProvider.table: $(OBJECTDIR)/MockProvider.o
+$(TABLEDIR)/wkto.gen/MockProvider.table: $(OBJECTDIR)/wkto.gen/MockProvider.o
 
 
 ##
