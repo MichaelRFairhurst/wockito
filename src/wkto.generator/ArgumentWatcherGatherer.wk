@@ -2,6 +2,10 @@ module wkto.generator;
 
 import treflect.WakeClass;
 import treflect.WakeType;
+import treflect.WakeParameterizedType;
+import treflect.WakeListType;
+import treflect.WakeOptionalType;
+import treflect.WakeClassType;
 import treflect.WakeProperty;
 import wkto.generator.MethodIterator;
 import wkto.generator.ArgumentIterator;
@@ -16,6 +20,7 @@ every ArgumentWatcherGatherer (an ArgumentIterator, capable ArgumentIteration, c
 	}
 
 	with public Text[] types = [];
+	with public Text[] casts = [];
 	with public Text[] aliases = [];
 	with public Text[] declarations = [];
 	with public Text[] provisions = [];
@@ -29,12 +34,17 @@ every ArgumentWatcherGatherer (an ArgumentIterator, capable ArgumentIteration, c
 			returntypename = returntype.getPureName();
 		}
 
-		var Text typename = "ArgumentWatcher{" + arg.getPureName() + "," + returntypename + "}";
+		var Text typename = "ArgumentWatcher{" + getMockableArgTypeName(arg) + "," + returntypename + "}";
 		var Text alias = NameTransformer.methodToProperty(WakeProperty.name) + "Za" + argn.toString();
 		if(!types.contains(typename)) types.push(typename);
 		aliases.push(alias);
 		declarations.push(typename + " " + alias);
 		provisions.push(typename + ":" + alias);
+		if(getMockableArgTypeName(arg) != arg.getPureName()) {
+			casts.push("(unsafe cast " + getMockableArgTypeName(arg)+ ")");
+		} else {
+			casts.push("");
+		}
 	}
 
 	iterate(WakeClass) {
@@ -43,6 +53,35 @@ every ArgumentWatcherGatherer (an ArgumentIterator, capable ArgumentIteration, c
 		MethodIterator.iterate(WakeClass);
 	}
 
-	#>Text -- getMockableArgTypeName(WakeType) {
+	Text -- getMockableArgTypeName(WakeType) {
 		var WakeParameterizedType? = WakeType.WakeParameterizedType;
-	}##
+		if WakeParameterizedType exists {
+			if(WakeParameterizedType.isArgParameterization) {
+				return "Anything";
+			} else {
+				return WakeParameterizedType.label;
+			}
+		}
+
+		var WakeClassType? = WakeType.WakeClassType;
+		if WakeClassType exists {
+			var Text = WakeClassType.classname;
+			foreach($WakeType in WakeClassType.parameters) {
+				Text += getMockableArgTypeName($WakeType);
+			}
+
+			return Text;
+		}
+
+		var WakeListType? = WakeType.WakeListType;
+		if WakeListType exists {
+			return getMockableArgTypeName(WakeListType.contained) + "[]";
+		}
+
+		var WakeOptionalType? = WakeType.WakeOptionalType;
+		if WakeOptionalType exists {
+			return getMockableArgTypeName(WakeOptionalType.contained) + "[]";
+		}
+
+		return "Error";
+	}

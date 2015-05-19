@@ -69,6 +69,7 @@ every Main is:
 				File.write('import wkto.MockTracker;\n');
 				File.write('import wkto.CallValidator;\n');
 				File.write('import wkto.TimesCalledValidator;\n');
+				File.write('import wkto.Anything;\n');
 				File.write('import wunit.Asserts;\n');
 
 				var Text[] = MockGenerationOptions.mockedClasses;
@@ -110,6 +111,7 @@ every Main is:
 				File.write('import wkto.ArgumentWatcher;\n');
 				File.write('import wkto.MockTracker;\n');
 				File.write('import wkto.CallValidator;\n');
+				File.write('import wkto.Anything;\n');
 
 				if(!WakeClass.getApiImports().contains(WakeClass.classname))
 					File.write('import ' + (WakeClass.modulename + '.' if WakeClass.modulename != '' else '') +  WakeClass.classname + ';\n');

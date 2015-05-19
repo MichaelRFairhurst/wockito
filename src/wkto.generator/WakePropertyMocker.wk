@@ -4,6 +4,10 @@ import treflect.WakeProperty;
 import treflect.WakeType;
 import treflect.WakeVarDecl;
 import treflect.WakeLambdaType;
+import treflect.WakeListType;
+import treflect.WakeOptionalType;
+import treflect.WakeParameterizedType;
+import treflect.WakeClassType;
 import wkto.generator.WatchedArgument;
 import wkto.generator.StubbedReturn;
 import wkto.generator.NameTransformer;
@@ -31,7 +35,7 @@ every WakePropertyMocker is:
 			var WakeType[] = WakeLambdaType.arguments;
 			for(var Num = 0; Num < WakeLambdaType.arguments.getSize(); Num += 1) { // @Todo foreach at
 				var WatchedArgument from this;
-				WatchedArgument.type = WakeLambdaType.arguments[Num].getPureName();
+				WatchedArgument.type = getMockableArgTypeName(WakeLambdaType.arguments[Num]);
 				WatchedArgument.rettype = retname;
 				WatchedArgument.specialty = WatchedArgument.alias := base + "_arg" + Num.toString();
 
@@ -60,4 +64,37 @@ every WakePropertyMocker is:
 		}
 
 		return nothing;
+	}
+
+	Text -- getMockableArgTypeName(WakeType) {
+		var WakeParameterizedType? = WakeType.WakeParameterizedType;
+		if WakeParameterizedType exists {
+			if(WakeParameterizedType.isArgParameterization) {
+				return "Anything";
+			} else {
+				return WakeParameterizedType.label;
+			}
+		}
+
+		var WakeClassType? = WakeType.WakeClassType;
+		if WakeClassType exists {
+			var Text = WakeClassType.classname;
+			foreach($WakeType in WakeClassType.parameters) {
+				Text += getMockableArgTypeName($WakeType);
+			}
+
+			return Text;
+		}
+
+		var WakeListType? = WakeType.WakeListType;
+		if WakeListType exists {
+			return getMockableArgTypeName(WakeListType.contained) + "[]";
+		}
+
+		var WakeOptionalType? = WakeType.WakeOptionalType;
+		if WakeOptionalType exists {
+			return getMockableArgTypeName(WakeOptionalType.contained) + "[]";
+		}
+
+		return "Error";
 	}

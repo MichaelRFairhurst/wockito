@@ -26,9 +26,9 @@ every VerifyMethodGenerator (capable MethodBodyGenerator) is:
 			File.write("\t\t");
 			if(Num == 0) {
 				File.write("var Num[] = ");
-				File.write(ArgumentWatcherGatherer.aliases[Num] + ".getCallIndices(arg0);\n");
+				File.write(ArgumentWatcherGatherer.aliases[Num] + ".getCallIndices(" + ArgumentWatcherGatherer.casts[Num] + "arg0);\n");
 			} else {
-				File.write("Num[] = Num[].intersect(" + ArgumentWatcherGatherer.aliases[Num] + ".getCallIndices(arg" + Num.toString() + "));\n");
+				File.write("Num[] = Num[].intersect(" + ArgumentWatcherGatherer.aliases[Num] + ".getCallIndices(" + ArgumentWatcherGatherer.casts[Num] + "arg" + Num.toString() + "));\n");
 			}
 		}
 

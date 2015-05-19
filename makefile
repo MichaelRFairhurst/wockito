@@ -235,6 +235,8 @@ $(OBJECTDIR)/%Test.o: $(TABLEDIR)/%.table $(TESTDIR)/extern/js/%Test.wk
 # are made when the .o file is made.
 ##
 $(OBJECTDIR)/%Mock.o: $(GENDIR)/%Mock.wk
+	@mkdir $(dir $@) 2>/dev/null || :
+	@mkdir $(OBJECTDIR)/$(dir $*) 2>/dev/null || :
 	$(WAKE) $< -d $(TABLEDIR) -o $@
 
 $(TABLEDIR)/%Mock.table: $(GENDIR)/%Mock.wk $(OBJECTDIR)/%Mock.o
@@ -263,6 +265,8 @@ $(GENDIR)/wkto.gen/MockProvider.wk: $(MOCKS)
 # Mock provider compilation
 ##
 $(OBJECTDIR)/wkto.gen/MockProvider.o: $(GENDIR)/wkto.gen/MockProvider.wk
+	@mkdir $(dir $@) 2>/dev/null || :
+	@mkdir $(OBJECTDIR)/$(dir $*) 2>/dev/null || :
 	$(WAKE) $< -d $(TABLEDIR) -o $@
 
 $(TABLEDIR)/wkto.gen/MockProvider.table: $(OBJECTDIR)/wkto.gen/MockProvider.o

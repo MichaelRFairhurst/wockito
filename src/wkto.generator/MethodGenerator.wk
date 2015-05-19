@@ -6,6 +6,7 @@ import treflect.WakeProperty;
 import treflect.WakeType;
 import treflect.WakeVarDecl;
 import treflect.WakeLambdaType;
+import treflect.WakeParameterizedType;
 import wkto.generator.MethodIteration;
 import wkto.generator.ArgumentIteration;
 import wkto.generator.ArgumentWatcherGatherer;
@@ -30,6 +31,13 @@ every MethodGenerator (capable MethodIteration) is:
 		}
 
 		File.write("\t");
+		var WakeParameterizedType[] = getFuncTypeParams(args, returntype);
+
+		if(WakeParameterizedType[].getSize()) {
+			File.write("{");
+			File.write(",".join(WakeParameterizedType[].map({ a => a.label })));
+			File.write("} ");
+		}
 		MethodReturnGenerator.generate(File, returntype);
 
 		for(var Num = 0; Num < args.getSize(); Num += 1) { // @TODO foreach in at
@@ -43,4 +51,29 @@ every MethodGenerator (capable MethodIteration) is:
 		MethodBodyGenerator.generate(File, WakeClass, WakeProperty, ArgumentWatcherGatherer, returntype);
 
 		File.write("\t}\n\n");
+	}
+
+	WakeParameterizedType[] -- getFuncTypeParams(WakeType[] args, WakeType? returntype) {
+		var WakeParameterizedType[] = [];
+		if returntype exists {
+			WakeParameterizedType[] = returntype.getArgParameterizations();
+		}
+
+		foreach(args) {
+			foreach(WakeType.getArgParameterizations()) {
+				WakeParameterizedType[].push(WakeParameterizedType);
+			}
+		}
+
+		var Text[] names = [];
+		var $WakeParameterizedType[] = [];
+		foreach(WakeParameterizedType[]) {
+			if(names.contains(WakeParameterizedType.label)) {
+				continue;
+			}
+			$WakeParameterizedType[].push(WakeParameterizedType);
+			names.push(WakeParameterizedType.label);
+		}
+
+		return $WakeParameterizedType[];
 	}
