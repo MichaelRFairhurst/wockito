@@ -73,13 +73,12 @@ every Main is:
 
 				var Text[] = MockGenerationOptions.mockedClasses;
 				foreach(Text[]) {
-					var $File from FileSystem.getPath(MockGenerationOptions.tabledir + '/' + Text + ".table");
+					var $File from FileSystem.getPath(MockGenerationOptions.tabledir + '/' + Text + "Mock.table");
 
 					var WakeClass = TableFileReader.readFrom($File);
 					WakeClass[].push(WakeClass);
-					File.write('import wkto.gen.' + (WakeClass.modulename + '.' if WakeClass.modulename != '' else '') + Text + 'Mock;\n');
-					File.write('import wkto.gen.' + (WakeClass.modulename + '.' if WakeClass.modulename != '' else '') + Text + 'Stubber;\n');
-					File.write('import wkto.gen.' + (WakeClass.modulename + '.' if WakeClass.modulename != '' else '') + Text + 'Verifier;\n');
+					var Text fqmockname = WakeClass.modulename + "." + WakeClass.classname;
+					File.write('import ' + fqmockname + ';\n');
 
 					var $Text[] = WakeClass.getApiImports();
 					foreach($Text[]) { // @TODO foreach as

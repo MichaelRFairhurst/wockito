@@ -16,6 +16,7 @@ every WakePropertyMockerTest is:
 
 	needs ReflectionProvider, WakePropertyMocker;
 
+	#>
 	@Test
 	~[ test get stubber from property returns nothing ]~(Asserts) {
 		var WakeProperty from ReflectionProvider;
@@ -141,3 +142,4 @@ every WakePropertyMockerTest is:
 		Asserts.that(WatchedArgument[0].rettype)Equals("Ret");
 		Asserts.that(WatchedArgument[1].rettype)Equals("Ret");
 	}
+	##

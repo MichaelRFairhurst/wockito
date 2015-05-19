@@ -77,24 +77,25 @@ every MockProviderFileGenerator is:
 		File.write("\t}\n\n");
 
 		foreach(WakeClass[]) {
-			File.write("\t" + WakeClass.classname + "Stubber -- when(" + WakeClass.classname + "Mock) {\n");
-			File.write("\t\treturn " + WakeClass.classname + "Stubber from " + WakeClass.classname + "Mock;\n");
+			var Text basename = WakeClass.classname.substr(0, -4);
+			File.write("\t" + basename + "Stubber -- when(" + basename + "Mock) {\n");
+			File.write("\t\treturn " + basename + "Stubber from " + basename + "Mock;\n");
 			File.write("\t}\n\n");
 
-			File.write("\t" + WakeClass.classname + "Verifier -- verify(" + WakeClass.classname + "Mock) {\n");
+			File.write("\t" + basename + "Verifier -- verify(" + basename + "Mock) {\n");
 			File.write("\t\tvar TimesCalledValidator from this;\n");
-			File.write("\t\tvar " + WakeClass.classname + "Verifier from " + WakeClass.classname + "Mock;\n");
-			File.write("\t\t" + WakeClass.classname + "Verifier.CallValidator = TimesCalledValidator;\n");
-			File.write("\t\treturn " + WakeClass.classname + "Verifier;\n");
+			File.write("\t\tvar " + basename + "Verifier from " + basename + "Mock;\n");
+			File.write("\t\t" + basename + "Verifier.CallValidator = TimesCalledValidator;\n");
+			File.write("\t\treturn " + basename + "Verifier;\n");
 			File.write("\t}\n\n");
 
-			File.write("\t" + WakeClass.classname + "Verifier -- verify(Num)Times(" + WakeClass.classname + "Mock) {\n");
+			File.write("\t" + basename + "Verifier -- verify(Num)Times(" + basename + "Mock) {\n");
 			File.write("\t\tvar TimesCalledValidator from this;\n");
 			File.write("\t\tTimesCalledValidator.minExpectedTimes = Num;\n");
 			File.write("\t\tTimesCalledValidator.maxExpectedTimes = Num;\n");
-			File.write("\t\tvar " + WakeClass.classname + "Verifier from " + WakeClass.classname + "Mock;\n");
-			File.write("\t\t" + WakeClass.classname + "Verifier.CallValidator = TimesCalledValidator;\n");
-			File.write("\t\treturn " + WakeClass.classname + "Verifier;\n");
+			File.write("\t\tvar " + basename + "Verifier from " + basename + "Mock;\n");
+			File.write("\t\t" + basename + "Verifier.CallValidator = TimesCalledValidator;\n");
+			File.write("\t\treturn " + basename + "Verifier;\n");
 			File.write("\t}\n\n");
 		}
 	}
@@ -119,8 +120,8 @@ every MockProviderFileGenerator is:
 		}
 
 		foreach(WakeClass[]) {
-			if(!Text[].contains(WakeClass.classname + "Mock")) {
-				Text[].push(WakeClass.classname + "Mock");
+			if(!Text[].contains(WakeClass.classname)) {
+				Text[].push(WakeClass.classname);
 			}
 		}
 

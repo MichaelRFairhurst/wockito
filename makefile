@@ -114,10 +114,10 @@ endif
 # makefiles counted.
 ##
 MOCKOBJECTFILES := $(subst .table.md5,.o,$(subst $(TABLEDIR),$(OBJECTDIR),$(MOCKS)))
-MOCKCLASSNAMES := $(subst Mock.table.md5,,$(subst $(TABLEDIR)/,,$(MOCKS)))
+MOCKCLASSNAMES := $(MOCKS:$(TABLEDIR)/%Mock.table.md5=%)
 # only link MockProvider if we have at least one mock
 ifneq ($(MOCKCLASSNAMES),)
-	MOCKPROVIDEROBJ := $(OBJECTDIR)/MockProvider.o
+	MOCKPROVIDEROBJ := $(OBJECTDIR)/wkto.gen/MockProvider.o
 endif
 
 ## Build a package ##

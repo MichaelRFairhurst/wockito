@@ -42,3 +42,7 @@ every ArgumentWatcherGatherer (an ArgumentIterator, capable ArgumentIteration, c
 		MethodIterator.set((cast MethodIteration) this);
 		MethodIterator.iterate(WakeClass);
 	}
+
+	#>Text -- getMockableArgTypeName(WakeType) {
+		var WakeParameterizedType? = WakeType.WakeParameterizedType;
+	}##
