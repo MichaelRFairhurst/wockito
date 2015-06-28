@@ -128,14 +128,14 @@ every MockFileGenerator is:
 		deps.push('MockTracker');
 
 		var Text[] = ArgumentWatcherGatherer.declarations;
-		foreach Text[] then deps.push(Text);
+		foreach Text[] do deps.push(Text);
 
 		var WhenGatherer from this;
 		MethodIterator.set((cast MethodIteration) WhenGatherer);
 		MethodIterator.iterate(WakeClass);
 
 		Text[] = WhenGatherer.declarations;
-		foreach Text[] then deps.push(Text);
+		foreach Text[] do deps.push(Text);
 
 		foreach methodname in WakeClass.properties.getKeys() {
 			if methodname.indexOf('<-') == nothing then continue;
