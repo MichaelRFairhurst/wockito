@@ -97,7 +97,7 @@ every Main is:
 				var WakeClass = TableFileReader.readFrom($File);
 
 				var FilePath from this;
-				if FilePath.fileExists() FilePath.delete();
+				if FilePath.fileExists() then FilePath.delete();
 				var File from this;
 
 				if WakeClass.modulename == "" {
