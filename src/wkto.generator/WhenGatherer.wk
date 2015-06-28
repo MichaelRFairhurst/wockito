@@ -15,7 +15,7 @@ every WhenGatherer (capable MethodIteration) is:
 	with public Text[] declarations = [];
 
 	iterate(WakeClass, WakeProperty method, WakeType[] args, WakeType? returnval) {
-		if(args.getSize() != 0) return;
+		if args.getSize() != 0 then return;
 		if returnval exists {
 			var Text alias = NameTransformer.methodToProperty(method.name);
 			var Text type = "When{" + returnval.getPureName() + "}";

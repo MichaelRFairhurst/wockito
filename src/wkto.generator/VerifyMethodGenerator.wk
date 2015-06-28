@@ -20,11 +20,11 @@ import wkto.generator.MethodBodyGenerator;
 every VerifyMethodGenerator (capable MethodBodyGenerator) is:
 
 	generate(File, WakeClass, WakeProperty, ArgumentWatcherGatherer, WakeType? returntype) {
-		if(ArgumentWatcherGatherer.aliases.getSize() == 0) return;
+		if ArgumentWatcherGatherer.aliases.getSize() == 0 then return;
 
 		for(var Num = 0; Num < ArgumentWatcherGatherer.aliases.getSize(); Num += 1) { // @TODO foreach in at
 			File.write("\t\t");
-			if(Num == 0) {
+			if Num == 0 {
 				File.write("var Num[] = ");
 				File.write(ArgumentWatcherGatherer.aliases[Num] + ".getCallIndices(" + ArgumentWatcherGatherer.casts[Num] + "arg0);\n");
 			} else {

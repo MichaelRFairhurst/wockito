@@ -6,8 +6,8 @@ every CommaStatementGenerator is:
 		var Bool first = true;
 		var $Text = "";
 
-		foreach(Text[]) {
-			if(first) {
+		foreach Text[] {
+			if first {
 				$Text = '\t' + keyword + '\n\t\t' + Text;
 				first = false;
 			} else {
@@ -15,7 +15,7 @@ every CommaStatementGenerator is:
 			}
 		}
 
-		if(!first) $Text += ';\n\n';
+		if !first then $Text += ';\n\n';
 
 		return $Text;
 	}

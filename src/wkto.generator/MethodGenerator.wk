@@ -33,7 +33,7 @@ every MethodGenerator (capable MethodIteration) is:
 		File.write("\t");
 		var WakeParameterizedType[] = getFuncTypeParams(args, returntype);
 
-		if(WakeParameterizedType[].getSize()) {
+		if WakeParameterizedType[].getSize() {
 			File.write("{");
 			File.write(",".join(WakeParameterizedType[].map({ a => a.label })));
 			File.write("} ");
@@ -59,16 +59,16 @@ every MethodGenerator (capable MethodIteration) is:
 			WakeParameterizedType[] = returntype.getArgParameterizations();
 		}
 
-		foreach(args) {
-			foreach(WakeType.getArgParameterizations()) {
+		foreach args {
+			foreach WakeType.getArgParameterizations() {
 				WakeParameterizedType[].push(WakeParameterizedType);
 			}
 		}
 
 		var Text[] names = [];
 		var $WakeParameterizedType[] = [];
-		foreach(WakeParameterizedType[]) {
-			if(names.contains(WakeParameterizedType.label)) {
+		foreach WakeParameterizedType[] {
+			if names.contains(WakeParameterizedType.label) {
 				continue;
 			}
 			$WakeParameterizedType[].push(WakeParameterizedType);

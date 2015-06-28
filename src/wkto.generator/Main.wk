@@ -44,7 +44,7 @@ every Main is:
 			var FilePath = FileSystem.getPath(MockGenerationOptions.outputfile);
 			var $FilePath? = FilePath.getParent();
 			if $FilePath exists {
-				if(!$FilePath.fileExists()) {
+				if !$FilePath.fileExists() {
 					$FilePath.makeDirectory();
 				}
 			}
@@ -56,11 +56,11 @@ every Main is:
 	main() {
 		try {
 			MockGenerationOptions.parse();
-			if(MockGenerationOptions.generateProvider) {
+			if MockGenerationOptions.generateProvider {
 				var WakeClass[] = [];
 
 				var FilePath from this;
-				if(FilePath.fileExists()) FilePath.delete();
+				if FilePath.fileExists() then FilePath.delete();
 				var File from this;
 
 				File.write('module wkto.gen;\n\n');
@@ -73,7 +73,7 @@ every Main is:
 				File.write('import wunit.Asserts;\n');
 
 				var Text[] = MockGenerationOptions.mockedClasses;
-				foreach(Text[]) {
+				foreach Text[] {
 					var $File from FileSystem.getPath(MockGenerationOptions.tabledir + '/' + Text + "Mock.table");
 
 					var WakeClass = TableFileReader.readFrom($File);
@@ -81,8 +81,7 @@ every Main is:
 					var Text fqmockname = WakeClass.modulename + "." + WakeClass.classname;
 					File.write('import ' + fqmockname + ';\n');
 
-					var $Text[] = WakeClass.getApiImports();
-					foreach($Text[]) { // @TODO foreach as
+					foreach $Text in WakeClass.getApiImports() {
 						File.write("import " + $Text + ";\n");
 					}
 				}
@@ -98,10 +97,10 @@ every Main is:
 				var WakeClass = TableFileReader.readFrom($File);
 
 				var FilePath from this;
-				if(FilePath.fileExists()) FilePath.delete();
+				if FilePath.fileExists() FilePath.delete();
 				var File from this;
 
-				if(WakeClass.modulename == "") {
+				if WakeClass.modulename == "" {
 					File.write("module wkto.gen;\n\n");
 				} else {
 					File.write("module wkto.gen." + WakeClass.modulename + ';\n\n');
@@ -113,10 +112,10 @@ every Main is:
 				File.write('import wkto.CallValidator;\n');
 				File.write('import wkto.Anything;\n');
 
-				if(!WakeClass.getApiImports().contains(WakeClass.classname))
+				if !WakeClass.getApiImports().contains(WakeClass.classname) then
 					File.write('import ' + (WakeClass.modulename + '.' if WakeClass.modulename != '' else '') +  WakeClass.classname + ';\n');
 
-				foreach(WakeClass.getApiImports()) { // @TODO foreach as
+				foreach WakeClass.getApiImports() {
 					File.write("import " + Text + ";\n");
 				}
 

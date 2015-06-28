@@ -57,12 +57,12 @@ every MockProviderFileGenerator is:
 		var WatchedArgument[] = [];
 		var StubbedReturn[] = [];
 
-		foreach(WakeClass[]) {
-			foreach(WakeClassMocker.getWatchedArguments(WakeClass)) {
+		foreach WakeClass[] {
+			foreach WakeClassMocker.getWatchedArguments(WakeClass) {
 				WatchedArgument[].push(WatchedArgument);
 			}
 
-			foreach(WakeClassMocker.getStubbedReturns(WakeClass)) {
+			foreach WakeClassMocker.getStubbedReturns(WakeClass) {
 				StubbedReturn[].push(StubbedReturn);
 			}
 		}
@@ -76,7 +76,7 @@ every MockProviderFileGenerator is:
 		File.write("\t\tAsserts[0] = Asserts;\n");
 		File.write("\t}\n\n");
 
-		foreach(WakeClass[]) {
+		foreach WakeClass[] {
 			var Text basename = WakeClass.classname.substr(0, -4);
 			File.write("\t" + basename + "Stubber -- when(" + basename + "Mock) {\n");
 			File.write("\t\treturn " + basename + "Stubber from " + basename + "Mock;\n");
@@ -107,20 +107,20 @@ every MockProviderFileGenerator is:
 		Text[].push("TimesCalledValidator");
 		Text[].push("Asserts <- { return Asserts[0]; }");
 
-		foreach(WatchedArgument[]) {
-			if(!Text[].contains(WatchedArgument.getWatchedType())) {
+		foreach WatchedArgument[] {
+			if !Text[].contains(WatchedArgument.getWatchedType()) {
 				Text[].push(WatchedArgument.getWatchedType());
 			}
 		}
 
-		foreach(StubbedReturn[]) {
-			if(!Text[].contains(StubbedReturn.getStubbedType())) {
+		foreach StubbedReturn[] {
+			if !Text[].contains(StubbedReturn.getStubbedType()) {
 				Text[].push(StubbedReturn.getStubbedType());
 			}
 		}
 
-		foreach(WakeClass[]) {
-			if(!Text[].contains(WakeClass.classname)) {
+		foreach WakeClass[] {
+			if !Text[].contains(WakeClass.classname) {
 				Text[].push(WakeClass.classname);
 			}
 		}

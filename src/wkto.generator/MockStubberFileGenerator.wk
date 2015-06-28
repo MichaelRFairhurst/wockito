@@ -64,9 +64,10 @@ every MockStubberFileGenerator is:
 	generateProvisions(WakeClass) {
 		var Text[] provisions = [];
 
-		foreach(WakeClassMocker.getReturnTypes(WakeClass)) { // @TODO foreach as?
-			if(!provisions.contains("When{" + WakeType.getPureName() + "}"))
+		foreach WakeClassMocker.getReturnTypes(WakeClass) {
+			if !provisions.contains("When{" + WakeType.getPureName() + "}") {
 				provisions.push("When{" + WakeType.getPureName() + "}");
+			}
 		}
 
 		File.write(CommaStatementGenerator.generate("provides", provisions));

@@ -17,11 +17,11 @@ every WakeClassMocker is:
 	WatchedArgument[] -- getWatchedArguments(WakeClass) {
 		var WatchedArgument[] = [];
 
-		foreach(WakeClass.properties.getKeys()) {
+		foreach WakeClass.properties.getKeys() {
 			var WakeProperty? = WakeClass.properties.get(Text);
 			if WakeProperty exists {
 				var $WatchedArgument[] = WakePropertyMocker.getWatchedArguments(WakeProperty);
-				foreach($WatchedArgument[]) WatchedArgument[].push($WatchedArgument);
+				foreach $WatchedArgument[] do WatchedArgument[].push($WatchedArgument);
 			}
 		}
 
@@ -31,7 +31,7 @@ every WakeClassMocker is:
 	StubbedReturn[] -- getStubbedReturns(WakeClass) {
 		var StubbedReturn[] = [];
 
-		foreach(WakeClass.properties.getKeys()) {
+		foreach WakeClass.properties.getKeys() {
 			var WakeProperty? = WakeClass.properties.get(Text);
 			if WakeProperty exists {
 				var StubbedReturn? = WakePropertyMocker.getStubbedReturn(WakeProperty);
@@ -48,7 +48,7 @@ every WakeClassMocker is:
 		var WakeType[] = [];
 
 
-		foreach(WakeClass.properties.getKeys()) {
+		foreach WakeClass.properties.getKeys() {
 			var WakeProperty? = WakeClass.properties.get(Text);
 			if WakeProperty exists {
 				var WakeLambdaType? = WakeProperty.WakeVarDecl.WakeType.WakeLambdaType;

@@ -91,21 +91,21 @@ every MockFileGenerator is:
 			provisions.push(WhenGatherer.provisions[Num] + " <- { return " + WhenGatherer.aliases[Num] + "; }");
 		}
 
-		foreach(WakeClass.properties.getKeys()) { // @Todo foreach in
-			if(Text.indexOf('<-') == nothing) continue;
-			var WakeProperty? = WakeClass.properties.get(Text);
+		foreach provisionname in WakeClass.properties.getKeys() {
+			if provisionname.indexOf('<-') == nothing then continue;
+			var WakeProperty? = WakeClass.properties.get(provisionname);
 			if WakeProperty exists {
 				var WakeLambdaType? method = WakeProperty.WakeVarDecl.WakeType.WakeLambdaType;
 				if method exists {
 					var WakeType? provision = method.returntype;
 					if provision exists {
 						var Text current = provision.getPureName();
-						if(provision.specialty != "") current += ":" + provision.specialty;
+						if provision.specialty != "" then current += ":" + provision.specialty;
 						current += " <- { return " + NameTransformer.methodToProperty(WakeProperty.name) + ".get(); }";
 						provisions.push(current);
 
 						current = "When{" + provision.getPureName() + "}";
-						if(provision.specialty != "") current += ":" + provision.specialty;
+						if provision.specialty != "" then current += ":" + provision.specialty;
 						current += " <- { return " + NameTransformer.methodToProperty(WakeProperty.name) + "; }";
 						provisions.push(current);
 					}
@@ -128,18 +128,18 @@ every MockFileGenerator is:
 		deps.push('MockTracker');
 
 		var Text[] = ArgumentWatcherGatherer.declarations;
-		foreach(Text[]) deps.push(Text);
+		foreach Text[] then deps.push(Text);
 
 		var WhenGatherer from this;
 		MethodIterator.set((cast MethodIteration) WhenGatherer);
 		MethodIterator.iterate(WakeClass);
 
 		Text[] = WhenGatherer.declarations;
-		foreach(Text[]) deps.push(Text);
+		foreach Text[] then deps.push(Text);
 
-		foreach(WakeClass.properties.getKeys()) { // @Todo foreach in
-			if(Text.indexOf('<-') == nothing) continue;
-			var WakeProperty? = WakeClass.properties.get(Text);
+		foreach methodname in WakeClass.properties.getKeys() {
+			if methodname.indexOf('<-') == nothing then continue;
+			var WakeProperty? = WakeClass.properties.get(methodname);
 			if WakeProperty exists {
 				var WakeLambdaType? method = WakeProperty.WakeVarDecl.WakeType.WakeLambdaType;
 				if method exists {

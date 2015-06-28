@@ -19,20 +19,20 @@ every MockGenerationOptions is:
 		for(var Num = 0; Num < Text[].getSize(); Num += 1) {
 			var Text = Text[Num];
 
-			if(Text == "-p") generateProvider = true;
-			else if(Text == "-d") {
+			if Text == "-p" then generateProvider = true;
+			else if Text == "-d" {
 				Num += 1;
 				tabledir = Text[Num];
-			} else if(Text == "-o") {
+			} else if Text == "-o" {
 				Num += 1;
 				outputfile = Text[Num];
-			} else if(generateProvider) {
+			} else if generateProvider {
 				mockedClasses.push(Text);
 			} else {
 				var Text[] parts = Text.split('.');
 				mockedClassname = parts[parts.getSize() - 1];
 
-				if(parts.getSize()) {
+				if parts.getSize() {
 					moduleName = '.'.join(parts).substr(0, -1 - mockedClassname.getSize());
 				}
 			}

@@ -36,11 +36,11 @@ every ArgumentWatcherGatherer (an ArgumentIterator, capable ArgumentIteration, c
 
 		var Text typename = "ArgumentWatcher{" + getMockableArgTypeName(arg) + "," + returntypename + "}";
 		var Text alias = NameTransformer.methodToProperty(WakeProperty.name) + "Za" + argn.toString();
-		if(!types.contains(typename)) types.push(typename);
+		if !types.contains(typename) then types.push(typename);
 		aliases.push(alias);
 		declarations.push(typename + " " + alias);
 		provisions.push(typename + ":" + alias);
-		if(getMockableArgTypeName(arg) != arg.getPureName()) {
+		if getMockableArgTypeName(arg) != arg.getPureName() {
 			casts.push("(unsafe cast " + getMockableArgTypeName(arg)+ ")");
 		} else {
 			casts.push("");
@@ -56,7 +56,7 @@ every ArgumentWatcherGatherer (an ArgumentIterator, capable ArgumentIteration, c
 	Text -- getMockableArgTypeName(WakeType) {
 		var WakeParameterizedType? = WakeType.WakeParameterizedType;
 		if WakeParameterizedType exists {
-			if(WakeParameterizedType.isArgParameterization) {
+			if WakeParameterizedType.isArgParameterization {
 				return "Anything";
 			} else {
 				return WakeParameterizedType.label;
@@ -66,7 +66,7 @@ every ArgumentWatcherGatherer (an ArgumentIterator, capable ArgumentIteration, c
 		var WakeClassType? = WakeType.WakeClassType;
 		if WakeClassType exists {
 			var Text = WakeClassType.classname;
-			foreach($WakeType in WakeClassType.parameters) {
+			foreach $WakeType in WakeClassType.parameters {
 				Text += getMockableArgTypeName($WakeType);
 			}
 

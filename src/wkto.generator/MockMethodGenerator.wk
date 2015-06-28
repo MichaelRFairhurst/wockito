@@ -13,12 +13,12 @@ every MockMethodGenerator (capable MethodBodyGenerator) is:
 	needs NameTransformer;
 
 	generate(File, WakeClass, WakeProperty, ArgumentWatcherGatherer, WakeType? returntype) {
-		if(ArgumentWatcherGatherer.aliases.getSize() > 0) {
+		if ArgumentWatcherGatherer.aliases.getSize() > 0 {
 			for(var Num = 0; Num < ArgumentWatcherGatherer.aliases.getSize(); Num += 1) { // @TODO foreach in at
 				File.write("\t\t" + ArgumentWatcherGatherer.aliases[Num] + ".tell(" + ArgumentWatcherGatherer.casts[Num] + "arg" + Num.toString() + ", MockTracker.current());\n");
 				if returntype exists {
 					File.write("\t\t");
-					if(Num == 0) {
+					if Num == 0 {
 						File.write("var When{" + returntype.getPureName() + "}[] = ");
 						File.write(ArgumentWatcherGatherer.aliases[Num] + ".getPossibleStubs(arg0);");
 					} else {
