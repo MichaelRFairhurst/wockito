@@ -24,7 +24,7 @@ every VerifyMethodGenerator (capable MethodBodyGenerator) is:
 
 		foreach alias in ArgumentWatcherGatherer.aliases at i {
 			File.write("\t\t");
-			if Num == 0 {
+			if i == 0 {
 				File.write("var Num[] = ");
 				File.write(alias + ".getCallIndices(" + ArgumentWatcherGatherer.casts[i] + "arg0);\n");
 			} else {
