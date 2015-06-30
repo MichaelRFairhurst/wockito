@@ -3,7 +3,7 @@ module wkto.generator;
 every CommaStatementGenerator is:
 
 	Text -- generate(Text keyword, Text[]) {
-		var Bool first = true;
+		var first = true;
 		var $Text = "";
 
 		foreach Text[] {

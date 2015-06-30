@@ -28,14 +28,14 @@ every ArgumentWatcherGatherer (an ArgumentIterator, capable ArgumentIteration, c
 	with Num? lastCallIndex = nothing;
 
 	iterate(WakeClass, WakeProperty, WakeType? returntype, WakeType arg, argn Num) {
-		var Text returntypename = "Num";
+		var returntypename = "Num";
 
 		if returntype exists {
 			returntypename = returntype.getPureName();
 		}
 
-		var Text typename = "ArgumentWatcher{" + getMockableArgTypeName(arg) + "," + returntypename + "}";
-		var Text alias = NameTransformer.methodToProperty(WakeProperty.name) + "Za" + argn.toString();
+		var typename = "ArgumentWatcher{" + getMockableArgTypeName(arg) + "," + returntypename + "}";
+		var alias = NameTransformer.methodToProperty(WakeProperty.name) + "Za" + argn.toString();
 		if !types.contains(typename) then types.push(typename);
 		aliases.push(alias);
 		declarations.push(typename + " " + alias);

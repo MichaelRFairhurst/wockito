@@ -17,8 +17,8 @@ every WhenGatherer (capable MethodIteration) is:
 	iterate(WakeClass, WakeProperty method, WakeType[] args, WakeType? returnval) {
 		if args.getSize() != 0 then return;
 		if returnval exists {
-			var Text alias = NameTransformer.methodToProperty(method.name);
-			var Text type = "When{" + returnval.getPureName() + "}";
+			var alias = NameTransformer.methodToProperty(method.name);
+			var type = "When{" + returnval.getPureName() + "}";
 			aliases.push(alias);
 			declarations.push(type + " " + alias);
 			provisions.push(type + ":" + alias);

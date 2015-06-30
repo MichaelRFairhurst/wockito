@@ -21,13 +21,13 @@ every WakePropertyMocker is:
 	WatchedArgument[] -- getWatchedArguments(WakeProperty) {
 		var WatchedArgument[] = [];
 
-		var Text base = NameTransformer.methodToProperty(WakeProperty.name);
+		var base = NameTransformer.methodToProperty(WakeProperty.name);
 
-		var Text retname = "Num";
+		var retname = "Num";
 		var WakeLambdaType? = WakeProperty.WakeVarDecl.WakeType.WakeLambdaType;
 
 		if WakeLambdaType exists {
-			var returned WakeType? = WakeLambdaType.returntype;
+			var returned = WakeLambdaType.returntype;
 			if returned exists {
 				retname = returned.getPureName();
 			}

@@ -99,7 +99,7 @@ every MockFileGenerator is:
 				if method exists {
 					var WakeType? provision = method.returntype;
 					if provision exists {
-						var Text current = provision.getPureName();
+						var current = provision.getPureName();
 						if provision.specialty != "" then current += ":" + provision.specialty;
 						current += " <- { return " + NameTransformer.methodToProperty(WakeProperty.name) + ".get(); }";
 						provisions.push(current);
