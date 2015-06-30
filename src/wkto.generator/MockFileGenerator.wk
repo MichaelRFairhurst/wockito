@@ -79,16 +79,16 @@ every MockFileGenerator is:
 		MethodIterator.set((cast MethodIteration) ArgumentWatcherGatherer);
 		MethodIterator.iterate(WakeClass);
 
-		for(var Num = 0; Num < ArgumentWatcherGatherer.declarations.getSize(); Num += 1) { // @TODO foreach at
-			provisions.push(ArgumentWatcherGatherer.provisions[Num] + " <- { return " + ArgumentWatcherGatherer.aliases[Num] + "; }");
+		foreach ArgumentWatcherGatherer.declarations at i {
+			provisions.push(ArgumentWatcherGatherer.provisions[i] + " <- { return " + ArgumentWatcherGatherer.aliases[i] + "; }");
 		}
 
 		var WhenGatherer from this;
 		MethodIterator.set((cast MethodIteration) WhenGatherer);
 		MethodIterator.iterate(WakeClass);
 
-		for(var Num = 0; Num < WhenGatherer.declarations.getSize(); Num += 1) { // @TODO foreach at
-			provisions.push(WhenGatherer.provisions[Num] + " <- { return " + WhenGatherer.aliases[Num] + "; }");
+		foreach WhenGatherer.declarations at i {
+			provisions.push(WhenGatherer.provisions[i] + " <- { return " + WhenGatherer.aliases[i] + "; }");
 		}
 
 		foreach provisionname in WakeClass.properties.getKeys() {

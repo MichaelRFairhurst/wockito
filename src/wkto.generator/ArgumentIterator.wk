@@ -15,10 +15,10 @@ every ArgumentIterator (capable MethodIteration) is:
 	}
 
 	iterate(WakeClass, WakeProperty, WakeType[] args, WakeType? returntype) {
-		for(var Num = 0; Num < args.getSize(); Num += 1) { // @TODO foreachin
+		foreach arg in args.getSize() at i {
 			var $ArgumentIteration? = ArgumentIteration;
 			if $ArgumentIteration exists {
-				$ArgumentIteration.iterate(WakeClass, WakeProperty, returntype, args[Num], Num);
+				$ArgumentIteration.iterate(WakeClass, WakeProperty, returntype, arg, i);
 			}
 		}
 	}

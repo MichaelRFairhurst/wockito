@@ -40,9 +40,9 @@ every MethodGenerator (capable MethodIteration) is:
 		}
 		MethodReturnGenerator.generate(File, returntype);
 
-		for(var Num = 0; Num < args.getSize(); Num += 1) { // @TODO foreach in at
-			File.write(WakeProperty.casing[Num]);
-			File.write(args[Num].getPureName() + " arg" + Num.toString());
+		foreach arg in args.getSize() at i {
+			File.write(WakeProperty.casing[i]);
+			File.write(arg.getPureName() + " arg" + i.toString());
 		}
 
 		File.write(WakeProperty.casing[args.getSize()]); // might be just ')' but might be ')ALastMethodSegment()'

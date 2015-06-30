@@ -14,15 +14,15 @@ every MockMethodGenerator (capable MethodBodyGenerator) is:
 
 	generate(File, WakeClass, WakeProperty, ArgumentWatcherGatherer, WakeType? returntype) {
 		if ArgumentWatcherGatherer.aliases.getSize() > 0 {
-			for(var Num = 0; Num < ArgumentWatcherGatherer.aliases.getSize(); Num += 1) { // @TODO foreach in at
-				File.write("\t\t" + ArgumentWatcherGatherer.aliases[Num] + ".tell(" + ArgumentWatcherGatherer.casts[Num] + "arg" + Num.toString() + ", MockTracker.current());\n");
+			foreach alias in ArgumentWatcherGatherer.aliases at i {
+				File.write("\t\t" + alias + ".tell(" + ArgumentWatcherGatherer.casts[i] + "arg" + i.toString() + ", MockTracker.current());\n");
 				if returntype exists {
 					File.write("\t\t");
-					if Num == 0 {
+					if i == 0 {
 						File.write("var When{" + returntype.getPureName() + "}[] = ");
-						File.write(ArgumentWatcherGatherer.aliases[Num] + ".getPossibleStubs(arg0);");
+						File.write(alias + ".getPossibleStubs(arg0);");
 					} else {
-						File.write("When[] = When[].intersect(" + ArgumentWatcherGatherer.aliases[Num] + ".getPossibleStubs(arg" + Num.toString() + "));");
+						File.write("When[] = When[].intersect(" + alias + ".getPossibleStubs(arg" + i.toString() + "));");
 					}
 					File.write("\n");
 				}

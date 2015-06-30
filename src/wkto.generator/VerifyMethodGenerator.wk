@@ -22,13 +22,13 @@ every VerifyMethodGenerator (capable MethodBodyGenerator) is:
 	generate(File, WakeClass, WakeProperty, ArgumentWatcherGatherer, WakeType? returntype) {
 		if ArgumentWatcherGatherer.aliases.getSize() == 0 then return;
 
-		for(var Num = 0; Num < ArgumentWatcherGatherer.aliases.getSize(); Num += 1) { // @TODO foreach in at
+		foreach alias in ArgumentWatcherGatherer.aliases at i {
 			File.write("\t\t");
 			if Num == 0 {
 				File.write("var Num[] = ");
-				File.write(ArgumentWatcherGatherer.aliases[Num] + ".getCallIndices(" + ArgumentWatcherGatherer.casts[Num] + "arg0);\n");
+				File.write(alias + ".getCallIndices(" + ArgumentWatcherGatherer.casts[i] + "arg0);\n");
 			} else {
-				File.write("Num[] = Num[].intersect(" + ArgumentWatcherGatherer.aliases[Num] + ".getCallIndices(" + ArgumentWatcherGatherer.casts[Num] + "arg" + Num.toString() + "));\n");
+				File.write("Num[] = Num[].intersect(" + alias + ".getCallIndices(" + ArgumentWatcherGatherer.casts[i] + "arg" + i.toString() + "));\n");
 			}
 		}
 

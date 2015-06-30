@@ -33,11 +33,11 @@ every WakePropertyMocker is:
 			}
 
 			var WakeType[] = WakeLambdaType.arguments;
-			for(var Num = 0; Num < WakeLambdaType.arguments.getSize(); Num += 1) { // @Todo foreach at
+			foreach argument in WakeLambdaType.arguments at i {
 				var WatchedArgument from this;
-				WatchedArgument.type = getMockableArgTypeName(WakeLambdaType.arguments[Num]);
+				WatchedArgument.type = getMockableArgTypeName(argument);
 				WatchedArgument.rettype = retname;
-				WatchedArgument.specialty = WatchedArgument.alias := base + "_arg" + Num.toString();
+				WatchedArgument.specialty = WatchedArgument.alias := base + "_arg" + i.toString();
 
 				WatchedArgument[].push(WatchedArgument);
 			}

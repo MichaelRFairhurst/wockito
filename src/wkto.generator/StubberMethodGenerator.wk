@@ -16,8 +16,8 @@ every StubberMethodGenerator (capable MethodBodyGenerator) is:
 		if returntype exists {
 			if ArgumentWatcherGatherer.aliases.getSize() > 0 {
 				File.write("\t\tvar When{" + returntype.getPureName() + "} from this;\n"); // @TODO return Anything casted as a parameterized arg
-				for(var Num = 0; Num < ArgumentWatcherGatherer.aliases.getSize(); Num += 1) { // @TODO foreach in at
-					File.write("\t\t" + ArgumentWatcherGatherer.aliases[Num] + ".expect(" + ArgumentWatcherGatherer.casts[Num] + "arg" + Num.toString() + ", When);\n");
+				foreach alias in ArgumentWatcherGatherer.aliases at i {
+					File.write("\t\t" + alias + ".expect(" + ArgumentWatcherGatherer.casts[i] + "arg" + i.toString() + ", When);\n");
 				}
 				File.write("\t\treturn When;\n");
 			} else {
