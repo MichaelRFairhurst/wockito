@@ -40,7 +40,7 @@ every MethodGenerator (capable MethodIteration) is:
 		}
 		MethodReturnGenerator.generate(File, returntype);
 
-		foreach arg in args.getSize() at i {
+		foreach arg in args at i {
 			File.write(WakeProperty.casing[i]);
 			File.write(arg.getPureName() + " arg" + i.toString());
 		}
