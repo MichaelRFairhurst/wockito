@@ -80,16 +80,16 @@ every MockStubberFileGenerator is:
 
 		var Text[] deps = [];
 
-		for(var Num = 0; Num < ArgumentWatcherGatherer.provisions.getSize(); Num += 1) {
-			deps.push(ArgumentWatcherGatherer.provisions[Num] + " " + ArgumentWatcherGatherer.aliases[Num]);
+		foreach provision in ArgumentWatcherGatherer.provisions at i {
+			deps.push(provision + " " + ArgumentWatcherGatherer.aliases[i]);
 		}
 
 		var WhenGatherer from this;
 		MethodIterator.set((cast MethodIteration) WhenGatherer);
 		MethodIterator.iterate(WakeClass);
 
-		for(var Num = 0; Num < WhenGatherer.provisions.getSize(); Num += 1) {
-			deps.push(WhenGatherer.provisions[Num] + " " + WhenGatherer.aliases[Num]);
+		foreach provision in WhenGatherer.provisions at i {
+			deps.push(provision + " " + WhenGatherer.aliases[i]);
 		}
 
 		File.write(CommaStatementGenerator.generate("needs", deps));

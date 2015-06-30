@@ -21,9 +21,9 @@ every ArgumentWatcher{T, R} is:
 
 	Num[] -- getCallIndices(T) {
 		var Num[] = [];
-		for(var $Num = 0; $Num < calls.getSize(); $Num += 1) {
-			if calls[$Num] == T {
-				Num[].push(callNums[$Num]);
+		foreach call in calls at i {
+			if call == T {
+				Num[].push(callNums[i]);
 			}
 		}
 
@@ -37,9 +37,9 @@ every ArgumentWatcher{T, R} is:
 
 	When{R}[] -- getPossibleStubs(T) {
 		var When{R}[] ret = [];
-		for(var Num = 0; Num < matches.getSize(); Num += 1) {
-			if matches[Num] == T {
-				ret.push(stubs[Num]);
+		foreach match in matches at i {
+			if match == T {
+				ret.push(stubs[i]);
 			}
 		}
 
