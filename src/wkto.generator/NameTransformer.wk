@@ -4,7 +4,7 @@ every NameTransformer is:
 
 	Text -- methodToProperty(Text) {
 		var $Text = "";
-		foreach Text.toCharArray at i {
+		foreach Text.toCharArray() at i {
 			if Char == "(" || Char == ")" {
 				$Text += "Zp";
 			} else if Char == "," {
@@ -21,11 +21,11 @@ every NameTransformer is:
 				$Text += Char;
 			}
 
-			if Num == 0 then $Text = $Text.toLower();
+			if i == 0 then $Text = $Text.toLower();
 		}
 		return $Text;
 	}
 
 	Text -- classToProperty(Text) {
-		return Text.charAt(0).toLower() + Text.substr(1, Text.getSize());
+		return Text.substr(0, 1).toLower() + Text.substr(1, Text.getSize());
 	}
