@@ -35,7 +35,7 @@ every ArgumentWatcherGatherer (an ArgumentIterator, capable ArgumentIteration, c
 		}
 
 		var typename = "ArgumentWatcher{" + getMockableArgTypeName(arg) + "," + returntypename + "}";
-		var alias = NameTransformer.methodToProperty(WakeProperty.name) + "Za" + argn.toString();
+		var alias = NameTransformer.methodToProperty(WakeProperty.name) + "Za" + argn.toChar();
 		if !types.contains(typename) then types.push(typename);
 		aliases.push(alias);
 		declarations.push(typename + " " + alias);

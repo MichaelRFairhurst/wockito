@@ -17,7 +17,7 @@ every StubberMethodGenerator (capable MethodBodyGenerator) is:
 			if ArgumentWatcherGatherer.aliases.getSize() > 0 {
 				File.write("\t\tvar When{" + returntype.getPureName() + "} from this;\n"); // @TODO return Anything casted as a parameterized arg
 				foreach alias in ArgumentWatcherGatherer.aliases at i {
-					File.write("\t\t" + alias + ".expect(" + ArgumentWatcherGatherer.casts[i] + "arg" + i.toString() + ", When);\n");
+					File.write("\t\t" + alias + ".expect(" + ArgumentWatcherGatherer.casts[i] + "arg" + i.toText() + ", When);\n");
 				}
 				File.write("\t\treturn When;\n");
 			} else {

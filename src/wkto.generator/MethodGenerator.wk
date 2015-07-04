@@ -42,7 +42,7 @@ every MethodGenerator (capable MethodIteration) is:
 
 		foreach arg in args at i {
 			File.write(WakeProperty.casing[i]);
-			File.write(arg.getPureName() + " arg" + i.toString());
+			File.write(arg.getPureName() + " arg" + i.toText());
 		}
 
 		File.write(WakeProperty.casing[args.getSize()]); // might be just ')' but might be ')ALastMethodSegment()'

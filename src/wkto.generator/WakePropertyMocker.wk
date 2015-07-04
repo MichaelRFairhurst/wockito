@@ -37,7 +37,7 @@ every WakePropertyMocker is:
 				var WatchedArgument from this;
 				WatchedArgument.type = getMockableArgTypeName(argument);
 				WatchedArgument.rettype = retname;
-				WatchedArgument.specialty = WatchedArgument.alias := base + "_arg" + i.toString();
+				WatchedArgument.specialty = WatchedArgument.alias := base + "_arg" + i.toText();
 
 				WatchedArgument[].push(WatchedArgument);
 			}

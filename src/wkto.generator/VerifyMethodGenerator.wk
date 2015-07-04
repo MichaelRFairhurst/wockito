@@ -28,7 +28,7 @@ every VerifyMethodGenerator (capable MethodBodyGenerator) is:
 				File.write("var Num[] = ");
 				File.write(alias + ".getCallIndices(" + ArgumentWatcherGatherer.casts[i] + "arg0);\n");
 			} else {
-				File.write("Num[] = Num[].intersect(" + alias + ".getCallIndices(" + ArgumentWatcherGatherer.casts[i] + "arg" + i.toString() + "));\n");
+				File.write("Num[] = Num[].intersect(" + alias + ".getCallIndices(" + ArgumentWatcherGatherer.casts[i] + "arg" + i.toText() + "));\n");
 			}
 		}
 
