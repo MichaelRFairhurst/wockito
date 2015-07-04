@@ -4,22 +4,21 @@ every NameTransformer is:
 
 	Text -- methodToProperty(Text) {
 		var $Text = "";
-		for(var Num = 0; Num < Text.getSize(); Num += 1) {
-			var Text char = Text.substr(Num, Num + 1);
-			if char == "(" || char == ")" {
+		foreach Text.toCharArray at i {
+			if Char == "(" || Char == ")" {
 				$Text += "Zp";
-			} else if char == "," {
+			} else if Char == "," {
 				$Text += "Zc";
-			} else if char == "{" {
+			} else if Char == "{" {
 				$Text += "Zs";
-			} else if char == "}" {
+			} else if Char == "}" {
 				$Text += "Ze";
-			} else if char == "<" {
+			} else if Char == "<" {
 				$Text += "Zl";
-			} else if char == "-" {
+			} else if Char == "-" {
 				$Text += "Zd";
 			} else {
-				$Text += char;
+				$Text += Char;
 			}
 
 			if Num == 0 then $Text = $Text.toLower();
@@ -28,5 +27,5 @@ every NameTransformer is:
 	}
 
 	Text -- classToProperty(Text) {
-		return Text.substr(0, 1).toLower() + Text.substr(1, Text.getSize());
+		return Text.charAt(0).toLower() + Text.substr(1, Text.getSize());
 	}
