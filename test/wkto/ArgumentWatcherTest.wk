@@ -7,25 +7,25 @@ import wkto.When;
 @TestClass
 every ArgumentWatcherTest is:
 
-	needs ArgumentWatcher{Num, Num};
+	needs ArgumentWatcher{Int, Int};
 
-	provides When{Num};
+	provides When{Int};
 
 	@Test
 	~[ test get a nonexist stub ]~(Asserts) {
-		var When{Num}[] = ArgumentWatcher.getPossibleStubs(1234);
+		var When{Int}[] = ArgumentWatcher.getPossibleStubs(1234);
 		Asserts.that(When[].getSize())Equals(0);
 		Asserts.that(When[].getSize())Equals(0);
 	}
 
 	@Test
 	~[ test set and get an expected stub ]~(Asserts) {
-		var When{Num} from this;
-		var $When{Num} from this;
+		var When{Int} from this;
+		var $When{Int} from this;
 
 		ArgumentWatcher.expect(1, When);
 		ArgumentWatcher.expect(2, $When);
-		var When{Num}[] arr = ArgumentWatcher.getPossibleStubs(1);
+		var When{Int}[] arr = ArgumentWatcher.getPossibleStubs(1);
 		Asserts.that(arr.getSize())Equals(1);
 		Asserts.that(arr[0] == When);
 		arr = ArgumentWatcher.getPossibleStubs(2);
@@ -35,12 +35,12 @@ every ArgumentWatcherTest is:
 
 	@Test
 	~[ test set and get a overlapping expected stubs ]~(Asserts) {
-		var When{Num} from this;
-		var $When{Num} from this;
+		var When{Int} from this;
+		var $When{Int} from this;
 
 		ArgumentWatcher.expect(3, When);
 		ArgumentWatcher.expect(3, $When);
-		var When{Num}[] arr = ArgumentWatcher.getPossibleStubs(3);
+		var When{Int}[] arr = ArgumentWatcher.getPossibleStubs(3);
 		Asserts.that(arr.getSize())Equals(2);
 		Asserts.that(arr[0] == When);
 		Asserts.that(arr[1] == $When);
@@ -50,24 +50,24 @@ every ArgumentWatcherTest is:
 	~[ test call nums with a nonmatching call ]~(Asserts) {
 		ArgumentWatcher.tell(1, 3);
 		ArgumentWatcher.tell(2, 4);
-		var Num[] = ArgumentWatcher.getCallIndices(3);
-		Asserts.that(Num[].getSize())Equals(0);
+		var Int[] = ArgumentWatcher.getCallIndices(3);
+		Asserts.that(Int[].getSize())Equals(0);
 	}
 
 	@Test
 	~[ test call nums with a single matching call ]~(Asserts) {
 		ArgumentWatcher.tell(4, 5);
-		var Num[] = ArgumentWatcher.getCallIndices(4);
-		Asserts.that(Num[].getSize())Equals(1);
-		Asserts.that(Num[0])Equals(5);
+		var Int[] = ArgumentWatcher.getCallIndices(4);
+		Asserts.that(Int[].getSize())Equals(1);
+		Asserts.that(Int[0])Equals(5);
 	}
 
 	@Test
 	~[ test call nums with multiple matching calls ]~(Asserts) {
 		ArgumentWatcher.tell(5, 6);
 		ArgumentWatcher.tell(5, 7);
-		var Num[] = ArgumentWatcher.getCallIndices(5);
-		Asserts.that(Num[].getSize())Equals(2);
-		Asserts.that(Num[0])Equals(6);
-		Asserts.that(Num[1])Equals(7);
+		var Int[] = ArgumentWatcher.getCallIndices(5);
+		Asserts.that(Int[].getSize())Equals(2);
+		Asserts.that(Int[0])Equals(6);
+		Asserts.that(Int[1])Equals(7);
 	}

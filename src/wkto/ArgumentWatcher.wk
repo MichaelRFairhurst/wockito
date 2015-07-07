@@ -5,29 +5,29 @@ import wkto.When;
 every ArgumentWatcher{T, R} is:
 
 	with T[] calls = [];
-	with Num[] callNums = [];
+	with Int[] callNums = [];
 
 	with When{R}[] stubs = [];
 	with T[] matches = [];
 
-	tell(T, Num) {
+	tell(T, Int) {
 		calls.push(T);
-		callNums.push(Num);
+		callNums.push(Int);
 	}
 
 	T[] -- getCalls() {
 		return calls;
 	}
 
-	Num[] -- getCallIndices(T) {
-		var Num[] = [];
+	Int[] -- getCallIndices(T) {
+		var Int[] = [];
 		foreach call in calls at i {
 			if call == T {
-				Num[].push(callNums[i]);
+				Int[].push(callNums[i]);
 			}
 		}
 
-		return Num[];
+		return Int[];
 	}
 
 	expect(T, When{R}) {
