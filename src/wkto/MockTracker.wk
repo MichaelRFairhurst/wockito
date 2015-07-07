@@ -2,12 +2,12 @@ module wkto;
 
 every MockTracker is:
 
-	with Num = 0;
+	with Int = 0;
 
-	Num -- current() {
-		return Num;
+	Int -- current() {
+		return Int;
 	}
 
 	next() {
-		Num += 1;
+		Int += 1;
 	}
