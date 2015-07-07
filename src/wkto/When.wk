@@ -3,7 +3,7 @@ module wkto;
 every When{T} is:
 
 	with T[] returns = [];
-	with Num = 0;
+	with Int = 0;
 
 	When{T} -- thenReturn(T) {
 		returns.push(T);
@@ -11,12 +11,12 @@ every When{T} is:
 	}
 
 	T -- get() {
-		var T? = returns[?Num];
+		var T? = returns[?Int];
 		if T exists {
-			Num += 1;
+			Int += 1;
 			return T;
 		} else {
-			Num = 0.orMaxOf(Num - 1); // go back one, stopping at 0
-			return returns[Num]; // will throw when we stopped at 0
+			Int = 0.orMaxOf(Int - 1); // go back one, stopping at 0
+			return returns[Int]; // will throw when we stopped at 0
 		}
 	}

@@ -38,10 +38,10 @@ import wkto.generator.WakeClassMocker;
 #		return ExampleVerifier;
 #	}
 #
-#	ExampleVerifier -- verify(Num)Times(ExampleMock) {
+#	ExampleVerifier -- verify(Int)Times(ExampleMock) {
 #		var ExampleVerifier from this;
-#		ExampleVerifier.CallValidator.minTimesCalled = Num;
-#		ExampleVerifier.CallValidator.maxTimesCalled = Num;
+#		ExampleVerifier.CallValidator.minTimesCalled = Int;
+#		ExampleVerifier.CallValidator.maxTimesCalled = Int;
 #	}
 #
 ##
@@ -89,10 +89,10 @@ every MockProviderFileGenerator is:
 			File.write("\t\treturn " + basename + "Verifier;\n");
 			File.write("\t}\n\n");
 
-			File.write("\t" + basename + "Verifier -- verify(Num)Times(" + basename + "Mock) {\n");
+			File.write("\t" + basename + "Verifier -- verify(Int)Times(" + basename + "Mock) {\n");
 			File.write("\t\tvar TimesCalledValidator from this;\n");
-			File.write("\t\tTimesCalledValidator.minExpectedTimes = Num;\n");
-			File.write("\t\tTimesCalledValidator.maxExpectedTimes = Num;\n");
+			File.write("\t\tTimesCalledValidator.minExpectedTimes = Int;\n");
+			File.write("\t\tTimesCalledValidator.maxExpectedTimes = Int;\n");
 			File.write("\t\tvar " + basename + "Verifier from " + basename + "Mock;\n");
 			File.write("\t\t" + basename + "Verifier.CallValidator = TimesCalledValidator;\n");
 			File.write("\t\treturn " + basename + "Verifier;\n");

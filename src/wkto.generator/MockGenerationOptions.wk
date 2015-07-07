@@ -16,16 +16,16 @@ every MockGenerationOptions is:
 	parse() {
 		var Text[] = Argv.getArgv();
 
-		for(var Num = 0; Num < Text[].getSize(); Num += 1) {
-			var Text = Text[Num];
+		for(var Int = 0; Int < Text[].getSize(); Int += 1) {
+			var Text = Text[Int];
 
 			if Text == "-p" then generateProvider = true;
 			else if Text == "-d" {
-				Num += 1;
-				tabledir = Text[Num];
+				Int += 1;
+				tabledir = Text[Int];
 			} else if Text == "-o" {
-				Num += 1;
-				outputfile = Text[Num];
+				Int += 1;
+				outputfile = Text[Int];
 			} else if generateProvider {
 				mockedClasses.push(Text);
 			} else {
