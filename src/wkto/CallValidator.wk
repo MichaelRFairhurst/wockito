@@ -6,5 +6,5 @@ every CallValidator is:
 
 	with public Text methodname = "";
 
-	validate(Num[]) {
+	validate(Int[]) {
 	}

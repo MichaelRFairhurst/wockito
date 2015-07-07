@@ -6,21 +6,21 @@ import wkto.CallValidator;
 every TimesCalledValidator (a CallValidator) is:
 
 	needs Asserts;
-	with public Num? minExpectedTimes = nothing;
-	with public Num? maxExpectedTimes = nothing;
+	with public Int? minExpectedTimes = nothing;
+	with public Int? maxExpectedTimes = nothing;
 
-	validate(Num[]) {
-		var $Num? = minExpectedTimes;
-		if $Num exists {
-			if Num[].getSize() < $Num {
-				Asserts.fail("Expected " + methodname + " to be called more than " + $Num.toText() + " times, actually called " + Num[].getSize().toText() + " times");
+	validate(Int[]) {
+		var $Int? = minExpectedTimes;
+		if $Int exists {
+			if Int[].getSize() < $Int {
+				Asserts.fail("Expected " + methodname + " to be called more than " + $Int.toText() + " times, actually called " + Int[].getSize().toText() + " times");
 			}
 		}
 
-		$Num = maxExpectedTimes;
-		if $Num exists {
-			if Num[].getSize() > $Num {
-				Asserts.fail("Expected " + methodname + " to be called fewer than " + $Num.toText() + " times, actually called " + Num[].getSize().toText() + " times");
+		$Int = maxExpectedTimes;
+		if $Int exists {
+			if Int[].getSize() > $Int {
+				Asserts.fail("Expected " + methodname + " to be called fewer than " + $Int.toText() + " times, actually called " + Int[].getSize().toText() + " times");
 			}
 		}
 	}
