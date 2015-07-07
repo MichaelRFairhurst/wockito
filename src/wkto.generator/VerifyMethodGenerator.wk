@@ -10,8 +10,8 @@ import wkto.generator.MethodBodyGenerator;
 #>
 # generate like
 #
-#	var Num[] calls = getZpTextZcNumZpZa1.getCallIndices(Text);
-#	calls = calls.intersect(getZpTextZcNumZpZa2.getCallIndices(Num));
+#	var Int[] calls = getZpTextZcNumZpZa1.getCallIndices(Text);
+#	calls = calls.intersect(getZpTextZcNumZpZa2.getCallIndices(Int));
 #	var $CallValidator? = CallValidator; // bugfix.....
 #	if $CallValidator exists {
 #		$CallValidator.validate(calls);
@@ -25,16 +25,16 @@ every VerifyMethodGenerator (capable MethodBodyGenerator) is:
 		foreach alias in ArgumentWatcherGatherer.aliases at i {
 			File.write("\t\t");
 			if i == 0 {
-				File.write("var Num[] = ");
+				File.write("var Int[] = ");
 				File.write(alias + ".getCallIndices(" + ArgumentWatcherGatherer.casts[i] + "arg0);\n");
 			} else {
-				File.write("Num[] = Num[].intersect(" + alias + ".getCallIndices(" + ArgumentWatcherGatherer.casts[i] + "arg" + i.toText() + "));\n");
+				File.write("Int[] = Int[].intersect(" + alias + ".getCallIndices(" + ArgumentWatcherGatherer.casts[i] + "arg" + i.toText() + "));\n");
 			}
 		}
 
 		File.write("\t\t"); File.write("var $CallValidator? = CallValidator;\n");
 		File.write("\t\t"); File.write("if $CallValidator exists {\n");
 		File.write("\t\t\t"); File.write("$CallValidator.methodname = '" + WakeProperty.name + "';\n");
-		File.write("\t\t\t"); File.write("$CallValidator.validate(Num[]);\n");
+		File.write("\t\t\t"); File.write("$CallValidator.validate(Int[]);\n");
 		File.write("\t\t"); File.write("}\n");
 	}
